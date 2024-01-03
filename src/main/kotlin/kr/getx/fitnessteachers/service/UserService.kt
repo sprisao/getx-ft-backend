@@ -2,16 +2,19 @@ package kr.getx.fitnessteachers.service
 
 import kr.getx.fitnessteachers.entity.User
 import kr.getx.fitnessteachers.repository.UserRepository
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-class UserService(val userRepository: UserRepository) {
-    private val logger = LoggerFactory.getLogger(UserService::class.java)
+class UserService(private val userRepository: UserRepository) {
 
-    fun findAll(): List<User> {
-        val users = userRepository.findAll()
-        logger.info("Fetched ${users.size} users from the database.")
-        return users
-    }
+    fun getAllUsers(): List<User> = userRepository.findAll()
+
+    fun addUser(user: User): User = userRepository.save(user)
+
+    fun getUserById(id: Long): User? = userRepository.findById(id).orElse(null)
+
+    fun updateUser(user: User): User = userRepository.save(user)
+
+    fun deleteUser(id: Long) = userRepository.deleteById(id)
 }
+
