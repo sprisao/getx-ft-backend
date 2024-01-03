@@ -1,15 +1,17 @@
 package kr.getx.fitnessteachers.controller
 
+import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.entity.User
+import kr.getx.fitnessteachers.service.ResumeService
 import kr.getx.fitnessteachers.service.UserService
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/users")
-class UserController(private val userService: UserService) {
+@RequestMapping("/api/resumes")
+class ResumeController(private val resumeController: ResumeController) {
 
     @GetMapping
-    fun getAllUsers(): List<User> = userService.getAllUsers()
+    fun getAllResumes(): List<Resume> = ResumeService.getAllResumes()
 
     @PostMapping("/add")
     fun addUser(@RequestBody user: User): User = userService.addUser(user)
