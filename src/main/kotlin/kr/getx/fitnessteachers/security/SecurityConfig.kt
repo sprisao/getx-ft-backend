@@ -6,8 +6,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 
 @Configuration
-class SecurityConfig {
-    private val allowedUrls = arrayOf("/*", "/login", "/users", "/health", "/actuator/**")
+class SecurityConfig{
+    private val allowedUrls = arrayOf("/*", "api/*", "api/users/add", "/api/users/*", "/api/**", "/login", "/users", "/health")
 
     @Bean
     fun filterChain(http: HttpSecurity) = http
