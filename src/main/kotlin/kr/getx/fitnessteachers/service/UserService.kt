@@ -1,5 +1,6 @@
 package kr.getx.fitnessteachers.service
 
+import jakarta.persistence.Id
 import kr.getx.fitnessteachers.entity.User
 import kr.getx.fitnessteachers.repository.UserRepository
 import org.springframework.stereotype.Service
@@ -11,10 +12,10 @@ class UserService(private val userRepository: UserRepository) {
 
     fun addUser(user: User): User = userRepository.save(user)
 
-    fun getUserById(id: Long): User? = userRepository.findById(id).orElse(null)
+    fun getUserById(id : Int): User? = userRepository.findById(id).orElse(null)
 
     fun updateUser(user: User): User = userRepository.save(user)
 
-    fun deleteUser(id: Long) = userRepository.deleteById(id)
+    fun deleteUser(id: Int) = userRepository.deleteById(id)
 }
 

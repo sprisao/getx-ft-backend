@@ -8,20 +8,20 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/resumes")
-class ResumeController(private val resumeController: ResumeController) {
+class ResumeController(private val resumeService: ResumeService) {
 
     @GetMapping
-    fun getAllResumes(): List<Resume> = ResumeService.getAllResumes()
+    fun getAllResumes(): List<Resume> = resumeService.getAllResumes()
 
     @PostMapping("/add")
-    fun addUser(@RequestBody user: User): User = userService.addUser(user)
+    fun addResume(@RequestBody resume: Resume): Resume = resumeService.addResume(resume)
 
     @GetMapping("/{id}")
-    fun getUser(@PathVariable id: Long): User? = userService.getUserById(id)
+    fun getResume(@PathVariable id: Int): Resume? = resumeService.getResumeById(id)
 
     @PutMapping("/update")
-    fun updateUser(@RequestBody user: User): User = userService.updateUser(user)
+    fun updateResume(@RequestBody resume: Resume): Resume = resumeService.updateResume(resume)
 
     @DeleteMapping("/delete/{id}")
-    fun deleteUser(@PathVariable id: Long) = userService.deleteUser(id)
+    fun deleteResume(@PathVariable id: Int) = resumeService.deleteResume(id)
 }

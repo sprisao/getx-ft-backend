@@ -3,15 +3,16 @@ package kr.getx.fitnessteachers.entity
 import jakarta.persistence.*
 import java.time.LocalDateTime
 @Entity
-@Table(name = "centerPhotos")
+@Table(name = "CenterPhotos")
 data class CenterPhoto(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PhotoID")
     val photoId: Int = 0,
 
-    @Column(name = "CenterID")
-    val centerId: Int? = null,
+    @ManyToOne
+    @JoinColumn(name = "CenterID", referencedColumnName = "CenterID")
+    val center: Center? = null,
 
     @Column(name = "Photo")
     val photo: String? = null,

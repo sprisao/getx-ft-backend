@@ -5,15 +5,15 @@ import kr.getx.fitnessteachers.repository.ResumeRepository
 import org.springframework.stereotype.Service
 
 @Service
-class ResumeService(private val resumerepository: ResumeRepository) {
+class ResumeService(private val resumeRepository: ResumeRepository) {
 
-    fun getAllResumes(): List<Resume> = ResumeRepository.findAll()
+    fun getAllResumes(): List<Resume> = resumeRepository.findAll()
 
-    fun addResume(resume: Resume): Resume = resumerepository.save(resume)
+    fun addResume(resume: Resume): Resume = resumeRepository.save(resume)
 
-    fun getResumeById(id: int): Resume? = resumerepository.findById(id).orElse(null)
+    fun getResumeById(id: Int): Resume? = resumeRepository.findById(id).orElse(null)
 
-    fun updateResume(resume: Resume): Resume = resumerepository.save(resume)
+    fun updateResume(resume: Resume): Resume = resumeRepository.save(resume)
 
-    fun deleteResume(id: int) = userRepository.deleteById(id)
+    fun deleteResume(id: Int) = resumeRepository.deleteById(id)
 }

@@ -15,11 +15,11 @@ class UserController(private val userService: UserService) {
     fun addUser(@RequestBody user: User): User = userService.addUser(user)
 
     @GetMapping("/{id}")
-    fun getUser(@PathVariable id: Long): User? = userService.getUserById(id)
+    fun getUser(@PathVariable id: Int): User? = userService.getUserById(id)
 
     @PutMapping("/update")
     fun updateUser(@RequestBody user: User): User = userService.updateUser(user)
 
     @DeleteMapping("/delete/{id}")
-    fun deleteUser(@PathVariable id: Long) = userService.deleteUser(id)
+    fun deleteUser(@PathVariable id: Int) = userService.deleteUser(id)
 }
