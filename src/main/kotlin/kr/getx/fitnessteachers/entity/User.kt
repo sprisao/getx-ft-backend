@@ -14,8 +14,6 @@ data class User(
     val userSocialMediaId: String? = null,
     @Column(name = "Username")
     val username: String = "",
-    @Column(name = "Password")
-    val email: String = "",
     @Column(name = "PhoneNumber")
     val phoneNumber: String? = null,
     @Column(name = "UserType")
