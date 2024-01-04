@@ -3,7 +3,7 @@ package kr.getx.fitnessteachers.entity
 import jakarta.persistence.*
 import java.time.LocalDateTime
 @Entity
-@Table(name = "CenterPhotos")
+@Table(name = "centerPhotos")
 data class CenterPhoto(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
