@@ -10,7 +10,7 @@ spring:
             clientSecret: sZ0wlp6QN8
             redirectUri: "/login/oauth2/code/{registrationId}"
             authorizationGrantType: authorization_code
-            scope: name,email //,profile_image
+            scope: name,email, mobile
         provider:
           naver:
             authorizationUri: https://nid.naver.com/oauth2.0/authorize
