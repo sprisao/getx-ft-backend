@@ -39,6 +39,12 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+
+    //Jasypt
+    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
+    //Log
+    implementation("io.github.microutils:kotlin-logging:3.0.5")
+
 }
 
 tasks.withType<KotlinCompile> {
