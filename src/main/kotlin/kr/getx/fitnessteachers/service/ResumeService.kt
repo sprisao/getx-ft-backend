@@ -16,4 +16,8 @@ class ResumeService(private val resumeRepository: ResumeRepository) {
     fun updateResume(resume: Resume): Resume = resumeRepository.save(resume)
 
     fun deleteResume(id: Int) = resumeRepository.deleteById(id)
+
+    fun getResumeByUserId(userId: Int): Resume? {
+        return resumeRepository.findByUserUserId(userId)
+    }
 }
