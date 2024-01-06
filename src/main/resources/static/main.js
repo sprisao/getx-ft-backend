@@ -1,4 +1,7 @@
 document.getElementById("naverLoginBtn").addEventListener("click", function() {
+    console.log("네이버 로그인 시도");  // 콘솔 로그 추가
+
+
     const clientId = "2aIpUgp68uEYugBfJ44f"; // 네이버 클라이언트 ID
     const redirectUri = encodeURIComponent("http://localhost:8080/login/oauth2/code/naver"); // 백엔드 redirectUri
     const state = "RANDOM_STRING"; // CSRF 방지를 위한 상태 토큰
