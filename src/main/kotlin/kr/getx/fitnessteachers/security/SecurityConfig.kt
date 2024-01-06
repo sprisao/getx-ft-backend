@@ -16,6 +16,9 @@ class SecurityConfig{
             it.requestMatchers(*allowedUrls).permitAll()    // 허용할 url 목록을 배열로 분리했다
                 .anyRequest().authenticated()
         }
+        .oauth2Login {
+            it.defaultSuccessUrl("/loginSuccess")
+        }
         .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
         .build()!!
 }
