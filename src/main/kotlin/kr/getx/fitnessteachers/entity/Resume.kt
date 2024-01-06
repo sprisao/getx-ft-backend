@@ -12,7 +12,7 @@ data class Resume(
     val resumeId: Int = 0,
 
     @ManyToOne
-    @JoinColumn(name = "UserID", referencedColumnName = "UserID")
+    @JoinColumn(name = "UserID")
     val user: User,
 
     @Column(name = "Photo")

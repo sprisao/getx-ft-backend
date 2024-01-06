@@ -4,6 +4,7 @@ import jakarta.persistence.Id
 import kr.getx.fitnessteachers.entity.User
 import kr.getx.fitnessteachers.repository.UserRepository
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class UserService(private val userRepository: UserRepository) {
