@@ -10,8 +10,6 @@ class UserService(private val userRepository: UserRepository) {
 
     fun getAllUsers(): List<User> = userRepository.findAll()
 
-    fun addUser(user: User): User = userRepository.save(user)
-
     fun getUserById(id : Int): User? = userRepository.findById(id).orElse(null)
 
     fun updateUser(user: User): User = userRepository.save(user)
