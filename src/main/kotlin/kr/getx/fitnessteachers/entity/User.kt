@@ -1,5 +1,7 @@
 package kr.getx.fitnessteachers.entity
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -11,11 +13,13 @@ data class User(
     @Column(name = "UserID")
     val userId: Int = 0,
     @Column(name = "User_Social_Media_ID")
-    val userSocialMediaId: String? = null,
+    val userSocialMediaId: String = "",
     @Column(name = "Username")
-    val username: String = "",
+    var username: String = "",
+    @Column(name = "Email")
+    var email: String = "",
     @Column(name = "PhoneNumber")
-    val phoneNumber: String? = null,
+    var phoneNumber: String? = null,
     @Column(name = "UserType")
     val userType: String = "",
     @Column(name = "ExperienceYears")
