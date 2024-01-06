@@ -8,9 +8,9 @@ spring:
           naver:
             clientId: 2aIpUgp68uEYugBfJ44f
             clientSecret: sZ0wlp6QN8
-            redirectUri: "/login/oauth2/code/{registrationId}"
+            redirectUri: http://localhost:8080/login/oauth2/code/naver
             authorizationGrantType: authorization_code
-            scope: name,email, mobile
+            scope: name,email,mobile
         provider:
           naver:
             authorizationUri: https://nid.naver.com/oauth2.0/authorize
