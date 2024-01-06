@@ -1,6 +1,5 @@
 package kr.getx.fitnessteachers.service
 
-import jakarta.persistence.Id
 import kr.getx.fitnessteachers.entity.User
 import kr.getx.fitnessteachers.repository.UserRepository
 import org.springframework.stereotype.Service
