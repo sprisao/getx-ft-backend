@@ -1,11 +1,16 @@
 document.getElementById("naverLoginBtn").addEventListener("click", function() {
-    console.log("네이버 로그인 시도");  // 콘솔 로그 추가
+    console.log("네이버 로그인 시도");
 
-
-    const clientId = "2aIpUgp68uEYugBfJ44f"; // 네이버 클라이언트 ID
-    const redirectUri = encodeURIComponent("http://localhost:8080/login/oauth2/code/naver"); // 백엔드 redirectUri
-    const state = "RANDOM_STRING"; // CSRF 방지를 위한 상태 토큰
+    const clientId = "2aIpUgp68uEYugBfJ44f";
+    const redirectUri = encodeURIComponent("http://localhost:8080/login/oauth2/code/naver");
+    const state = generateRandomString();  // 랜덤 문자열 생성 함수 호출
     const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`;
 
     window.location.href = naverAuthUrl;
 });
+
+function generateRandomString() {
+    const array = new Uint32Array(28);
+    window.crypto.getRandomValues(array);
+    return Array.from(array, dec => ('0' + dec.toString(16)).substr(-2)).join('');
+}

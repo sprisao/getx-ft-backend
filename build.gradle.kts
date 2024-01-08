@@ -45,8 +45,9 @@ dependencies {
     //Log
     implementation("io.github.microutils:kotlin-logging:3.0.5")
 
-    // AOuth2
+    // Spring Security OAuth2 Client
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+
 }
 
 tasks.withType<KotlinCompile> {
