@@ -14,7 +14,7 @@ data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "UserID")
-    val userId: Int,
+    val userId: Int = 0,
 
     @Column(name = "Username")
     var username: String = "",
