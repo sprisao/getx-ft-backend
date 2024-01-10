@@ -48,6 +48,8 @@ dependencies {
     // Spring Security OAuth2 Client
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 
+    // JWT OAuth2 Token
+    implementation ("io.jsonwebtoken:jjwt:0.9.1")
 }
 
 tasks.withType<KotlinCompile> {
