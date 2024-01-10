@@ -22,6 +22,7 @@ class SecurityConfig(val jwtTokenProvider: JwtTokenProvider) {
             // it.defaultSuccessUrl("/api/users/all")
             it.successHandler(CustomAuthenticationSuccessHandler(jwtTokenProvider))
         }
-        .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+        .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) } // 세션을 사용할 수 있게 변경
+        // OAuth2 인증 프로세스에 필요한 세션 정보를 유지하기 위해 필요
         .build()!!
 }
