@@ -14,7 +14,7 @@ spring:
 
           naver:
             clientId: 2aIpUgp68uEYugBfJ44f
-            clientSecret: enc(fU5eqnTKlYxAbMzvkKVf54rXLpe0DusM)
+            clientSecret: sZ0wlp6QN8
             authorizationGrantType: authorization_code
             redirectUri: http://localhost:8080/login/oauth2/code/naver
             scope:

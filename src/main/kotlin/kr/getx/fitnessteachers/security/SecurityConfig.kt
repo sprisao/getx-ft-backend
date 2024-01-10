@@ -10,7 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy
 
 @Configuration
 class SecurityConfig(val jwtTokenProvider: JwtTokenProvider, val customOAuth2UserService: CustomOAuth2UserService) {
-    private val allowedUrls = arrayOf("/*", "api/*", "/api/users/add", "/api/users/*", "/api/**", "/login", "/users", "/health")
+    private val allowedUrls = arrayOf("/*", "/api/users/all", "/api/users/add", "/api/users/*", "/api/**", "/login", "/users", "/health")
     @Bean
     fun filterChain(http: HttpSecurity) = http
         .csrf { it.disable() }
