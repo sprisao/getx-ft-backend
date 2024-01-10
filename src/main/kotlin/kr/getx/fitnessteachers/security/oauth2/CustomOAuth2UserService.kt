@@ -6,14 +6,17 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
+import org.springframework.stereotype.Service
 
+
+@Service
 class CustomOAuth2UserService(private val userService: UserService) : OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private val delegate = DefaultOAuth2UserService()
 
     override fun loadUser(userRequest: OAuth2UserRequest): OAuth2User {
         val oauth2User = delegate.loadUser(userRequest)
-        val attributes = oauth2User.attributes["response"] as Map<String, Any?>
+        val attributes = oauth2User.attributes["response"] as? Map<String, Any?> ?: throw IllegalArgumentException("Invalid OAuth2 user data")
         val userSocialMediaId = attributes["id"] as String
 
         val user = User(
