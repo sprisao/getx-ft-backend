@@ -15,7 +15,6 @@ spring:
           naver:
             clientId: 2aIpUgp68uEYugBfJ44f
             clientSecret: enc(fU5eqnTKlYxAbMzvkKVf54rXLpe0DusM)
-            client-authentication-method: client_secret_post
             authorizationGrantType: authorization_code
             redirectUri: http://localhost:8080/login/oauth2/code/naver
             scope:
@@ -27,7 +26,6 @@ spring:
           kakao:
             clientId: ea6371bfabae8491821c0c3d6464591a
             clientSecret: enc(jnR0Jw+1jLdOwYoX5cNECtdrtO3yP0sVtwIUhCBHHDr2Ez67XngXsKL3H2nytw9q)
-            client-authentication-method: client_secret_post
             redirectUri: http://localhost:8080/login/oauth2/code/kakao
             authorizationGrantType: authorization_code
             scope:
@@ -48,3 +46,7 @@ spring:
             userInfoUri: https://kapi.kakao.com/v2/user/me
             user-info-authentication-method: header
             userNameAttribute: id
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
