@@ -16,7 +16,7 @@ data class User(
     @Column(name = "UserID")
     val userId: Int = 0,
 
-    @Column(name = "Username")
+    @Column(name = "Username", unique = false)
     var username: String = "",
 
     @Column(name = "Email")

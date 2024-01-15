@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
 interface UserRepository : JpaRepository<User, Int>{
-    fun findByUserSocialMediaId(userSocialMediaId: String): Optional<User>
+    fun findByUserSocialMediaId(userSocialMediaId: String): User?
+
+    // 중복 이메일 검사 메소드
+    fun findByEmail(email: String): User?
 
 }

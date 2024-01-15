@@ -12,21 +12,19 @@ class UserService(private val userRepository: UserRepository) {
 
     fun getUserById(id : Int): User? = userRepository.findById(id).orElse(null)
 
-    fun addOrUpdateUser(user: User): User {
-        val existingUser = userRepository.findByUserSocialMediaId(user.userSocialMediaId)
-        return existingUser.map {
-            it.apply {
-                email = user.email
-                username = user.username
-                phoneNumber = user.phoneNumber
-                // 기타 필드 업데이트
-            }
-            userRepository.save(it)
-        }.orElseGet { userRepository.save(user) }
-    }
-
-    fun getUserBySocialMediaId(userSocialMediaId: String): Optional<User> {
-        return userRepository.findByUserSocialMediaId(userSocialMediaId)
+    fun addOrUpdateUser(userSocialMediaId: String, userInfo: Map<String, Any>): User {
+        val existingUser = userRepository.findByUserSocialMediaId(userSocialMediaId)
+        val user = existingUser?.apply {
+            this.username = userInfo["name"] as String
+            this.email = userInfo["email"] as String
+            this.phoneNumber = userInfo["mobile"] as String
+        } ?: User(
+            userSocialMediaId = userSocialMediaId,
+            username = userInfo["name"] as String,
+            email = userInfo["email"] as String,
+            phoneNumber = userInfo["mobile"] as String
+        )
+        return userRepository.save(user)
     }
 
     fun deleteUser(id: Int) = userRepository.deleteById(id)
