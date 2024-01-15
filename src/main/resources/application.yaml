@@ -50,3 +50,6 @@ logging:
   level:
     org.springframework.security: DEBUG
     org.springframework.web: DEBUG
+
+jwt:
+  secret: pilyotestTokenTest256bitKepilyotestTokenTest256bitKeypilyotestTokenTest256bitKeypilyotestTokenTest256bitKeypilyotestTokenTest256bitKeyy
