@@ -7,7 +7,7 @@ import org.springframework.security.config.http.SessionCreationPolicy
 
 @Configuration
 class SecurityConfig {
-    private val allowedUrls = arrayOf("/*", "/api/users/all", "/api/users/social-login", "/api/users/add", "/api/users/*", "/api/**", "/login", "/users", "/health")
+    private val allowedUrls = arrayOf("/*", "/api/users/all", "/api/users/login", "/api/users/*", "/api/**", "/login", "/users", "/health")
     @Bean
     fun filterChain(http: HttpSecurity) = http
         .csrf { it.disable() }
