@@ -1,6 +1,5 @@
 package kr.getx.fitnessteachers.service
 
-import jakarta.servlet.http.HttpServletResponse
 import kr.getx.fitnessteachers.dto.UserData
 import kr.getx.fitnessteachers.entity.User
 import kr.getx.fitnessteachers.repository.UserRepository

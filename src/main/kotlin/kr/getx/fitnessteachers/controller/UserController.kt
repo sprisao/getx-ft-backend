@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
-import org.springframework.http.HttpStatus
 
 @RestController
 @RequiredArgsConstructor
@@ -20,7 +19,6 @@ import org.springframework.http.HttpStatus
 class UserController(
   private val userService: UserService,
   private val resumeService: ResumeService,
-  private val userRepository: UserRepository,
 ) {
 
   @Autowired
