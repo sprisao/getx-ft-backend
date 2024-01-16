@@ -13,27 +13,18 @@ import java.time.LocalDateTime
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "UserID")
     val userId: Int = 0,
 
-    @Column(name = "Username", unique = false)
-    var username: String = "",
+    val name: String = "",
 
-    @Column(name = "Email")
-    var email: String = "",
+    val email: String = "",
 
-    @Column(name = "PhoneNumber")
-    var phoneNumber: String = "",
+    var profileUrl: String? = "",
 
-    @Column(name = "UserType")
-    val userType: String? = "",
+    var socialType: String = "",
 
-    @Column(name = "ExperienceYears")
-    val experienceYears: Int? = null,
+    var userType: String? = "",
 
-    @Column(name = "CreatedAt", insertable = false)
+    @Column(name = "createdAt", insertable = false)
     val createdAt: LocalDateTime? = LocalDateTime.now(),
-
-    @Column(name = "User_Social_Media_ID")
-    val userSocialMediaId: String = ""
 )
