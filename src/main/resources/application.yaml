@@ -52,4 +52,4 @@ logging:
     org.springframework.web: DEBUG
 
 jwt:
-  secret: pilyotestTokenTest256bitKepilyotestTokenTest256bitKeypilyotestTokenTest256bitKeypilyotestTokenTest256bitKeypilyotestTokenTest256bitKeyy
+  secret: s3BTt6uIdU6/99xZQYfOQoh4cRrJyZIXSbrmq+4nDog
