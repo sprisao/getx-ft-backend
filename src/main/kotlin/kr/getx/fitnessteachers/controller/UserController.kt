@@ -1,11 +1,11 @@
 package kr.getx.fitnessteachers.controller
 
+import jakarta.servlet.http.HttpServletRequest
 import kr.getx.fitnessteachers.common.response.CommonResult
 import kr.getx.fitnessteachers.common.service.ResponseService
 import kr.getx.fitnessteachers.dto.UserData
 import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.entity.User
-import kr.getx.fitnessteachers.repository.UserRepository
 import kr.getx.fitnessteachers.service.ResumeService
 import kr.getx.fitnessteachers.service.UserService
 import lombok.RequiredArgsConstructor
@@ -28,9 +28,10 @@ class UserController(
   fun getAllUsers(): List<User> = userService.getAllUsers()
 
   @PostMapping("/login")
-  fun loginUser(@RequestBody userData: UserData): ResponseEntity<Any> {
+  fun loginUser(request: HttpServletRequest): ResponseEntity<Any> {
+      val userData = request.getAttribute("userData") as? UserData
       return try {
-          val user = userService.processUserLogin(userData)
+          val user = userService.processUserLogin(userData!!)
           ResponseEntity.ok(user)
       } catch (e: Exception) {
           ResponseEntity.badRequest().body("Login or Registration Failed")

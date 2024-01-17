@@ -17,13 +17,19 @@ data class User(
 
     val name: String = "",
 
-    val email: String = "",
+    val email: String? = "",
 
     var profileUrl: String? = "",
 
     var socialType: String = "",
 
     var userType: String? = "",
+
+    var profileStatus: Boolean? = false,
+
+    var resumeStatus: Boolean? = false,
+
+    var centerStatus: Boolean? = false,
 
     @Column(name = "createdAt", insertable = false)
     val createdAt: LocalDateTime? = LocalDateTime.now(),

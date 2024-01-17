@@ -8,10 +8,14 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import kr.getx.fitnessteachers.jwt.JwtTokenFilter
+import kr.getx.fitnessteachers.jwt.JwtUtils
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 class SecurityConfig {
     private val allowedUrls = arrayOf("/*", "/api/users/all", "/api/users/login", "/api/users/*", "/api/**", "/login", "/users", "/health")
+    val jwtTokenFilter = JwtTokenFilter(JwtUtils())
     @Bean
     fun filterChain(http: HttpSecurity) = http
         .csrf { it.disable() }
@@ -21,6 +25,7 @@ class SecurityConfig {
                 .anyRequest().authenticated()
         }
         .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) } // 세션을 사용할 수 있게 변경
+        .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter::class.java) // JwtTokenFilter 추가
         // OAuth2 인증 프로세스에 필요한 세션 정보를 유지하기 위해 필요
         .build()!!
 

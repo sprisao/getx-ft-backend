@@ -17,10 +17,10 @@ class UserService(private val userRepository: UserRepository) {
    fun processUserLogin(userData : UserData): User {
        val existingUser = userRepository.findByEmail(userData.email)
        return if (existingUser != null) {
-           if (existingUser.email == userData.email && existingUser.socialType == userData.socialType) {
+           if (existingUser.socialType == userData.socialType) {
                loginUser(existingUser)
            } else {
-                throw Exception("이미 가입된 이메일 입니다.")
+                throw Exception("이미 다른 소셜로 가입된 이메일 입니다.")
            }
        } else {
            registerUser(userData)
@@ -35,7 +35,7 @@ class UserService(private val userRepository: UserRepository) {
         val newUser = User(
             name = userData.name,
             email = userData.email,
-            socialType = userData.socialType,
+            socialType = userData.socialType
         )
         return userRepository.save(newUser)
     }
