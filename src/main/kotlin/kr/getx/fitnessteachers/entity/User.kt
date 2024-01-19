@@ -31,7 +31,8 @@ data class User(
 
     var centerStatus: Boolean? = false,
 
-    var socialTypeStatus: Boolean? = false,
+    var userTypeStatus: Boolean? = false,
+
     @Column(name = "createdAt", insertable = false)
     val createdAt: LocalDateTime? = LocalDateTime.now(),
 )

@@ -62,7 +62,7 @@ class JwtUtils {
         val socialType = claims["socialType"] as String
 
         return if (email != null && name != null) {
-            UserData(name, email, socialType)
+            UserData(name, email, socialType, false, "", "", false, false, false)
         } else {
             throw Exception("Invalid Token")
         }

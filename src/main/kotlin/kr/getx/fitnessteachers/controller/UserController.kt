@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest
 import kr.getx.fitnessteachers.common.response.CommonResult
 import kr.getx.fitnessteachers.common.service.ResponseService
 import kr.getx.fitnessteachers.dto.UserData
-import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.entity.User
 import kr.getx.fitnessteachers.service.ResumeService
 import kr.getx.fitnessteachers.service.UserService
@@ -34,20 +33,31 @@ class UserController(
           val user = userService.processUserLogin(userData!!)
           ResponseEntity.ok(user)
       } catch (e: Exception) {
-          ResponseEntity.badRequest().body("Login or Registration Failed")
+          ResponseEntity.badRequest().body("Login or Registration Failed : ${e.message}")
       }
   }
 
-  @GetMapping("/{id}")
-  fun getUser(@PathVariable id: Int): CommonResult = responseService.getSingleResult(userService.getUserById(id))
+    @PostMapping("/userTypeEdit")
+    fun userTypeEdit(@RequestBody updateUserRequest: UserData): ResponseEntity<Any> {
+        return try {
+            val updateUser = userService.processUserTypeEdit(updateUserRequest)
+            ResponseEntity.ok(updateUser)
+            ResponseEntity.ok().body("User Type Edit Success")
+        } catch (e: Exception) {
+            ResponseEntity.badRequest().body("User Type Edit Failed : ${e.message}")
+        }
+    }
 
-  @DeleteMapping("/delete/{id}")
-  fun deleteUser(@PathVariable id: Int) = userService.deleteUser(id)
+  @GetMapping("/{email}")
+  fun getUser(@PathVariable email: String): CommonResult = responseService.getSingleResult(userService.getUserByEmail(email))
 
-  @GetMapping("/{id}/resume")
+  @DeleteMapping("/delete/{email}")
+  fun deleteUser(@PathVariable email: String) = userService.deleteUser(email)
+
+/*  @GetMapping("/{id}/resume")
   fun getUserAndResume(@PathVariable id: Int): ResponseEntity<Pair<User?, Resume?>> {
     val user = userService.getUserById(id)
     val resume = resumeService.getResumeByUserId(id)
     return ResponseEntity.ok(Pair(user, resume))
-  }
+  }*/
 }

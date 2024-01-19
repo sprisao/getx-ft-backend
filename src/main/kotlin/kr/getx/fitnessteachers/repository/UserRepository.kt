@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface UserRepository : JpaRepository<User, Int>{
     // 중복 이메일 검사 메소드
-    fun findByEmail(email: String): User?
+    fun findByEmail(email: String?): User?
 }

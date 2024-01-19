@@ -17,12 +17,16 @@ class JwtTokenFilter(private val jwtUtils: JwtUtils) : OncePerRequestFilter() {
             // Jwt 토큰에서 소셜 로그인 정보 추출
             val userData = jwtUtils.getSocialLoginInfo(token)
             if(userData != null) {
+                val name = userData.name ?: throw IllegalArgumentException("Name is missing in the token")
+                val email = userData.email ?: throw IllegalArgumentException("Email is missing in the token")
+                val socialType = userData.socialType ?: throw IllegalArgumentException("Social Type is missing in the token")
+
                 // 인증 정보 저장
                 val auth = UsernamePasswordAuthenticationToken(
                     User(
-                        name = userData.name,
-                        email = userData.email,
-                        socialType = userData.socialType
+                        name = name,
+                        email = email,
+                        socialType = socialType
                     ),
                     null,
                     listOf(SimpleGrantedAuthority("ROLE_USER")) // 권한 설정
