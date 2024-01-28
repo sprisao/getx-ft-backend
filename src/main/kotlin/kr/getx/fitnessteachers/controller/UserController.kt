@@ -41,8 +41,7 @@ class UserController(
     fun userTypeEdit(@RequestBody updateUserRequest: UserData): ResponseEntity<Any> {
         return try {
             val updateUser = userService.processUserTypeEdit(updateUserRequest)
-            ResponseEntity.ok(updateUser)
-            ResponseEntity.ok().body("User Type Edit Success")
+            ResponseEntity.ok().body(updateUser)
         } catch (e: Exception) {
             ResponseEntity.badRequest().body("User Type Edit Failed : ${e.message}")
         }
@@ -54,10 +53,4 @@ class UserController(
   @DeleteMapping("/delete/{email}")
   fun deleteUser(@PathVariable email: String) = userService.deleteUser(email)
 
-/*  @GetMapping("/{id}/resume")
-  fun getUserAndResume(@PathVariable id: Int): ResponseEntity<Pair<User?, Resume?>> {
-    val user = userService.getUserById(id)
-    val resume = resumeService.getResumeByUserId(id)
-    return ResponseEntity.ok(Pair(user, resume))
-  }*/
 }

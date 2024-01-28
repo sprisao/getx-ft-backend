@@ -4,8 +4,7 @@ import kr.getx.fitnessteachers.dto.UserData
 import kr.getx.fitnessteachers.entity.User
 import kr.getx.fitnessteachers.repository.UserRepository
 import org.springframework.stereotype.Service
-import java.lang.Exception
-
+import org.springframework.http.ResponseEntity
 @Service
 class UserService(private val userRepository: UserRepository) {
 
@@ -23,16 +22,17 @@ class UserService(private val userRepository: UserRepository) {
     }
 
     // 회원가입 & 로그인
-   fun processUserLogin(userData : UserData): User {
+   fun processUserLogin(userData : UserData): ResponseEntity<Map<String, Any>> {
        val existingUser = userRepository.findByEmail(userData.email)
        return if (existingUser != null) {
            if (existingUser.socialType == userData.socialType) {
-               loginUser(existingUser)
+               ResponseEntity.ok(mapOf("loginStatus" to true, "data" to loginUser(existingUser)))
            } else {
-                throw Exception("이미 다른 소셜로 가입된 이메일 입니다.")
+                ResponseEntity
+                    .ok(mapOf("loginStatus" to false, "data" to "이미 다른 소셜로 가입된 이메일 입니다."))
            }
        } else {
-           registerUser(userData)
+           ResponseEntity.ok(mapOf("loginStatus" to true, "data" to registerUser(userData)))
        }
    }
 
