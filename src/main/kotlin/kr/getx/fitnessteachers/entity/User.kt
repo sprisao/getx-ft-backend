@@ -2,6 +2,7 @@ package kr.getx.fitnessteachers.entity
 
 import jakarta.persistence.*
 import lombok.Getter
+import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 
@@ -33,6 +34,6 @@ data class User(
 
     var userTypeStatus: Boolean? = false,
 
-    @Column(name = "createdAt", insertable = false)
-    val createdAt: LocalDateTime? = LocalDateTime.now(),
+    @CreationTimestamp
+    val createdAt: LocalDateTime? = null
 )
