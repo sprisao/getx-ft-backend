@@ -1,18 +1,19 @@
 package kr.getx.fitnessteachers.entity
 
 import jakarta.persistence.*
-import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
+import org.hibernate.annotations.CreationTimestamp
+
 @Entity
-@Table(name = "centersPhotos")
-data class CenterPhoto(
+@Table(name = "resumesPhotos")
+data class ResumePhoto(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val photoId: Int = 0,
 
     @ManyToOne
-    @JoinColumn(name = "centerId", referencedColumnName = "centerId")
-    val center: Center,
+    @JoinColumn(name = "resumeId", referencedColumnName = "resumeId")
+    val resume: Resume,
 
     val photoUrl: String? = null,
 
