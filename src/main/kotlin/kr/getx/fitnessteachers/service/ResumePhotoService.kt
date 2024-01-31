@@ -11,7 +11,7 @@ class ResumePhotoService(private val resumePhotoRepository: ResumePhotoRepositor
 
     fun getResumePhotoById(id: Int) = resumePhotoRepository.findById(id).orElse(null)
 
-    fun getResumePhotoByResumeId(resumeId: Int) = resumePhotoRepository.findByResumePhotoResumeId(resumeId)
+    fun getResumePhotoByResumeId(resumeId: Int) = resumePhotoRepository.findByResumeResumeId(resumeId)
 
     fun addResumePhoto(resumePhoto: ResumePhoto) = resumePhotoRepository.save(resumePhoto)
 
@@ -19,5 +19,5 @@ class ResumePhotoService(private val resumePhotoRepository: ResumePhotoRepositor
 
     fun deleteResumePhoto(id: Int) = resumePhotoRepository.deleteById(id)
 
-    fun deleteResumePhotoByResumeId(resumeId: Int) = resumePhotoRepository.deleteByResumePhotoResumeId(resumeId)
+    fun deleteResumePhotoByResumeId(resumeId: Int) = resumePhotoRepository.deleteByResumeResumeId(resumeId)
 }

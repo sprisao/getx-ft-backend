@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ResumePhotoRepository : JpaRepository<ResumePhoto, Int> {
-    fun findByResumePhotoResumeId(resumeId: Int): List<ResumePhoto>
+    fun findByResumeResumeId(resumeId: Int): List<ResumePhoto>
 
-    fun deleteByResumePhotoResumeId(resumeId: Int)
+    fun deleteByResumeResumeId(resumeId: Int)
 }
