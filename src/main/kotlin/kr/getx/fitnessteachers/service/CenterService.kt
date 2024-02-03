@@ -16,4 +16,6 @@ class CenterService(private val centerRepository: CenterRepository) {
     fun updateCenter(center: Center): Center = centerRepository.save(center)
 
     fun deleteCenter(id: Int) = centerRepository.deleteById(id)
+
+    fun getCenterByUserId(userId: Int): List<Center> = centerRepository.findByUser_UserId(userId)
 }

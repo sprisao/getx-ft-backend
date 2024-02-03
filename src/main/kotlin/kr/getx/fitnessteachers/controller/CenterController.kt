@@ -33,6 +33,17 @@ class CenterController(private val centerService: CenterService, private val use
         return ResponseEntity.ok(saveCenter)
     }
 
+    @GetMapping("/user/{userId}")
+    fun getCenterByUserId(@RequestBody centerData: CenterData): List<Center> {
+        val user = userService.findUserById(centerData.userId)
+        if (user!= null) {
+            return centerService.getCenterByUserId(user.userId)
+        } else {
+            return emptyList()
+        }
+    }
+
+
     @GetMapping("/{id}")
     fun getCenter(@PathVariable id: Int): Center? = centerService.getCenterById(id)
 
