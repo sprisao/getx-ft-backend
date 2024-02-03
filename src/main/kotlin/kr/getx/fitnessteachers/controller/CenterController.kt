@@ -1,6 +1,5 @@
 package kr.getx.fitnessteachers.controller
 
-import jakarta.persistence.Id
 import jakarta.servlet.http.HttpServletRequest
 import kr.getx.fitnessteachers.dto.CenterData
 import kr.getx.fitnessteachers.entity.Center
