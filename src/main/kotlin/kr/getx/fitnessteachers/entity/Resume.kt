@@ -13,7 +13,10 @@ data class Resume(
 
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")
-    val user: User,
+    val user: User? = null,
+
+    @Lob
+    val photos: String,
 
     @CreationTimestamp
     val createdAt: LocalDateTime? = null
