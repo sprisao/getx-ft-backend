@@ -15,7 +15,6 @@ data class JobOpening(
     @JoinColumn(name = "centerId", referencedColumnName = "centerId")
     val center: Center? = null,
 
-    @Enumerated(EnumType.STRING)
     val recruitmentStatus: String? = null,
 
     val responsibilities: String? = null,
@@ -32,7 +31,6 @@ data class JobOpening(
 
     val salary: String? = null,
 
-    @Enumerated(EnumType.STRING)
     val baseSalary: String? = null,
 
     val qualifications: String? = null,

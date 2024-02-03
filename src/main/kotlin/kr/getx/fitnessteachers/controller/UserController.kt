@@ -47,9 +47,8 @@ class UserController(
         }
     }
 
-  @GetMapping("/{email}")
-  fun getUser(@PathVariable email: String): CommonResult = responseService.getSingleResult(userService.getUserByEmail(email))
-
+    @GetMapping("/{email}")
+    fun getUser(@PathVariable email: String): CommonResult = responseService.getSingleResult(userService.getUser(email))
   @DeleteMapping("/delete/{email}")
   fun deleteUser(@PathVariable email: String) = userService.deleteUser(email)
 

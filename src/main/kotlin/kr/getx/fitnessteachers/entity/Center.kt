@@ -7,22 +7,25 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "centers")
 data class Center(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val centerId: Int = 0,
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        val centerId: Int = 0,
 
-    @ManyToOne
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
-    val user: User,
+        @ManyToOne
+        @JoinColumn(name = "userId", referencedColumnName = "userId")
+        val user: User? = null,
 
-    val centerName: String? = null,
+        val centerName: String? = null,
 
-    val locationProvince: String? = null,
+        @Lob
+        val photos: String,
 
-    val locationCity: String? = null,
+        val locationProvince: String? = null,
 
-    val description: String? = null,
+        val locationCity: String? = null,
 
-    @CreationTimestamp
-    val createdAt: LocalDateTime? = null
+        val description: String? = null,
+
+        @CreationTimestamp
+        val createdAt: LocalDateTime? = null
 )

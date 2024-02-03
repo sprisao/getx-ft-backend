@@ -19,11 +19,9 @@ data class JobSeeker(
     @JoinColumn(name = "resumeId", referencedColumnName = "resumeId")
     val resume: Resume,
 
-    @Enumerated(EnumType.STRING)
-    val jobInterest: String,
+    val jobInterest: String? = null,
 
-    @Enumerated(EnumType.STRING)
-    val availabilityStatus: String,
+    val availabilityStatus: String? = null,
 
     val desiredWorkLocation: String? = null,
 

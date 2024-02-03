@@ -1,5 +1,6 @@
 package kr.getx.fitnessteachers.service
 
+import jakarta.persistence.EntityNotFoundException
 import kr.getx.fitnessteachers.dto.UserData
 import kr.getx.fitnessteachers.entity.User
 import kr.getx.fitnessteachers.repository.UserRepository
@@ -10,8 +11,11 @@ class UserService(private val userRepository: UserRepository) {
 
     fun getAllUsers(): List<User> = userRepository.findAll()
 
-    fun getUserByEmail(email: String): User?{
-        return userRepository.findByEmail(email)
+    fun getUser(email: String): User? = userRepository.findByEmail(email)
+    fun findUserById(userId: Int): User?{
+        return userRepository.findById(userId).orElseThrow {
+            EntityNotFoundException("User not found with ID: $userId")
+        }
     }
 
     fun deleteUser(email: String) {

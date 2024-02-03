@@ -18,7 +18,7 @@ class JobSeekerController(private val jobSeekerService: JobSeekerService) {
         jobSeekerService.findById(seekerId)?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.notFound().build()
 
-    @PostMapping
+    @PostMapping("/add")
     fun createJobSeeker(@RequestBody jobSeeker: JobSeeker): ResponseEntity<JobSeeker> =
         ResponseEntity.ok(jobSeekerService.save(jobSeeker))
 
@@ -26,5 +26,12 @@ class JobSeekerController(private val jobSeekerService: JobSeekerService) {
     fun updateJobSeeker(@PathVariable seekerId: Int, @RequestBody jobSeeker: JobSeeker): ResponseEntity<JobSeeker> =
         jobSeekerService.findById(seekerId)?.let {
             ResponseEntity.ok(jobSeekerService.save(jobSeeker))
+        } ?: ResponseEntity.notFound().build()
+
+    @DeleteMapping("/delete/{seekerId}")
+    fun deleteJobSeeker(@PathVariable seekerId: Int): ResponseEntity<Unit> =
+jobSeekerService.findById(seekerId)?.let {
+            jobSeekerService.deleteById(seekerId)
+            ResponseEntity.noContent().build()
         } ?: ResponseEntity.notFound().build()
 }
