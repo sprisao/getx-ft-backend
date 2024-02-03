@@ -1,5 +1,6 @@
 package kr.getx.fitnessteachers.controller
 
+import jakarta.persistence.Id
 import jakarta.servlet.http.HttpServletRequest
 import kr.getx.fitnessteachers.dto.CenterData
 import kr.getx.fitnessteachers.entity.Center
@@ -34,12 +35,21 @@ class CenterController(private val centerService: CenterService, private val use
     }
 
     @GetMapping("/user/{userId}")
-    fun getCenterByUserId(@RequestBody centerData: CenterData): List<Center> {
-        val user = userService.findUserById(centerData.userId)
+    fun getCenterByUserId(@PathVariable userId: Int): ResponseEntity<List<CenterData>> {
+        val user = userService.findUserById(userId)
         if (user!= null) {
-            return centerService.getCenterByUserId(user.userId)
+            val centers = centerService.getCenterByUserId(user.userId).map { center ->
+                CenterData(
+                        centerName = center.centerName,
+                        photos = center.photos?.let { StringConversionUtils.convertStringToList(it) } ?: emptyList(),
+                        locationCity = center.locationCity,
+                        description = center.description,
+                        userId = center.user!!.userId
+                )
+            }
+            return ResponseEntity.ok().body(centers)
         } else {
-            return emptyList()
+            return ResponseEntity.notFound().build()
         }
     }
 
