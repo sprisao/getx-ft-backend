@@ -1,6 +1,7 @@
 package kr.getx.fitnessteachers.entity
 
 import jakarta.persistence.*
+import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -9,22 +10,18 @@ import java.time.LocalDateTime
 data class Education(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "EducationID")
     val educationId: Int,
 
     @ManyToOne
-    @JoinColumn(name = "ResumeID", referencedColumnName = "ResumeID")
+    @JoinColumn(name = "resumeId", referencedColumnName = "resumeId")
     val resume: Resume,
 
-    @Column(name = "CourseName")
     val courseName: String,
 
-    @Column(name = "Institution")
     val institution: String,
 
-    @Column(name = "CompletionDate")
     val completionDate: LocalDate,
 
-    @Column(name = "CreatedAt")
-    val createdAt: LocalDateTime = LocalDateTime.now()
+    @CreationTimestamp
+    val createdAt: LocalDateTime? = null
 )

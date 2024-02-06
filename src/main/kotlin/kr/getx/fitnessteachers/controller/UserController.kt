@@ -5,7 +5,6 @@ import kr.getx.fitnessteachers.common.response.CommonResult
 import kr.getx.fitnessteachers.common.service.ResponseService
 import kr.getx.fitnessteachers.dto.UserData
 import kr.getx.fitnessteachers.entity.User
-import kr.getx.fitnessteachers.service.ResumeService
 import kr.getx.fitnessteachers.service.UserService
 import lombok.RequiredArgsConstructor
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,7 +16,6 @@ import org.springframework.http.ResponseEntity
 @RequestMapping("/api/users")
 class UserController(
   private val userService: UserService,
-  private val resumeService: ResumeService,
 ) {
 
   @Autowired

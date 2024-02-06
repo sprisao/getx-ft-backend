@@ -5,11 +5,11 @@ import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "job_openings")
-data class JobOpening(
+@Table(name = "jobPosts")
+data class JobPost(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val jobOpeningId: Int = 0,
+    val jobPostId: Int = 0,
 
     @ManyToOne
     @JoinColumn(name = "centerId", referencedColumnName = "centerId")
@@ -17,6 +17,7 @@ data class JobOpening(
 
     val recruitmentStatus: String? = null,
 
+    @Column(length = 10000)
     val responsibilities: String? = null,
 
     val workLocation: String? = null,
@@ -31,8 +32,7 @@ data class JobOpening(
 
     val salary: String? = null,
 
-    val baseSalary: String? = null,
-
+    @Column(length = 10000)
     val qualifications: String? = null,
 
     val applicationPeriodStart: LocalDateTime? = null,
@@ -45,6 +45,7 @@ data class JobOpening(
 
     val contactPerson: String? = null,
 
+    @Column(length = 10000)
     val details: String? = null,
 
     @CreationTimestamp

@@ -1,8 +1,10 @@
 package kr.getx.fitnessteachers.repository
 
-import kr.getx.fitnessteachers.entity.JobSeeker
+import kr.getx.fitnessteachers.entity.JobPost
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface JobSeekerRepository : JpaRepository<JobSeeker, Int>
+interface JobPostRepository : JpaRepository<JobPost, Int> {
+
+}
