@@ -17,9 +17,6 @@ class ExperienceController(private val experienceService: ExperienceService) {
     @GetMapping("/{id}")
     fun getExperience(@PathVariable id: Int): Experience? = experienceService.getExperienceById(id)
 
-    @PutMapping("/update")
-    fun updateExperience(@RequestBody experience: Experience): Experience = experienceService.updateExperience(experience)
-
     @DeleteMapping("/delete/{id}")
     fun deleteExperience(@PathVariable id: Int) = experienceService.deleteExperience(id)
 }

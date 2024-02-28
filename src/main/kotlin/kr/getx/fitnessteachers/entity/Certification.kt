@@ -16,11 +16,11 @@ data class Certification(
     @JoinColumn(name = "resumeId", referencedColumnName = "resumeId")
     val resume: Resume,
 
-    val name: String,
+    var name: String,
 
-    val issuedBy: String,
+    var issuedBy: String,
 
-    val issuedDate: LocalDate,
+    var issuedDate: LocalDate,
 
     @CreationTimestamp
     val createdAt: LocalDateTime? = null

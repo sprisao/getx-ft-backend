@@ -15,7 +15,20 @@ class EducationService(private val educationRepository: EducationRepository) {
 
     fun getEducationById(id: Int): Education? = educationRepository.findById(id).orElse(null)
 
-    fun updateEducation(education: Education): Education = educationRepository.save(education)
+    fun updateEducation(resume: Resume, education: Education) {
+      val existingEducation = educationRepository.findByResumeResumeId(resume.resumeId)
+
+        existingEducation.forEach { existingEducation ->
+            if(existingEducation.educationId == education.educationId) {
+                existingEducation.apply {
+                    this.courseName = education.courseName
+                    this.institution = education.institution
+                    this.completionDate = education.completionDate
+                }
+                educationRepository.save(existingEducation)
+            }
+        }
+    }
 
     fun deleteEducation(id: Int) = educationRepository.deleteById(id)
 

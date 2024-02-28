@@ -17,9 +17,6 @@ class EducationController(private val educationService: EducationService) {
     @GetMapping("/{id}")
     fun getEducation(@PathVariable id: Int): Education? = educationService.getEducationById(id)
 
-    @PutMapping("/update")
-    fun updateEducation(@RequestBody education: Education): Education = educationService.updateEducation(education)
-
     @DeleteMapping("/delete/{id}")
     fun deleteEducation(@PathVariable id: Int) = educationService.deleteEducation(id)
 }

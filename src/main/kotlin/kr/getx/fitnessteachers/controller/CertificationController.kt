@@ -17,9 +17,6 @@ class CertificationController(private val certificationService: CertificationSer
     @GetMapping("/{id}")
     fun getCertification(@PathVariable id: Int): Certification? = certificationService.getCertificationById(id)
 
-    @PutMapping("/update")
-    fun updateCertification(@RequestBody certification: Certification): Certification = certificationService.updateCertification(certification)
-
     @DeleteMapping("/delete/{id}")
     fun deleteCertification(@PathVariable id: Int) = certificationService.deleteCertification(id)
 }

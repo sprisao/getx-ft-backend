@@ -40,6 +40,37 @@ class ResumeService(
         return resume
     }
 
+    fun updateResumeWithDetails(resumeDto: ResumeDto): Resume {
+        // Resume ID를 통해 기존 이력서를 찾습니다.
+        val resume = resumeDto.userId?.let {
+            resumeRepository.findByUserUserId(it) ?: throw Exception("Resume not found")
+        } ?: throw Exception("Resume ID is required for update operation.")
+
+        // 유저 정보 업데이트 (필요한 경우)
+        val user = userService.findUserById(resumeDto.userId) ?: throw Exception("User not found")
+
+
+        // 사진 정보 업데이트
+        val photoString = StringConversionUtils.convertListToString(resumeDto.photos)
+        resume.photos = photoString
+
+        // 이력서 업데이트
+        resumeRepository.save(resume)
+
+        resumeDto.educations.forEach { educationDto ->
+            educationService.updateEducation(resume, educationDto.toEducation(resume))
+        }
+
+        resumeDto.experiences.forEach { experienceDto ->
+            experienceService.updateExperience(resume, experienceDto.toExperience(resume))
+        }
+
+        resumeDto.certifications.forEach { certificationDto ->
+            certificationService.updateCertification(resume, certificationDto.toCertification(resume))
+        }
+        return resume
+    }
+
     fun getResumeById(id: Int): Resume? = resumeRepository.findById(id).orElse(null)
 
     fun updateResume(resume: Resume): Resume = resumeRepository.save(resume)

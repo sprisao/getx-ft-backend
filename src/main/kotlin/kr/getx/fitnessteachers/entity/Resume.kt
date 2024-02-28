@@ -16,7 +16,7 @@ data class Resume(
     val user: User? = null,
 
     @Lob
-    val photos: String,
+    var photos: String,
 
     @CreationTimestamp
     val createdAt: LocalDateTime? = null

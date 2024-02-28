@@ -14,16 +14,13 @@ data class Experience(
 
     @ManyToOne
     @JoinColumn(name = "resumeId", referencedColumnName = "resumeId")
-    val resume: Resume,
+    var resume: Resume,
 
-    @Column(name = "description")
-    val description: String,
+    var description: String,
 
-    @Column(name = "startDate")
-    val startDate: LocalDate,
+    var startDate: LocalDate,
 
-    @Column(name = "endDate")
-    val endDate: LocalDate,
+    var endDate: LocalDate,
 
     @CreationTimestamp
     val createdAt: LocalDateTime? = null

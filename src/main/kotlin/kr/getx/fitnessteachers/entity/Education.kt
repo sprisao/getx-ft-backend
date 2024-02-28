@@ -14,13 +14,13 @@ data class Education(
 
     @ManyToOne
     @JoinColumn(name = "resumeId", referencedColumnName = "resumeId")
-    val resume: Resume,
+    var resume: Resume,
 
-    val courseName: String,
+    var courseName: String,
 
-    val institution: String,
+    var institution: String,
 
-    val completionDate: LocalDate,
+    var completionDate: LocalDate,
 
     @CreationTimestamp
     val createdAt: LocalDateTime? = null

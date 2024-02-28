@@ -15,7 +15,20 @@ class CertificationService(private val certificationRepository: CertificationRep
 
     fun getCertificationById(id: Int): Certification? = certificationRepository.findById(id).orElse(null)
 
-    fun updateCertification(certification: Certification): Certification = certificationRepository.save(certification)
+    fun updateCertification(resume: Resume,certification: Certification) {
+        val certificationToUpdate = certificationRepository.findByResumeResumeId(resume.resumeId)
+
+        certificationToUpdate.forEach { certificationToUpdate ->
+            if(certificationToUpdate.certificationId == certification.certificationId) {
+                certificationToUpdate.apply {
+                    this.name = certification.name
+                    this.issuedBy = certification.issuedBy
+                    this.issuedDate = certification.issuedDate
+                }
+                certificationRepository.save(certificationToUpdate)
+            }
+        }
+    }
 
     fun deleteCertification(id: Int) = certificationRepository.deleteById(id)
 
