@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface CertificationRepository : JpaRepository<Certification, Int> {
     // 필요한 경우 사용자 정의 메서드를 추가
+
+    fun findByResumeResumeId(resumeId: Int): List<Certification>
 }

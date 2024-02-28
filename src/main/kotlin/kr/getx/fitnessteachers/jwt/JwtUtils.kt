@@ -8,7 +8,7 @@ import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.security.Keys
 import jakarta.servlet.http.HttpServletRequest
-import kr.getx.fitnessteachers.dto.UserData
+import kr.getx.fitnessteachers.dto.UserDto
 import org.springframework.stereotype.Component
 import org.springframework.beans.factory.annotation.Value
 
@@ -50,7 +50,7 @@ class JwtUtils {
     }
 
     // Jwt Claims 추출
-    fun getSocialLoginInfo(authToken: String): UserData {
+    fun getSocialLoginInfo(authToken: String): UserDto {
         val claims = Jwts.parserBuilder()
             .setSigningKey(Keys.hmacShaKeyFor("s3BTt6uIdU6/99xZQYfOQoh4cRrJyZIXSbrmq+4nDog".toByteArray(StandardCharset.UTF_8)))
             .build()
@@ -62,7 +62,7 @@ class JwtUtils {
         val socialType = claims["socialType"] as String
 
         return if (email != null && name != null) {
-            UserData(name, email, socialType, false, "", "", false, false, false)
+            UserDto(name, email, socialType, false, "", "", false, false, false)
         } else {
             throw Exception("Invalid Token")
         }

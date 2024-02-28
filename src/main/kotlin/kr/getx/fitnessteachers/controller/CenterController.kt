@@ -1,7 +1,7 @@
 package kr.getx.fitnessteachers.controller
 
 import jakarta.servlet.http.HttpServletRequest
-import kr.getx.fitnessteachers.dto.CenterData
+import kr.getx.fitnessteachers.dto.CenterDto
 import kr.getx.fitnessteachers.entity.Center
 import kr.getx.fitnessteachers.service.CenterService
 import kr.getx.fitnessteachers.service.UserService
@@ -16,17 +16,17 @@ class CenterController(private val centerService: CenterService, private val use
     fun getAllCenters(): List<Center> = centerService.getAllCenters()
 
     @PostMapping("/add")
-    fun addCenter(@RequestBody centerData: CenterData, request: HttpServletRequest): ResponseEntity<Center> {
-        val user = userService.findUserById(centerData.userId)
+    fun addCenter(@RequestBody centerDto: CenterDto, request: HttpServletRequest): ResponseEntity<Center> {
+        val user = userService.findUserById(centerDto.userId)
 
-        val photoString = StringConversionUtils.convertListToString(centerData.photos)
+        val photoString = StringConversionUtils.convertListToString(centerDto.photos)
         val center = Center(
                 user = user,
-                centerName = centerData.centerName,
+                centerName = centerDto.centerName,
                 photos = photoString,
-                locationProvince = centerData.locationProvince,
-                locationCity = centerData.locationCity,
-                description = centerData.description
+                locationProvince = centerDto.locationProvince,
+                locationCity = centerDto.locationCity,
+                description = centerDto.description
         )
 
         val saveCenter = centerService.addCenter(center)
@@ -34,11 +34,11 @@ class CenterController(private val centerService: CenterService, private val use
     }
 
     @GetMapping("/user/{userId}")
-    fun getCenterByUserId(@PathVariable userId: Int): ResponseEntity<List<CenterData>> {
+    fun getCenterByUserId(@PathVariable userId: Int): ResponseEntity<List<CenterDto>> {
         val user = userService.findUserById(userId)
         if (user!= null) {
             val centers = centerService.getCenterByUserId(user.userId).map { center ->
-                CenterData(
+                CenterDto(
                         centerName = center.centerName,
                         photos = center.photos?.let { StringConversionUtils.convertStringToList(it) } ?: emptyList(),
                         locationCity = center.locationCity,

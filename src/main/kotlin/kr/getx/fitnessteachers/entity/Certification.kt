@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 data class Certification(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val certificationId: Int,
+    val certificationId: Int = 0,
 
     @ManyToOne
     @JoinColumn(name = "resumeId", referencedColumnName = "resumeId")

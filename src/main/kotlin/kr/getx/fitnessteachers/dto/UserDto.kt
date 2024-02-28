@@ -1,6 +1,6 @@
 package kr.getx.fitnessteachers.dto
 
-data class UserData(
+data class UserDto(
     val name: String? = null,
     val email: String? = null,
     val socialType: String? = null,

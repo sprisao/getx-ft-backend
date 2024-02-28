@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 data class Education(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val educationId: Int,
+    val educationId: Int = 0,
 
     @ManyToOne
     @JoinColumn(name = "resumeId", referencedColumnName = "resumeId")

@@ -1,6 +1,6 @@
 package kr.getx.fitnessteachers.dto
 
-data class CenterData(
+data class CenterDto(
         val centerName: String? = null,
         val photos: List<String>,
         val locationProvince: String? = null,
