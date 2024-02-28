@@ -19,8 +19,6 @@ class ResumeService(
 
     fun getAllResumes(): List<Resume> = resumeRepository.findAll()
 
-    fun addResume(resume: Resume): Resume = resumeRepository.save(resume)
-
     fun addResumeWithDetails(resumeDto: ResumeDto): Resume {
         val user = userService.findUserById(resumeDto.userId) ?: throw Exception("User not found")
 

@@ -1,6 +1,5 @@
 package kr.getx.fitnessteachers.service
 
-import kr.getx.fitnessteachers.common.service.ResponseService
 import kr.getx.fitnessteachers.entity.Education
 import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.repository.EducationRepository

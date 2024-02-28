@@ -1,6 +1,5 @@
 package kr.getx.fitnessteachers.service
 
-import kr.getx.fitnessteachers.entity.Certification
 import kr.getx.fitnessteachers.entity.Experience
 import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.repository.ExperienceRepository
