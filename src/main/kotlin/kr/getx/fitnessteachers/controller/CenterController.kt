@@ -10,7 +10,6 @@ import kr.getx.fitnessteachers.service.UserService
 import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
-import java.security.Principal
 
 @RestController
 @RequestMapping("/api/centers")

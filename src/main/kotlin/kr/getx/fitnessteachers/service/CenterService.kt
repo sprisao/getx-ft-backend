@@ -1,6 +1,5 @@
 package kr.getx.fitnessteachers.service
 
-import kr.getx.fitnessteachers.dto.CenterDto
 import kr.getx.fitnessteachers.dto.UpdateCenterDto
 import kr.getx.fitnessteachers.entity.Center
 import kr.getx.fitnessteachers.repository.CenterRepository
@@ -19,7 +18,7 @@ class CenterService(private val centerRepository: CenterRepository) {
 
         center.apply {
             centerName = updateCenterDto.centerName ?: centerName
-            photos = updateCenterDto.photos.let { StringConversionUtils.convertListToString(it) } ?: photos
+            photos = updateCenterDto.photos.let { StringConversionUtils.convertListToString(it) }
             locationProvince = updateCenterDto.locationProvince ?: locationProvince
             locationCity = updateCenterDto.locationCity ?: locationCity
             description = updateCenterDto.description ?: description
