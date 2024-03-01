@@ -1,10 +1,12 @@
 package kr.getx.fitnessteachers.dto
 
+
 data class CenterDto(
-        val centerName: String? = null,
-        val photos: List<String>,
-        val locationProvince: String? = null,
-        val locationCity: String? = null,
-        val description: String? = null,
-        val userId: Int  // 사용자 ID 추가
+        val centerId: Int,
+        var centerName: String? = null,
+        var photos: List<String>,
+        var locationProvince: String? = null,
+        var locationCity: String? = null,
+        var description: String? = null,
+        var userId: Int
 )

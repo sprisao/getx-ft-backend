@@ -15,16 +15,16 @@ data class Center(
         @JoinColumn(name = "userId", referencedColumnName = "userId")
         val user: User? = null,
 
-        val centerName: String? = null,
+        var centerName: String? = null,
 
         @Lob
-        val photos: String,
+        var photos: String,
 
-        val locationProvince: String? = null,
+        var locationProvince: String? = null,
 
-        val locationCity: String? = null,
+        var locationCity: String? = null,
 
-        val description: String? = null,
+        var description: String? = null,
 
         @CreationTimestamp
         val createdAt: LocalDateTime? = null

@@ -1,13 +1,17 @@
 package kr.getx.fitnessteachers.controller
 
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.validation.Valid
 import kr.getx.fitnessteachers.dto.CenterDto
+import kr.getx.fitnessteachers.dto.UpdateCenterDto
 import kr.getx.fitnessteachers.entity.Center
 import kr.getx.fitnessteachers.service.CenterService
 import kr.getx.fitnessteachers.service.UserService
 import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
+import java.security.Principal
+
 @RestController
 @RequestMapping("/api/centers")
 class CenterController(private val centerService: CenterService, private val userService: UserService) {
@@ -16,7 +20,7 @@ class CenterController(private val centerService: CenterService, private val use
     fun getAllCenters(): List<Center> = centerService.getAllCenters()
 
     @PostMapping("/add")
-    fun addCenter(@RequestBody centerDto: CenterDto, request: HttpServletRequest): ResponseEntity<Center> {
+    fun addCenter(@RequestBody centerDto: CenterDto, request: HttpServletRequest): ResponseEntity<Any> {
         val user = userService.findUserById(centerDto.userId)
 
         val photoString = StringConversionUtils.convertListToString(centerDto.photos)
@@ -34,31 +38,40 @@ class CenterController(private val centerService: CenterService, private val use
     }
 
     @GetMapping("/user/{userId}")
-    fun getCenterByUserId(@PathVariable userId: Int): ResponseEntity<List<CenterDto>> {
+    fun getCenterByUserId(@PathVariable userId: Int): ResponseEntity<Any> {
         val user = userService.findUserById(userId)
-        if (user!= null) {
+
+        return if (user!= null) {
             val centers = centerService.getCenterByUserId(user.userId).map { center ->
                 CenterDto(
-                        centerName = center.centerName,
-                        photos = center.photos?.let { StringConversionUtils.convertStringToList(it) } ?: emptyList(),
-                        locationCity = center.locationCity,
-                        description = center.description,
-                        userId = center.user!!.userId
+                    centerId = center.centerId,
+                    centerName = center.centerName,
+                    photos = center.photos?.let { StringConversionUtils.convertStringToList(it) } ?: emptyList(),
+                    locationProvince = center.locationProvince,
+                    locationCity = center.locationCity,
+                    description = center.description,
+                    userId = center.user!!.userId
                 )
             }
+
+            if (centers.isEmpty()) {
+                return ResponseEntity.ok().body("등록된 센터가 없습니다.")
+            } else {
             return ResponseEntity.ok().body(centers)
+            }
         } else {
-            return ResponseEntity.notFound().build()
+            ResponseEntity.notFound().build()
         }
     }
 
-
-    @GetMapping("/{id}")
-    fun getCenter(@PathVariable id: Int): Center? = centerService.getCenterById(id)
-
-    @PutMapping("/update")
-    fun updateCenter(@RequestBody center: Center): Center = centerService.updateCenter(center)
-
-    @DeleteMapping("/delete/{id}")
-    fun deleteCenter(@PathVariable id: Int) = centerService.deleteCenter(id)
+    @PutMapping("/update/{centerId}")
+    fun updateCenter(@PathVariable centerId: Int,@RequestBody @Valid updateCenterDto: UpdateCenterDto): ResponseEntity<Any>{
+        val updateCenter = centerService.updateCenter(centerId, updateCenterDto)
+        return ResponseEntity.ok(updateCenter)
+    }
+    @DeleteMapping("/delete/{centerId}")
+    fun deleteCenter(@PathVariable centerId: Int): ResponseEntity<Any>{
+        centerService.deleteCenter(centerId)
+        return ResponseEntity.ok().body("센터가 성공적으로 삭제되었습니다.")
+    }
 }
