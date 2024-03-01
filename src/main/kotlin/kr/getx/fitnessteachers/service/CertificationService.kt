@@ -44,4 +44,8 @@ class CertificationService(private val certificationRepository: CertificationRep
     fun getCertificationByResumeId(resumeId: Int): List<Certification> {
         return certificationRepository.findByResumeResumeId(resumeId)
     }
+
+    fun deleteAllByResume(resume: Resume) {
+        certificationRepository.deleteAllByResume(resume)
+    }
 }

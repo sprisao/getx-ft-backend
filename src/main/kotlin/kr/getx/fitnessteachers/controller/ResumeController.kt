@@ -30,7 +30,7 @@ class ResumeController(
         return ResponseEntity.ok(saveResume)
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{userId}")
     fun getResumeByUserId(@PathVariable userId: Int): ResponseEntity<ResumeDto> {
         val user = userService.findUserById(userId)
         return if (user != null) {
@@ -76,10 +76,10 @@ class ResumeController(
         }
     }
 
-    @DeleteMapping("/delete/{id}")
-    fun deleteResume(@PathVariable id: Int): ResponseEntity<Void> {
+    @DeleteMapping("/delete/{userId}")
+    fun deleteResume(@PathVariable userId: Int): ResponseEntity<Void> {
         return try {
-            resumeService.deleteResume(id)
+            resumeService.deleteResumeAndRelatedDetails(userId)
             ResponseEntity.noContent().build()
         } catch (e: Exception) {
             ResponseEntity.notFound().build()

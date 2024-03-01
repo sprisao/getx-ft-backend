@@ -45,4 +45,8 @@ class ExperienceService(private val experienceRepository: ExperienceRepository) 
     fun getExperienceByResumeId(resumeId: Int): List<Experience> {
         return experienceRepository.findByResumeResumeId(resumeId)
     }
+
+    fun deleteAllByResume(resume: Resume) {
+        experienceRepository.deleteAllByResume(resume)
+    }
 }

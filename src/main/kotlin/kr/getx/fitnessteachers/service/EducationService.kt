@@ -44,5 +44,9 @@ class EducationService(private val educationRepository: EducationRepository) {
     fun getEducationByResumeId(resumeId: Int): List<Education> {
         return educationRepository.findByResumeResumeId(resumeId)
     }
+
+    fun deleteAllByResume(resume: Resume) {
+        educationRepository.deleteAllByResume(resume)
+    }
 }
 

@@ -71,13 +71,17 @@ class ResumeService(
         return resume
     }
 
-    fun getResumeById(id: Int): Resume? = resumeRepository.findById(id).orElse(null)
-
-    fun updateResume(resume: Resume): Resume = resumeRepository.save(resume)
-
-    fun deleteResume(id: Int) = resumeRepository.deleteById(id)
-
     fun getResumeByUserId(userId: Int): Resume? {
         return resumeRepository.findByUserUserId(userId)
+    }
+
+    fun deleteResumeAndRelatedDetails(userId: Int) {
+        val resume = resumeRepository.findByUserUserId(userId) ?: throw Exception("Resume not found")
+
+        educationService.deleteAllByResume(resume)
+        experienceService.deleteAllByResume(resume)
+        certificationService.deleteAllByResume(resume)
+
+        resumeRepository.delete(resume)
     }
 }
