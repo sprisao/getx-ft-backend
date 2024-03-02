@@ -24,7 +24,7 @@ class CenterController(private val centerService: CenterService, private val use
 
         val photoString = StringConversionUtils.convertListToString(centerDto.photos)
         val center = Center(
-                user = user,
+                user = user!!,
                 centerName = centerDto.centerName,
                 photos = photoString,
                 locationProvince = centerDto.locationProvince,

@@ -3,6 +3,7 @@ package kr.getx.fitnessteachers.jwt
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import kr.getx.fitnessteachers.dto.UserDto
 import kr.getx.fitnessteachers.entity.User
 import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -21,13 +22,14 @@ class JwtTokenFilter(private val jwtUtils: JwtUtils) : OncePerRequestFilter() {
                 val email = userData.email ?: throw IllegalArgumentException("Email is missing in the token")
                 val socialType = userData.socialType ?: throw IllegalArgumentException("Social Type is missing in the token")
 
+                val userDto = UserDto(
+                    name = name,
+                    email = email,
+                    socialType = socialType
+                )
                 // 인증 정보 저장
                 val auth = UsernamePasswordAuthenticationToken(
-                    User(
-                        name = name,
-                        email = email,
-                        socialType = socialType
-                    ),
+                    userDto,
                     null,
                     listOf(SimpleGrantedAuthority("ROLE_USER")) // 권한 설정
                 )

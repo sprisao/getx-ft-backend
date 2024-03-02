@@ -13,7 +13,7 @@ data class Center(
 
         @ManyToOne
         @JoinColumn(name = "userId", referencedColumnName = "userId")
-        val user: User? = null,
+        val user: User,
 
         var centerName: String? = null,
 

@@ -13,40 +13,40 @@ data class JobPost(
 
     @ManyToOne
     @JoinColumn(name = "centerId", referencedColumnName = "centerId")
-    val center: Center? = null,
+    val center: Center,
 
-    val recruitmentStatus: String? = null,
-
-    @Column(length = 10000)
-    val responsibilities: String? = null,
-
-    val workLocation: String? = null,
-
-    val workHours: String? = null,
-
-    val workDays: String? = null,
-
-    val employmentType: String? = null,
-
-    val numberOfPositions: Int? = null,
-
-    val salary: String? = null,
+    var recruitmentStatus: String? = null,
 
     @Column(length = 10000)
-    val qualifications: String? = null,
+    var responsibilities: String? = null,
 
-    val applicationPeriodStart: LocalDateTime? = null,
+    var workLocation: String? = null,
 
-    val applicationPeriodEnd: LocalDateTime? = null,
+    var workHours: String? = null,
 
-    val contactEmail: String? = null,
+    var workDays: String? = null,
 
-    val contactPhone: String? = null,
+    var employmentType: String? = null,
 
-    val contactPerson: String? = null,
+    var numberOfPositions: Int? = null,
+
+    var salary: String? = null,
 
     @Column(length = 10000)
-    val details: String? = null,
+    var qualifications: String? = null,
+
+    var applicationPeriodStart: LocalDateTime? = null,
+
+    var applicationPeriodEnd: LocalDateTime? = null,
+
+    var contactEmail: String? = null,
+
+    var contactPhone: String? = null,
+
+    var contactPerson: String? = null,
+
+    @Column(length = 10000)
+    var details: String? = null,
 
     @CreationTimestamp
     val postedDate: LocalDateTime? = null

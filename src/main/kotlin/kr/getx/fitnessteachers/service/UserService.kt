@@ -11,7 +11,12 @@ class UserService(private val userRepository: UserRepository) {
 
     fun getAllUsers(): List<User> = userRepository.findAll()
 
-    fun getUser(email: String): User? = userRepository.findByEmail(email)
+    fun getUser(email: String?): User? = userRepository.findByEmail(email)
+
+    fun findUserByEmail(email: String): User? {
+        return userRepository.findByEmail(email)
+    }
+
     fun findUserById(userId: Int): User?{
         return userRepository.findById(userId).orElseThrow {
             EntityNotFoundException("User not found with ID: $userId")

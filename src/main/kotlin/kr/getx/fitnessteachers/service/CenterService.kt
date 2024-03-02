@@ -11,6 +11,8 @@ class CenterService(private val centerRepository: CenterRepository) {
 
     fun getAllCenters(): List<Center> = centerRepository.findAll()
 
+    fun findById(centerId: Int): Center? = centerRepository.findById(centerId).orElse(null)
+
     fun addCenter(center: Center): Center = centerRepository.save(center)
 
     fun updateCenter(centerId: Int, updateCenterDto: UpdateCenterDto): Center {
@@ -36,5 +38,7 @@ class CenterService(private val centerRepository: CenterRepository) {
         }
     }
 
-    fun getCenterByUserId(userId: Int): List<Center> = centerRepository.findByUser_UserId(userId)
+    fun getCenterByUserId(userId: Int): List<Center> {
+        return centerRepository.findByUser_UserId(userId)
+    }
 }
