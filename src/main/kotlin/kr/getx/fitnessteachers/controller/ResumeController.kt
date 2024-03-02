@@ -31,7 +31,7 @@ class ResumeController(
     }
 
     @GetMapping("/{userId}")
-    fun getResumeByUserId(@PathVariable userId: Int): ResponseEntity<ResumeDto> {
+    fun getResumeByUserId(@PathVariable userId: Int): ResponseEntity<Any> {
         val user = userService.findUserById(userId)
         return if (user != null) {
             val resume = resumeService.getResumeByUserId(user.userId)
@@ -49,10 +49,10 @@ class ResumeController(
                 )
                 return ResponseEntity.ok().body(resumeDto)
             } else {
-                ResponseEntity.notFound().build()
+                ResponseEntity.ok().body( "No resume found for user ID: $userId")
             }
         } else {
-            ResponseEntity.notFound().build()
+            ResponseEntity.ok().body("No user found for user ID: $userId")
         }
     }
 
@@ -70,19 +70,19 @@ class ResumeController(
                 ResponseEntity.badRequest().body(e.message)
             }
         } else if (user == null){
-            ResponseEntity.notFound().build()
+            ResponseEntity.ok().body("No user found for user ID: $userId")
         } else {
             ResponseEntity.badRequest().body("Resume ID is missing in the request.")
         }
     }
 
     @DeleteMapping("/delete/{userId}")
-    fun deleteResume(@PathVariable userId: Int): ResponseEntity<Void> {
+    fun deleteResume(@PathVariable userId: Int): ResponseEntity<Any> {
         return try {
             resumeService.deleteResumeAndRelatedDetails(userId)
-            ResponseEntity.noContent().build()
+            ResponseEntity.ok().body("Resume deleted successfully for user ID: $userId")
         } catch (e: Exception) {
-            ResponseEntity.notFound().build()
+            ResponseEntity.ok().body(e.message)
         }
     }
 }
