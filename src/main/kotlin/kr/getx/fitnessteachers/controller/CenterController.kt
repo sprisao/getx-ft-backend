@@ -36,7 +36,7 @@ class CenterController(private val centerService: CenterService, private val use
         return ResponseEntity.ok(saveCenter)
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{userId}")
     fun getCenterByUserId(@PathVariable userId: Int): ResponseEntity<Any> {
         val user = userService.findUserById(userId)
 
@@ -59,7 +59,7 @@ class CenterController(private val centerService: CenterService, private val use
             return ResponseEntity.ok().body(centers)
             }
         } else {
-            ResponseEntity.notFound().build()
+            ResponseEntity.ok().body("해당 유저가 존재하지 않습니다.")
         }
     }
 
