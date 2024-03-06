@@ -5,6 +5,9 @@ import kr.getx.fitnessteachers.common.response.CommonResult
 import kr.getx.fitnessteachers.common.service.ResponseService
 import kr.getx.fitnessteachers.dto.UserDto
 import kr.getx.fitnessteachers.entity.User
+import kr.getx.fitnessteachers.exceptions.AuthenticationEmailNotFoundException
+import kr.getx.fitnessteachers.exceptions.UserEditFailedException
+import kr.getx.fitnessteachers.exceptions.UserLoginFailedException
 import kr.getx.fitnessteachers.service.UserService
 import lombok.RequiredArgsConstructor
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,11 +30,12 @@ class UserController(
   @PostMapping("/login")
   fun loginUser(request: HttpServletRequest): ResponseEntity<Any> {
       val userDto = request.getAttribute("userData") as? UserDto
+          ?: throw AuthenticationEmailNotFoundException()
       return try {
-          val user = userService.processUserLogin(userDto!!)
+          val user = userService.processUserLogin(userDto)
           ResponseEntity.ok(user)
       } catch (e: Exception) {
-          ResponseEntity.badRequest().body("Login or Registration Failed : ${e.message}")
+        throw UserLoginFailedException("Login or Registration Failed: ${e.message}")
       }
   }
 
@@ -41,7 +45,7 @@ class UserController(
             val updateUser = userService.processUserTypeEdit(updateUserRequest)
             ResponseEntity.ok().body(updateUser)
         } catch (e: Exception) {
-            ResponseEntity.badRequest().body("User Type Edit Failed : ${e.message}")
+            throw UserEditFailedException("User Type Edit Failed : ${e.message}")
         }
     }
 
@@ -51,7 +55,7 @@ class UserController(
             val updateUser = userService.processUserEdit(email, updateUserRequest)
             ResponseEntity.ok().body(updateUser)
         } catch (e: Exception) {
-            ResponseEntity.badRequest().body("User Edit Failed : ${e.message}")
+            throw UserEditFailedException("User Edit Failed : ${e.message}")
         }
     }
     @GetMapping("/{email}")

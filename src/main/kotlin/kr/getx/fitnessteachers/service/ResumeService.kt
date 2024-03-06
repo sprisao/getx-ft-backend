@@ -6,6 +6,9 @@ import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.repository.ResumeRepository
 import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.stereotype.Service
+import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
+import kr.getx.fitnessteachers.exceptions.UserNotFoundException
+import kr.getx.fitnessteachers.exceptions.InvalidResumeOperationException
 
 @Service
 @Transactional
@@ -20,7 +23,7 @@ class ResumeService(
     fun getAllResumes(): List<Resume> = resumeRepository.findAll()
 
     fun addResumeWithDetails(resumeDto: ResumeDto): Resume {
-        val user = userService.findUserById(resumeDto.userId) ?: throw Exception("User not found")
+        val user = userService.findUserById(resumeDto.userId) ?: throw UserNotFoundException(resumeDto.userId)
 
         val photoString = StringConversionUtils.convertListToString(resumeDto.photos)
 
@@ -43,11 +46,11 @@ class ResumeService(
     fun updateResumeWithDetails(resumeDto: ResumeDto): Resume {
         // Resume ID를 통해 기존 이력서를 찾습니다.
         val resume = resumeDto.userId?.let {
-            resumeRepository.findByUserUserId(it) ?: throw Exception("Resume not found")
-        } ?: throw Exception("Resume ID is required for update operation.")
+            resumeRepository.findByUserUserId(it) ?: throw ResumeNotFoundException(it)
+        } ?: throw InvalidResumeOperationException("User ID is required to update resume")
 
         // 유저 정보 업데이트 (필요한 경우)
-        val user = userService.findUserById(resumeDto.userId) ?: throw Exception("User not found")
+        val user = userService.findUserById(resumeDto.userId) ?: throw UserNotFoundException(resumeDto.userId)
 
 
         // 사진 정보 업데이트
@@ -76,7 +79,7 @@ class ResumeService(
     }
 
     fun deleteResumeAndRelatedDetails(userId: Int) {
-        val resume = resumeRepository.findByUserUserId(userId) ?: throw Exception("Resume not found")
+        val resume = resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
 
         educationService.deleteAllByResume(resume)
         experienceService.deleteAllByResume(resume)

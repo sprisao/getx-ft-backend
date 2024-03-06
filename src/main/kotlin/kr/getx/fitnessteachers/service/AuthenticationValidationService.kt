@@ -1,12 +1,14 @@
 package kr.getx.fitnessteachers.service
 
-import jakarta.persistence.EntityNotFoundException
 import kr.getx.fitnessteachers.dto.UserDto
 import kr.getx.fitnessteachers.entity.Center
 import kr.getx.fitnessteachers.entity.User
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
-import java.nio.file.AccessDeniedException
+import kr.getx.fitnessteachers.exceptions.AuthenticationEmailNotFoundException
+import kr.getx.fitnessteachers.exceptions.CenterNotFoundException
+import kr.getx.fitnessteachers.exceptions.CenterOwnershipException
+import kr.getx.fitnessteachers.exceptions.UserNotFoundExceptionByEmail
 
 @Service
 class AuthenticationValidationService (
@@ -17,18 +19,18 @@ class AuthenticationValidationService (
     fun getUserFromAuthentication(authentication: Authentication): User {
         val userDto = authentication.principal as UserDto
         val userEmail = userDto.email
-            ?: throw IllegalArgumentException("인증 정보에서 사용자 이메일을 찾을 수 없습니다.")
+            ?: throw AuthenticationEmailNotFoundException()
         return userService.findUserByEmail(userEmail)
-            ?: throw EntityNotFoundException("이메일이 $userEmail 인 사용자를 찾을 수 없습니다.")
+            ?: throw UserNotFoundExceptionByEmail(userEmail)
     }
 
     // centerId 를 통해서 센터의 소유주인지 확인
     fun validateCenterOwnership(centerId: Int, user: User): Center {
         val center = centerService.findById(centerId)
-            ?: throw EntityNotFoundException("ID가 $centerId 인 센터를 찾을 수 없습니다.")
+            ?: throw CenterNotFoundException(centerId)
 
         if (center.user.userId != user.userId) {
-            throw AccessDeniedException("사용자 ${user.userId}는 센터 ${centerId}의 소유주가 아닙니다.")
+            throw CenterOwnershipException(centerId, user.userId)
         }
 
         return center

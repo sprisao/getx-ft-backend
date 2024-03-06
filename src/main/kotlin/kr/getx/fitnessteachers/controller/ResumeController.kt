@@ -10,6 +10,9 @@ import kr.getx.fitnessteachers.service.*
 import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
+import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
+import kr.getx.fitnessteachers.exceptions.UserNotFoundException
+
 
 @RestController
 @RequestMapping("/api/resumes")
@@ -33,56 +36,47 @@ class ResumeController(
     @GetMapping("/{userId}")
     fun getResumeByUserId(@PathVariable userId: Int): ResponseEntity<Any> {
         val user = userService.findUserById(userId)
-        return if (user != null) {
-            val resume = resumeService.getResumeByUserId(user.userId)
-            if (resume != null) {
-                val resumeDto = ResumeDto(
-                    resumeId = resume.resumeId,
-                    userId = user.userId,
-                    photos = StringConversionUtils.convertStringToList(resume.photos ?: " "),
-                    experiences = experienceService.getExperienceByResumeId(resume.resumeId)
-                        .map { ExperienceDto(it.experienceId, it.description, it.startDate, it.endDate) },
-                    educations = educationService.getEducationByResumeId(resume.resumeId)
-                        .map { EducationDto(it.educationId, it.courseName, it.institution, it.completionDate) },
-                    certifications = certificationService.getCertificationByResumeId(resume.resumeId)
-                        .map { CertificationDto(it.certificationId, it.name, it.issuedBy, it.issuedDate) }
-                )
-                return ResponseEntity.ok().body(resumeDto)
-            } else {
-                ResponseEntity.ok().body( "No resume found for user ID: $userId")
-            }
-        } else {
-            ResponseEntity.ok().body("No user found for user ID: $userId")
-        }
+            ?: throw UserNotFoundException(userId)
+        val resume = resumeService.getResumeByUserId(user.userId)
+            ?: throw ResumeNotFoundException(user.userId)
+        val resumeDto = ResumeDto(
+            resumeId = resume.resumeId,
+            userId = user.userId,
+            photos = StringConversionUtils.convertStringToList(resume.photos ?: " "),
+            experiences = experienceService.getExperienceByResumeId(resume.resumeId)
+                .map { ExperienceDto(it.experienceId, it.description, it.startDate, it.endDate) },
+            educations = educationService.getEducationByResumeId(resume.resumeId)
+                .map { EducationDto(it.educationId, it.courseName, it.institution, it.completionDate) },
+            certifications = certificationService.getCertificationByResumeId(resume.resumeId)
+                .map { CertificationDto(it.certificationId, it.name, it.issuedBy, it.issuedDate) }
+        )
+        return ResponseEntity.ok().body(resumeDto)
     }
 
     @PutMapping("/update/{userId}")
     fun updateResumeByUserId(@PathVariable userId: Int, @RequestBody resumeDto: ResumeDto): ResponseEntity<Any> {
         val user = userService.findUserById(userId)
-        return if (user != null && resumeDto != null) {
-            // 이력서 업데이트를 위한 데이터 검증 및 설정
-            resumeDto.userId = userId
+            ?: throw UserNotFoundException(userId)
 
-            try {
-                val updatedResume = resumeService.updateResumeWithDetails(resumeDto)
-                ResponseEntity.ok(updatedResume)
-            } catch (e: Exception) {
-                ResponseEntity.badRequest().body(e.message)
-            }
-        } else if (user == null){
-            ResponseEntity.ok().body("No user found for user ID: $userId")
-        } else {
-            ResponseEntity.badRequest().body("Resume ID is missing in the request.")
+        // 이력서 업데이트를 위한 데이터 검증 및 설정
+        resumeDto.userId = userId
+
+        try {
+            val updatedResume = resumeService.updateResumeWithDetails(resumeDto)
+            return ResponseEntity.ok(updatedResume)
+        } catch (e: Exception) {
+            return ResponseEntity.internalServerError().body(e.message)
         }
     }
 
     @DeleteMapping("/delete/{userId}")
     fun deleteResume(@PathVariable userId: Int): ResponseEntity<Any> {
+        userService.findUserById(userId) ?: throw UserNotFoundException(userId)
         return try {
             resumeService.deleteResumeAndRelatedDetails(userId)
-            ResponseEntity.ok().body("Resume deleted successfully for user ID: $userId")
+            ResponseEntity.ok().body("이력서 삭제를 완료했습니다. 유저 ID : $userId")
         } catch (e: Exception) {
-            ResponseEntity.ok().body(e.message)
+            ResponseEntity.internalServerError().body(e.message)
         }
     }
 }
