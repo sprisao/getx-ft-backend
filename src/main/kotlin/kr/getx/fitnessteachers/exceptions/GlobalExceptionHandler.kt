@@ -1,7 +1,5 @@
 package kr.getx.fitnessteachers.exceptions
 
-import kr.getx.fitnessteachers.exceptions.*
-import kr.getx.fitnessteachers.service.AuthenticationValidationService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler

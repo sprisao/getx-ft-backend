@@ -4,7 +4,6 @@ import jakarta.persistence.EntityNotFoundException
 import kr.getx.fitnessteachers.dto.UserDto
 import kr.getx.fitnessteachers.entity.User
 import kr.getx.fitnessteachers.exceptions.UserLoginFailedException
-import kr.getx.fitnessteachers.exceptions.UserNotFoundException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundExceptionByEmail
 import kr.getx.fitnessteachers.repository.UserRepository
 import org.springframework.stereotype.Service

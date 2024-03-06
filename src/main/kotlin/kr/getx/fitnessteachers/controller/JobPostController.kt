@@ -11,7 +11,6 @@ import kr.getx.fitnessteachers.service.JobPostService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.security.core.Authentication
-import java.nio.file.AccessDeniedException
 @RestController
 @RequestMapping("/api/jobPosts")
 class JobPostController(

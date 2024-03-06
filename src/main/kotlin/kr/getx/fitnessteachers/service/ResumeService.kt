@@ -45,7 +45,7 @@ class ResumeService(
 
     fun updateResumeWithDetails(resumeDto: ResumeDto): Resume {
         // Resume ID를 통해 기존 이력서를 찾습니다.
-        val resume = resumeDto.userId?.let {
+        val resume = resumeDto.userId.let {
             resumeRepository.findByUserUserId(it) ?: throw ResumeNotFoundException(it)
         } ?: throw InvalidResumeOperationException("User ID is required to update resume")
 
