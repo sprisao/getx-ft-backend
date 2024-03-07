@@ -23,5 +23,5 @@ data class Education(
     var completionDate: LocalDate,
 
     @CreationTimestamp
-    val createdAt: LocalDateTime? = null
+    val createdAt: LocalDateTime = LocalDateTime.now()
 )

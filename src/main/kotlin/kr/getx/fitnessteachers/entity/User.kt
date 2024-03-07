@@ -36,5 +36,5 @@ data class User(
     var userTypeStatus: Boolean? = false,
 
     @CreationTimestamp
-    val createdAt: LocalDateTime? = null
+    val createdAt: LocalDateTime = LocalDateTime.now()
 )

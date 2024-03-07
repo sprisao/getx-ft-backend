@@ -2,6 +2,7 @@ package kr.getx.fitnessteachers.dto
 
 import kr.getx.fitnessteachers.entity.*
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 data class ResumeDto(
         var resumeId : Int,
@@ -9,12 +10,14 @@ data class ResumeDto(
         val photos: List<String>,
         val experiences: List<ExperienceDto>,
         val educations: List<EducationDto>,
-        val certifications: List<CertificationDto>
+        val certifications: List<CertificationDto>,
+        val createdAt : LocalDateTime
 )
 {
         fun toResume(user: User, photosString: String): Resume = Resume(
                 user = user,
-                photos = photosString
+                photos = photosString,
+                createdAt = this.createdAt
         )
 }
 
@@ -22,7 +25,8 @@ data class ExperienceDto(
         val experienceId: Int,
         val description: String,
         val startDate: LocalDate,
-        val endDate: LocalDate
+        val endDate: LocalDate,
+        val createdAt: LocalDateTime
 )
 {
         fun toExperience(resume: Resume): Experience = Experience(
@@ -30,7 +34,8 @@ data class ExperienceDto(
                 resume = resume,
                 description = this.description,
                 startDate = this.startDate,
-                endDate = this.endDate
+                endDate = this.endDate,
+                createdAt = this.createdAt
         )
 }
 
@@ -38,7 +43,8 @@ data class EducationDto(
         val educationId: Int,
         val courseName: String,
         val institution: String,
-        val completionDate: LocalDate
+        val completionDate: LocalDate,
+        val createdAt: LocalDateTime
 )
 {
         fun toEducation(resume: Resume): Education = Education(
@@ -46,15 +52,17 @@ data class EducationDto(
                 resume = resume,
                 courseName = this.courseName,
                 institution = this.institution,
-                completionDate = this.completionDate
+                completionDate = this.completionDate,
+                createdAt = this.createdAt
         )
 }
 
 data class CertificationDto(
         val certificationId: Int,
         val name: String,
-        val issuedBy: String,
-        val issuedDate: LocalDate
+        val issuedBy: LocalDate,
+        val issuedDate: LocalDate,
+        val createdAt: LocalDateTime
 )
 {
         fun toCertification(resume: Resume): Certification = Certification(
@@ -62,6 +70,7 @@ data class CertificationDto(
                 resume = resume,
                 name = this.name,
                 issuedBy = this.issuedBy,
-                issuedDate = this.issuedDate
+                issuedDate = this.issuedDate,
+                createdAt = this.createdAt
         )
 }

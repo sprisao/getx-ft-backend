@@ -18,10 +18,10 @@ data class Certification(
 
     var name: String,
 
-    var issuedBy: String,
+    var issuedBy: LocalDate,
 
     var issuedDate: LocalDate,
 
     @CreationTimestamp
-    val createdAt: LocalDateTime? = null
+    val createdAt: LocalDateTime = LocalDateTime.now()
 )

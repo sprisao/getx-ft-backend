@@ -4,7 +4,7 @@ package kr.getx.fitnessteachers.dto
 data class CenterDto(
         val centerId: Int,
         var centerName: String? = null,
-        var photos: List<String>,
+        var photos: List<String>? = null,
         var locationProvince: String? = null,
         var locationCity: String? = null,
         var description: String? = null,

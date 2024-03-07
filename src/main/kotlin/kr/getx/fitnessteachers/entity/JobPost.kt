@@ -49,5 +49,5 @@ data class JobPost(
     var details: String? = null,
 
     @CreationTimestamp
-    val postedDate: LocalDateTime? = null
+    val postedDate: LocalDateTime = LocalDateTime.now()
 )

@@ -23,5 +23,5 @@ data class Experience(
     var endDate: LocalDate,
 
     @CreationTimestamp
-    val createdAt: LocalDateTime? = null
+    val createdAt: LocalDateTime = LocalDateTime.now()
 )

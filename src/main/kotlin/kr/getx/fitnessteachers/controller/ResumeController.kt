@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
 import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundException
+import java.time.LocalDateTime
 
 
 @RestController
@@ -43,12 +44,13 @@ class ResumeController(
             resumeId = resume.resumeId,
             userId = user.userId,
             photos = StringConversionUtils.convertStringToList(resume.photos ?: " "),
+            createdAt = resume.createdAt,
             experiences = experienceService.getExperienceByResumeId(resume.resumeId)
-                .map { ExperienceDto(it.experienceId, it.description, it.startDate, it.endDate) },
+                .map { ExperienceDto(it.experienceId, it.description, it.startDate, it.endDate, it.createdAt) },
             educations = educationService.getEducationByResumeId(resume.resumeId)
-                .map { EducationDto(it.educationId, it.courseName, it.institution, it.completionDate) },
+                .map { EducationDto(it.educationId, it.courseName, it.institution, it.completionDate, it.createdAt) },
             certifications = certificationService.getCertificationByResumeId(resume.resumeId)
-                .map { CertificationDto(it.certificationId, it.name, it.issuedBy, it.issuedDate) }
+                .map { CertificationDto(it.certificationId, it.name, it.issuedBy, it.issuedDate, it.createdAt) }
         )
         return ResponseEntity.ok().body(resumeDto)
     }

@@ -29,7 +29,7 @@ class CenterController(
         val user = userService.findUserById(centerDto.userId)
             ?: throw UserNotFoundException(centerDto.userId)
 
-        val photoString = StringConversionUtils.convertListToString(centerDto.photos)
+        val photoString = StringConversionUtils.convertListToString(centerDto.photos ?: emptyList())
         val center = Center(
                 user = user,
                 centerName = centerDto.centerName,
@@ -52,7 +52,7 @@ class CenterController(
             CenterDto(
                 centerId = center.centerId,
                 centerName = center.centerName,
-                photos = center.photos.let { StringConversionUtils.convertStringToList(it) } ?: emptyList(),
+                photos = StringConversionUtils.convertStringToList(center.photos ?: ""),
                 locationProvince = center.locationProvince,
                 locationCity = center.locationCity,
                 description = center.description,
