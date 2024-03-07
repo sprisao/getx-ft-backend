@@ -33,10 +33,15 @@ class UserService(private val userRepository: UserRepository) {
 
     // 회원가입 & 로그인
    fun processUserLogin(userDto : UserDto): ResponseEntity<Map<String, Any>> {
-       val existingUser = userRepository.findByEmail(userDto.email) ?: return ResponseEntity.ok(mapOf("loginStatus" to true, "data" to registerUser(userDto)))
-        if (existingUser.socialType != userDto.socialType) {
-            throw UserLoginFailedException("이미 다른 소셜로 가입된 이메일입니다: ${userDto.email}")
-        }
+       val existingUser = userRepository.findByEmail(userDto.email)
+
+       if(existingUser != null) {
+           if (existingUser.socialType != userDto.socialType) {
+               throw UserLoginFailedException("이미 다른 소셜로 가입된 이메일입니다: ${userDto.email}")
+           }
+
+              return ResponseEntity.ok(mapOf("loginStatus" to true, "data" to loginUser(existingUser)))
+       }
 
         return ResponseEntity.ok(mapOf("loginStatus" to true, "data" to registerUser(userDto)))
    }

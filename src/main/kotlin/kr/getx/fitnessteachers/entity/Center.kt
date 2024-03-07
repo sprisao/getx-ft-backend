@@ -14,18 +14,4 @@ data class Center(
         @ManyToOne
         @JoinColumn(name = "userId", referencedColumnName = "userId")
         val user: User,
-
-        var centerName: String? = null,
-
-        @Lob
-        var photos: String,
-
-        var locationProvince: String? = null,
-
-        var locationCity: String? = null,
-
-        var description: String? = null,
-
-        @CreationTimestamp
-        val createdAt: LocalDateTime? = null
-)
+var centerName: String? = null, @Lob var photos: String, var locationProvince: String? = null, var locationCity: String? = null, var description: String? = null, @CreationTimestamp val createdAt: LocalDateTime? = null )
