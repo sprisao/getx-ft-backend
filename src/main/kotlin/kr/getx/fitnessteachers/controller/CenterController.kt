@@ -22,7 +22,20 @@ class CenterController(
 ) {
 
     @GetMapping("/all")
-    fun getAllCenters(): List<Center> = centerService.getAllCenters()
+    fun getAllCenters(): ResponseEntity<Any> {
+        val centers = centerService.getAllCenters().map { center ->
+            CenterDto(
+                centerId = center.centerId,
+                centerName = center.centerName,
+                photos = StringConversionUtils.convertStringToList(center.photos ?: ""),
+                locationProvince = center.locationProvince,
+                locationCity = center.locationCity,
+                description = center.description,
+                userId = center.user.userId
+            )
+        }
+        return ResponseEntity.ok().body(centers.takeIf { it.isNotEmpty() } ?: "등록된 센터가 존재하지 않습니다.")
+    }
 
     @PostMapping("/add")
     fun addCenter(@RequestBody centerDto: CenterDto, request: HttpServletRequest): ResponseEntity<Any> {
