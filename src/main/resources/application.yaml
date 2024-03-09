@@ -5,7 +5,25 @@ logging:
   level:
     org.springframework.security: DEBUG
     org.springframework.web: DEBUG
-
 jwt:
   secret: s3BTt6uIdU6/99xZQYfOQoh4cRrJyZIXSbrmq+4nDog
 
+---
+
+spring:
+  profiles:
+    active: dev
+logging:
+    level:
+        org.springframework.security: DEBUG
+        org.springframework.web: DEBUG
+jwt:
+  secret: s3BTt6uIdU6/99xZQYfOQoh4cRrJyZIXSbrmq+4nDog
+
+---
+
+spring:
+    profiles:
+        active: prod
+jwt:
+  secret: s3BTt6uIdU6/99xZQYfOQoh4cRrJyZIXSbrmq+4nDog
