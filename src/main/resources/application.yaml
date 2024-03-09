@@ -1,51 +1,6 @@
 spring:
   profiles:
     active: local
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            clientId: 597656425443-594gqbrji63li3oivojsq6uhb3275u10.apps.googleusercontent.com
-            clientSecret: enc(eSitLrVFeIyJMUl+Epoy5UNKmuB5Mz6a0DvwJ9rG/hoXeQFllbsjx9SpTYvUlxQj)
-            scope:
-              - email
-              - profile
-
-          naver:
-            clientId: 2aIpUgp68uEYugBfJ44f
-            clientSecret: sZ0wlp6QN8
-            authorizationGrantType: authorization_code
-            redirectUri: http://localhost:8080/login/oauth2/code/naver
-            scope:
-              - name
-              - email
-              - mobile
-            client-name: Naver
-
-          kakao:
-            clientId: ea6371bfabae8491821c0c3d6464591a
-            clientSecret: enc(jnR0Jw+1jLdOwYoX5cNECtdrtO3yP0sVtwIUhCBHHDr2Ez67XngXsKL3H2nytw9q)
-            redirectUri: http://localhost:8080/login/oauth2/code/kakao
-            authorizationGrantType: authorization_code
-            scope:
-              - profile_nickname
-              - profile_image
-            client-name: Kakao
-        provider:
-          naver:
-            authorizationUri: https://nid.naver.com/oauth2.0/authorize
-            tokenUri: https://nid.naver.com/oauth2.0/token
-            userInfoUri: https://openapi.naver.com/v1/nid/me
-            user-info-authentication-method: header
-            userNameAttribute: response
-
-          kakao:
-            authorizationUri: https://kauth.kakao.com/oauth/authorize
-            tokenUri: https://kauth.kakao.com/oauth/token
-            userInfoUri: https://kapi.kakao.com/v2/user/me
-            user-info-authentication-method: header
-            userNameAttribute: id
 logging:
   level:
     org.springframework.security: DEBUG

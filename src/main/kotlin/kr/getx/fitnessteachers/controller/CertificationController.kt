@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/certifications")
 class CertificationController(private val certificationService: CertificationService) {
 
-    @GetMapping
+    @GetMapping("/all")
     fun getAllCertifications(): List<Certification> = certificationService.getAllCertifications()
 
     @PostMapping("/add")

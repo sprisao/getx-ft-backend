@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/educations")
 class EducationController(private val educationService: EducationService) {
 
-    @GetMapping
+    @GetMapping("/all")
     fun getAllEducations(): List<Education> = educationService.getAllEducations()
 
     @PostMapping("/add")

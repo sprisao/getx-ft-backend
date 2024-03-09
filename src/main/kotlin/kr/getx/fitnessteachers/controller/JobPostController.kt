@@ -19,7 +19,7 @@ class JobPostController(
     private val authenticationValidationService: AuthenticationValidationService,
 ) {
 
-    @GetMapping
+    @GetMapping("/all")
     fun getAllJobPosts(): ResponseEntity<List<JobPost>> =
         ResponseEntity.ok(jobPostService.findAll())
 

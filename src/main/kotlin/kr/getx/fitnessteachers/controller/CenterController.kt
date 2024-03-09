@@ -21,7 +21,7 @@ class CenterController(
     private val userService: UserService
 ) {
 
-    @GetMapping
+    @GetMapping("/all")
     fun getAllCenters(): List<Center> = centerService.getAllCenters()
 
     @PostMapping("/add")

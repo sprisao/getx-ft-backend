@@ -25,7 +25,7 @@ class ResumeController(
     private val educationService: EducationService
 ) {
 
-    @GetMapping
+    @GetMapping("/all")
     fun getAllResumes(): List<Resume> = resumeService.getAllResumes()
 
     @PostMapping("/add")

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/experiences")
 class ExperienceController(private val experienceService: ExperienceService) {
 
-    @GetMapping
+    @GetMapping("/all")
     fun getAllExperiences(): List<Experience> = experienceService.getAllExperiences()
 
     @PostMapping("/add")
