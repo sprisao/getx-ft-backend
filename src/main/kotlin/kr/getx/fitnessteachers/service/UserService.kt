@@ -50,6 +50,7 @@ class UserService(private val userRepository: UserRepository) {
     fun processUserTypeEdit(userDto : UserDto): User {
         val editUser = userRepository.findByEmail(userDto.email) ?: throw UserNotFoundExceptionByEmail(userDto.email)
 
+        editUser.nickname = userDto.nickname ?: "닉네임 없음"
         editUser.profileUrl = userDto.profileUrl
         editUser.userType = userDto.userType
         editUser.profileStatus = userDto.profileStatus
@@ -76,6 +77,7 @@ class UserService(private val userRepository: UserRepository) {
         val editUser = userRepository.findByEmail(email) ?: throw UserNotFoundExceptionByEmail(email)
 
         editUser.apply {
+            nickname = userDto.nickname ?: "닉네임 없음"
             profileUrl = userDto.profileUrl
             profileStatus = userDto.profileStatus
             resumeStatus = userDto.resumeStatus
