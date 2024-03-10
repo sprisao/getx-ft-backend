@@ -13,7 +13,8 @@ import kr.getx.fitnessteachers.service.UserService
 import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
-
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Page
 @RestController
 @RequestMapping("/api/centers")
 class CenterController(
@@ -91,5 +92,29 @@ class CenterController(
             ?: throw CenterNotFoundException(centerId)
         centerService.deleteCenter(centerId)
         return ResponseEntity.ok().body("센터가 성공적으로 삭제되었습니다.")
+    }
+
+    // 검색 기능 추가
+    @GetMapping("/search")
+    fun searchCenters(
+        @RequestParam(required = false) keyword: String?,
+        @RequestParam(required = false) locationProvince: String?,
+        @RequestParam(required = false) locationCity: String?,
+        @RequestParam(defaultValue = "10") pageable: Pageable
+    ): ResponseEntity<Page<CenterDto>> {
+        val page = centerService.searchCenters(keyword, locationProvince, locationCity, pageable)
+        val pageDto = page.map {center ->
+            CenterDto(
+                centerId = center.centerId,
+                centerName = center.centerName,
+                photos = StringConversionUtils.convertStringToList(center.photos ?: ""),
+                locationProvince = center.locationProvince,
+                locationCity = center.locationCity,
+                description = center.description,
+                userId = center.user.userId
+            )
+
+        }
+        return ResponseEntity.ok().body(pageDto)
     }
 }

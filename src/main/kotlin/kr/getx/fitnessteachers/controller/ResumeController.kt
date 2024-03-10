@@ -105,6 +105,6 @@ class ResumeController(
                     .map { CertificationDto(it.certificationId, it.name, it.issuedBy, it.issuedDate, it.createdAt) }
             )
         }
-        return ResponseEntity.ok(pageDto)
+        return ResponseEntity.ok().body(pageDto)
     }
 }

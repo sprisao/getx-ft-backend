@@ -5,6 +5,8 @@ import kr.getx.fitnessteachers.entity.Center
 import kr.getx.fitnessteachers.repository.CenterRepository
 import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.stereotype.Service
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Page
 
 @Service
 class CenterService(private val centerRepository: CenterRepository) {
@@ -40,5 +42,10 @@ class CenterService(private val centerRepository: CenterRepository) {
 
     fun getCenterByUserId(userId: Int): List<Center> {
         return centerRepository.findByUser_UserId(userId)
+    }
+
+    // 센터 검색 기능
+    fun searchCenters(keyword: String?, locationProvince: String?, locationCity: String?, pageable: Pageable): Page<Center> {
+        return centerRepository.findByCriteria(keyword, locationProvince, locationCity, pageable)
     }
 }
