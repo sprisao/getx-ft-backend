@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service
 import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundException
 import kr.getx.fitnessteachers.exceptions.InvalidResumeOperationException
-
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 @Service
 @Transactional
 class ResumeService(
@@ -86,5 +87,10 @@ class ResumeService(
         certificationService.deleteAllByResume(resume)
 
         resumeRepository.delete(resume)
+    }
+
+    // 검색 기능 추가
+    fun searchResumes(keyword: String?, experienceYears: Int?, educationLevel: String?, pageable: Pageable): Page<Resume> {
+        return resumeRepository.findByCriteria(keyword, experienceYears, educationLevel, pageable)
     }
 }

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
 import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundException
-import java.time.LocalDateTime
-
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 
 @RestController
 @RequestMapping("/api/resumes")
@@ -80,5 +80,31 @@ class ResumeController(
         } catch (e: Exception) {
             ResponseEntity.internalServerError().body(e.message)
         }
+    }
+
+    // 검색 기능 추가
+    @GetMapping("/search")
+    fun searchResume(
+        @RequestParam(required = false) keyword: String?,
+        @RequestParam(required = false) experienceYears: Int?,
+        @RequestParam(required = false) educationLevel: String?,
+        @RequestParam(defaultValue = "10") pageable: Pageable
+    ): ResponseEntity<Page<ResumeDto>> {
+        val page = resumeService.searchResumes(keyword, experienceYears, educationLevel, pageable)
+        val pageDto = page.map { resume ->
+            ResumeDto(
+                resumeId = resume.resumeId,
+                userId = resume.user.userId,
+                photos = StringConversionUtils.convertStringToList(resume.photos ?: " "),
+                createdAt = resume.createdAt,
+                experiences = experienceService.getExperienceByResumeId(resume.resumeId)
+                    .map { ExperienceDto(it.experienceId, it.description, it.startDate, it.endDate, it.createdAt) },
+                educations = educationService.getEducationByResumeId(resume.resumeId)
+                    .map { EducationDto(it.educationId, it.courseName, it.institution, it.completionDate, it.createdAt) },
+                certifications = certificationService.getCertificationByResumeId(resume.resumeId)
+                    .map { CertificationDto(it.certificationId, it.name, it.issuedBy, it.issuedDate, it.createdAt) }
+            )
+        }
+        return ResponseEntity.ok(pageDto)
     }
 }
