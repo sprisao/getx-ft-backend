@@ -21,5 +21,5 @@ data class JobPostDto(
     val contactPerson: String? = null,
     val title: String? = null,
     val details: String? = null,
-    val jobCategory: String? = null,ºª
+    val jobCategory: String? = null,
 )
