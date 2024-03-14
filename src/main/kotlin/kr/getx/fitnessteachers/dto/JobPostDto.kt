@@ -1,6 +1,6 @@
 package kr.getx.fitnessteachers.dto
 
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 data class JobPostDto(
     val jobPostId: Int,
@@ -14,8 +14,8 @@ data class JobPostDto(
     val numberOfPositions: Int? = null,
     val salary: String? = null,
     val qualifications: String? = null,
-    val applicationPeriodStart: LocalDateTime? = null,
-    val applicationPeriodEnd: LocalDateTime? = null,
+    val applicationPeriodStart: LocalDate? = null,
+    val applicationPeriodEnd: LocalDate? = null,
     val contactEmail: String? = null,
     val contactPhone: String? = null,
     val contactPerson: String? = null,

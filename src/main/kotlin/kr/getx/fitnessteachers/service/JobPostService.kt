@@ -4,6 +4,8 @@ import kr.getx.fitnessteachers.dto.JobPostDto
 import kr.getx.fitnessteachers.entity.JobPost
 import kr.getx.fitnessteachers.repository.JobPostRepository
 import org.springframework.stereotype.Service
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 
 @Service
 class JobPostService(private val jobPostRepository: JobPostRepository) {
@@ -40,4 +42,21 @@ class JobPostService(private val jobPostRepository: JobPostRepository) {
     }
 
     fun findByCenterId(centerId: Int): List<JobPost> = jobPostRepository.findByCenter_CenterId(centerId)
+
+    // 검색 기능 추가
+    fun searchJobPosts(
+        recruitmentStatus: String?,
+        jobCategory: String?,
+        locationProvince: String?,
+        locationCity: String?,
+        pageable: Pageable
+    ) : Page<JobPost> {
+        return jobPostRepository.findByCriteria(
+            recruitmentStatus,
+            jobCategory,
+            locationProvince,
+            locationCity,
+            pageable
+        )
+    }
 }

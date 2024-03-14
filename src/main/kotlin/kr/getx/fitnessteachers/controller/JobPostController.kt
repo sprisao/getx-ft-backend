@@ -11,6 +11,9 @@ import kr.getx.fitnessteachers.service.JobPostService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.security.core.Authentication
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+
 @RestController
 @RequestMapping("/api/jobPosts")
 class JobPostController(
@@ -69,7 +72,9 @@ class JobPostController(
             contactEmail = jobPostDto.contactEmail,
             contactPhone = jobPostDto.contactPhone,
             contactPerson = jobPostDto.contactPerson,
-            details = jobPostDto.details
+            title = jobPostDto.title,
+            details = jobPostDto.details,
+            jobCategory = jobPostDto.jobCategory
         )
         return ResponseEntity.ok(jobPostService.save(jobPost))
     }
@@ -104,4 +109,41 @@ class JobPostController(
         jobPostService.deleteById(jobPostId)
         return ResponseEntity.ok().body("해당 구인게시판이 삭제되었습니다.")
     }
+
+    // recruitmentStatus, jobCategory, 연결된 center의 locationProvince, locationCity 로 필터 검색 기능
+    @GetMapping("/search")
+fun searchJobPosts(
+        @RequestParam(required = false) recruitmentStatus: String?,
+        @RequestParam(required = false) jobCategory: String?,
+        @RequestParam(required = false) locationProvince: String?,
+        @RequestParam(required = false) locationCity: String?,
+        @RequestParam(defaultValue = "10") pageable: Pageable
+    ): ResponseEntity<Page<JobPostDto>> {
+        val page = jobPostService.searchJobPosts(recruitmentStatus, jobCategory, locationProvince, locationCity, pageable)
+        val pageDto = page.map { jobPost ->
+            JobPostDto(
+                jobPostId = jobPost.jobPostId,
+                centerId = jobPost.center.centerId,
+                recruitmentStatus = jobPost.recruitmentStatus,
+                responsibilities = jobPost.responsibilities,
+                workLocation = jobPost.workLocation,
+                workHours = jobPost.workHours,
+                workDays = jobPost.workDays,
+                employmentType = jobPost.employmentType,
+                numberOfPositions = jobPost.numberOfPositions,
+                salary = jobPost.salary,
+                qualifications = jobPost.qualifications,
+                applicationPeriodStart = jobPost.applicationPeriodStart,
+                applicationPeriodEnd = jobPost.applicationPeriodEnd,
+                contactEmail = jobPost.contactEmail,
+                contactPhone = jobPost.contactPhone,
+                contactPerson = jobPost.contactPerson,
+                title = jobPost.title,
+                details = jobPost.details,
+                jobCategory = jobPost.jobCategory
+            )
+        }
+        return ResponseEntity.ok().body(pageDto)
+    }
+
 }
