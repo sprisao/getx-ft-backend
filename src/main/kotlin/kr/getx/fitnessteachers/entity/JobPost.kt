@@ -2,6 +2,7 @@ package kr.getx.fitnessteachers.entity
 
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity
@@ -35,9 +36,9 @@ data class JobPost(
     @Column(length = 10000)
     var qualifications: String? = null,
 
-    var applicationPeriodStart: LocalDateTime? = null,
+    var applicationPeriodStart: LocalDate? = null,
 
-    var applicationPeriodEnd: LocalDateTime? = null,
+    var applicationPeriodEnd: LocalDate? = null,
 
     var contactEmail: String? = null,
 
@@ -45,8 +46,12 @@ data class JobPost(
 
     var contactPerson: String? = null,
 
+    var title: String? = null,
+
     @Column(length = 10000)
     var details: String? = null,
+
+    var jobCategory: String? = null,
 
     @CreationTimestamp
     val postedDate: LocalDateTime = LocalDateTime.now()
