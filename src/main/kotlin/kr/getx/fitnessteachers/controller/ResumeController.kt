@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
 import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundException
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
 
 @RestController
 @RequestMapping("/api/resumes")
