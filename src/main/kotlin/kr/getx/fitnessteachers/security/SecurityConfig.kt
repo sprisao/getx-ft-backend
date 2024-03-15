@@ -14,7 +14,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 class SecurityConfig {
-    private val allowedUrls = arrayOf("/api/users/**", "/api/jobPosts/all", "/api/centers/all")
+    private val allowedUrls = arrayOf(
+        "/api/users/login",
+        "/*",
+        "/health",
+        "/users",
+        "/api/users/all",
+        "/api/jobPosts/all",
+        "/api/centers/all",
+        "/api/jobPosts/applicantCount/*",
+        "/api/jobPosts/applicantCount/"
+    )
     val jwtTokenFilter = JwtTokenFilter(JwtUtils())
     @Bean
     fun filterChain(http: HttpSecurity) = http

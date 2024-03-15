@@ -35,15 +35,14 @@ class UserService(private val userRepository: UserRepository) {
    fun processUserLogin(userDto : UserDto): ResponseEntity<Map<String, Any>> {
        val existingUser = userRepository.findByEmail(userDto.email)
 
-       if(existingUser != null) {
-           if (existingUser.socialType != userDto.socialType) {
-               throw UserLoginFailedException("이미 다른 소셜로 가입된 이메일입니다: ${userDto.email}")
-           }
-
-              return ResponseEntity.ok(mapOf("loginStatus" to true, "data" to loginUser(existingUser)))
-       }
-
-        return ResponseEntity.ok(mapOf("loginStatus" to true, "data" to registerUser(userDto)))
+        existingUser?.let {
+            if(it.socialType != userDto.socialType) {
+                throw UserLoginFailedException("User Login Failed: Social Type Mismatch")
+            }
+            return ResponseEntity.ok(mapOf("loginStatus" to true, "data" to loginUser(it)))
+        } ?: run {
+            return ResponseEntity.ok(mapOf("loginStatus" to false, "data" to registerUser(userDto)))
+        }
    }
 
    // 개인정보 추가 기입 (유저 타입, 프로필 사진, 프로필 상태, 유저 타입 상태, 이력서 상태, 센터 상태, 유저 타입)
@@ -67,9 +66,9 @@ class UserService(private val userRepository: UserRepository) {
 
     private fun registerUser(userDto : UserDto): User {
         return User (
-            name = userDto.name ?: throw IllegalArgumentException("Name is missing in the token"),
-            email = userDto.email ?: throw IllegalArgumentException("Email is missing in the token"),
-            socialType = userDto.socialType ?: throw IllegalArgumentException("Social Type is missing in the token"),
+            name = userDto.name,
+            email = userDto.email,
+            socialType = userDto.socialType
         ).also { userRepository.save(it) }
     }
 

@@ -2,13 +2,13 @@ package kr.getx.fitnessteachers.dto
 
 data class UserDto(
     val name: String,
-    var nickname: String? = null,
+    var nickname: String? = "",
     val email: String,
-    val socialType: String? = null,
-    var profileStatus: Boolean? = null,
-    var profileUrl: String? = null,
-    var userType: String? = null,
-    var userTypeStatus: Boolean? = null,
-    var resumeStatus: Boolean? = null,
-    var centerStatus: Boolean? = null
+    val socialType: String,
+    var profileStatus: Boolean = false,
+    var profileUrl: String? = "",
+    var userType: String? = "",
+    var userTypeStatus: Boolean = false,
+    var resumeStatus: Boolean = false,
+    var centerStatus: Boolean = false
 )

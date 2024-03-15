@@ -16,26 +16,26 @@ data class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val userId: Int = 0,
 
-    val name: String = "",
+    val name: String,
 
-    var nickname: String = "",
+    var nickname: String? = "",
 
     @Column(name = "email", unique = true)
-    val email: String? = "",
+    val email: String,
 
     var profileUrl: String? = "",
 
-    var socialType: String = "",
+    var socialType: String,
 
     var userType: String? = "",
 
-    var profileStatus: Boolean? = false,
+    var profileStatus: Boolean = false,
 
-    var resumeStatus: Boolean? = false,
+    var resumeStatus: Boolean = false,
 
-    var centerStatus: Boolean? = false,
+    var centerStatus: Boolean = false,
 
-    var userTypeStatus: Boolean? = false,
+    var userTypeStatus: Boolean = false,
 
     @CreationTimestamp
     val createdAt: LocalDateTime = LocalDateTime.now()
