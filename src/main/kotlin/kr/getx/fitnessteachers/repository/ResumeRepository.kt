@@ -10,7 +10,5 @@ import org.springframework.data.domain.Pageable
 interface ResumeRepository : JpaRepository<Resume, Int> {
     fun findByUserUserId(userId: Int): Resume?
 
-    // 검색 기능
-    fun findByCriteria(keyword: String?, experienceYears: Int?, educationLevel: String?, pageable: Pageable): Page<Resume>
 }
 

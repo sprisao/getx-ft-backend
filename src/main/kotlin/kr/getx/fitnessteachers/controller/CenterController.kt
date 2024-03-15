@@ -97,12 +97,12 @@ class CenterController(
     // 검색 기능 추가
     @GetMapping("/search")
     fun searchCenters(
-        @RequestParam(required = false) keyword: String?,
+        @RequestParam(required = false) centerName: String?,
         @RequestParam(required = false) locationProvince: String?,
         @RequestParam(required = false) locationCity: String?,
         @RequestParam(defaultValue = "10") pageable: Pageable
     ): ResponseEntity<Page<CenterDto>> {
-        val page = centerService.searchCenters(keyword, locationProvince, locationCity, pageable)
+        val page = centerService.searchCenters(centerName, locationProvince, locationCity, pageable)
         val pageDto = page.map {center ->
             CenterDto(
                 centerId = center.centerId,

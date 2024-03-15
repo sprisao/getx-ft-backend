@@ -88,9 +88,4 @@ class ResumeService(
 
         resumeRepository.delete(resume)
     }
-
-    // 검색 기능 추가
-    fun searchResumes(keyword: String?, experienceYears: Int?, educationLevel: String?, pageable: Pageable): Page<Resume> {
-        return resumeRepository.findByCriteria(keyword, experienceYears, educationLevel, pageable)
-    }
 }

@@ -12,7 +12,7 @@ interface JobPostRepository : JpaRepository<JobPost, Int> {
     fun findByCenter_CenterId(centerId: Int): List<JobPost>
 
     // 검색 기능 추가
-    fun findByCriteria(
+    fun findByRecruitmentStatusAndJobCategoryAndCenterLocationProvinceAndCenterLocationCity(
         recruitmentStatus: String?,
         jobCategory: String?,
         locationProvince: String?,

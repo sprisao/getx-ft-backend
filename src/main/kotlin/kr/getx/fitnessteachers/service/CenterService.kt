@@ -45,7 +45,7 @@ class CenterService(private val centerRepository: CenterRepository) {
     }
 
     // 센터 검색 기능
-    fun searchCenters(keyword: String?, locationProvince: String?, locationCity: String?, pageable: Pageable): Page<Center> {
-        return centerRepository.findByCriteria(keyword, locationProvince, locationCity, pageable)
+    fun searchCenters(centerName: String?, locationProvince: String?, locationCity: String?, pageable: Pageable): Page<Center> {
+        return centerRepository.findByCenterNameAndLocationProvinceAndLocationCity(centerName, locationProvince, locationCity, pageable)
     }
 }

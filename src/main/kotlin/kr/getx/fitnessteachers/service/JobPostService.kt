@@ -51,7 +51,7 @@ class JobPostService(private val jobPostRepository: JobPostRepository) {
         locationCity: String?,
         pageable: Pageable
     ) : Page<JobPost> {
-        return jobPostRepository.findByCriteria(
+        return jobPostRepository.findByRecruitmentStatusAndJobCategoryAndCenterLocationProvinceAndCenterLocationCity(
             recruitmentStatus,
             jobCategory,
             locationProvince,
