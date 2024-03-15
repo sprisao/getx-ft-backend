@@ -8,6 +8,7 @@ import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
 import kr.getx.fitnessteachers.service.AuthenticationValidationService
 import kr.getx.fitnessteachers.service.CenterService
 import kr.getx.fitnessteachers.service.JobPostService
+import kr.getx.fitnessteachers.service.ResumeService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.security.core.Authentication
@@ -20,6 +21,7 @@ class JobPostController(
     private val jobPostService: JobPostService,
     private val centerService: CenterService,
     private val authenticationValidationService: AuthenticationValidationService,
+    private val resumeService: ResumeService
 ) {
 
     @GetMapping("/all")
@@ -146,4 +148,57 @@ fun searchJobPosts(
         return ResponseEntity.ok().body(pageDto)
     }
 
+    // 지원자 ID 추가 메서드 구현
+    @PutMapping("/addApplicant/{jobPostId}/{userId}")
+    fun applyToJobPost(@PathVariable jobPostId: Int, authentication: Authentication): ResponseEntity<Any> {
+        val user = authenticationValidationService.getUserFromAuthentication(authentication)
+
+        try {
+            val responseMessage = jobPostService.applyToJobPost(jobPostId, user.userId)
+            return ResponseEntity.ok().body(responseMessage)
+        } catch(e: IllegalArgumentException) {
+            return ResponseEntity.badRequest().body(e.message)
+        } catch (e: JobPostNotFoundException) {
+            return ResponseEntity.badRequest().body(e.message)
+        }
+    }
+
+    // 지원 취소
+    @PutMapping("/cancelApplicant/{jobPostId}/{userId}")
+    fun cancelApplication(@PathVariable jobPostId: Int, authentication: Authentication): ResponseEntity<Any> {
+        val user = authenticationValidationService.getUserFromAuthentication(authentication)
+
+        try {
+            val responseMessage = jobPostService.cancelApplication(jobPostId, user.userId)
+            return ResponseEntity.ok().body(responseMessage)
+        } catch(e: IllegalArgumentException) {
+            return ResponseEntity.badRequest().body(e.message)
+        } catch (e: JobPostNotFoundException) {
+            return ResponseEntity.badRequest().body(e.message)
+        }
+    }
+
+    // 지원자 수 조회
+    @GetMapping("/applicantCount/{jobPostId}")
+    fun getApplicantCount(@PathVariable jobPostId: Int): ResponseEntity<Any> {
+        val jobPost = jobPostService.findById(jobPostId)
+            ?: throw JobPostNotFoundException(jobPostId)
+
+        val applicantCount = jobPost.applicationUserIds.size
+        return ResponseEntity.ok().body(applicantCount)
+    }
+
+    // 지원한 userId들 이력서 조회
+    @GetMapping("/applicantResumes/{jobPostId}")
+    fun getApplicantResumes(@PathVariable jobPostId: Int): ResponseEntity<Any> {
+        val jobPost = jobPostService.findById(jobPostId)
+            ?: throw JobPostNotFoundException(jobPostId)
+
+        val applicantIds = jobPost.applicationUserIds
+        val resumes = applicantIds.map { userId ->
+            val user = authenticationValidationService.getUserById(userId)
+            resumeService.getResumeByUserId(user.userId)
+        }
+        return ResponseEntity.ok().body(resumes)
+    }
 }

@@ -53,6 +53,9 @@ data class JobPost(
 
     var jobCategory: String? = null,
 
+    @ElementCollection
+    var applicationUserIds : MutableList<Int> = mutableListOf(),
+
     @CreationTimestamp
     val postedDate: LocalDateTime = LocalDateTime.now()
 )

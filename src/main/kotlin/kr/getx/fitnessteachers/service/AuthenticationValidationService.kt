@@ -35,4 +35,9 @@ class AuthenticationValidationService (
 
         return center
     }
+
+    fun getUserById(userId: Int): User {
+        return userService.findUserById(userId)
+            ?: throw UserNotFoundExceptionByEmail("해당값의 유저가 존재하지 않습니다. : $userId")
+    }
 }
