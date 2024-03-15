@@ -11,13 +11,13 @@ data class ResumeDto(
         val experiences: List<ExperienceDto>,
         val educations: List<EducationDto>,
         val certifications: List<CertificationDto>,
-        val createdAt : LocalDateTime
+        val createdAt : LocalDateTime?
 )
 {
         fun toResume(user: User, photosString: String): Resume = Resume(
                 user = user,
                 photos = photosString,
-                createdAt = this.createdAt
+                createdAt = this.createdAt ?: LocalDateTime.now()
         )
 }
 
@@ -26,7 +26,7 @@ data class ExperienceDto(
         val description: String,
         val startDate: LocalDate,
         val endDate: LocalDate,
-        val createdAt: LocalDateTime
+        val createdAt: LocalDateTime?
 )
 {
         fun toExperience(resume: Resume): Experience = Experience(
@@ -35,7 +35,7 @@ data class ExperienceDto(
                 description = this.description,
                 startDate = this.startDate,
                 endDate = this.endDate,
-                createdAt = this.createdAt
+                createdAt = this.createdAt ?: LocalDateTime.now()
         )
 }
 
@@ -44,7 +44,7 @@ data class EducationDto(
         val courseName: String,
         val institution: String,
         val completionDate: LocalDate,
-        val createdAt: LocalDateTime
+        val createdAt: LocalDateTime?
 )
 {
         fun toEducation(resume: Resume): Education = Education(
@@ -53,7 +53,7 @@ data class EducationDto(
                 courseName = this.courseName,
                 institution = this.institution,
                 completionDate = this.completionDate,
-                createdAt = this.createdAt
+                createdAt = this.createdAt ?: LocalDateTime.now()
         )
 }
 
@@ -62,7 +62,7 @@ data class CertificationDto(
         val name: String,
         val issuedBy: LocalDate,
         val issuedDate: LocalDate,
-        val createdAt: LocalDateTime
+        val createdAt: LocalDateTime?
 )
 {
         fun toCertification(resume: Resume): Certification = Certification(
@@ -71,6 +71,6 @@ data class CertificationDto(
                 name = this.name,
                 issuedBy = this.issuedBy,
                 issuedDate = this.issuedDate,
-                createdAt = this.createdAt
+                createdAt = this.createdAt ?: LocalDateTime.now()
         )
 }
