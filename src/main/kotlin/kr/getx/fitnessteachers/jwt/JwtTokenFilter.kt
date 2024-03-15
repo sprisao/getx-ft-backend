@@ -15,14 +15,15 @@ class JwtTokenFilter(private val jwtUtils: JwtUtils) : OncePerRequestFilter() {
         "/api/users/all",
         "/api/jobPosts/all",
         "/api/centers/all",
-        "/api/jobPosts/applicantCount/*",
-        "/api/jobPosts/applicantCount/"
     )
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
+        if(request.method.equals("OPTIONS", ignoreCase = true)) {
+            filterChain.doFilter(request, response)
+            return
+        }
         val requestURI = request.requestURI
 
-        // publicEndpoint에 대해서는 토큰 검증을 생략
         if(publicEndpoint.any { requestURI.startsWith(it) }) {
             filterChain.doFilter(request, response)
             return

@@ -31,6 +31,7 @@ class UserController(
   fun loginUser(request: HttpServletRequest): ResponseEntity<Any> {
       val userDto = request.getAttribute("userData") as? UserDto
           ?: throw AuthenticationEmailNotFoundException()
+
       return try {
           val user = userService.processUserLogin(userDto)
           ResponseEntity.ok(user)
