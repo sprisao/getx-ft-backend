@@ -1,17 +1,5 @@
 spring:
   profiles:
-    active: local
-logging:
-  level:
-    org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
-jwt:
-  secret: s3BTt6uIdU6/99xZQYfOQoh4cRrJyZIXSbrmq+4nDog
-
----
-
-spring:
-  profiles:
     active: dev
 logging:
     level:
@@ -24,6 +12,6 @@ jwt:
 
 spring:
     profiles:
-        active: prod
+        active: release
 jwt:
   secret: s3BTt6uIdU6/99xZQYfOQoh4cRrJyZIXSbrmq+4nDog
