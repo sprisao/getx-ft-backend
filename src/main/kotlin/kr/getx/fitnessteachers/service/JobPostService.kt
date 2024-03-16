@@ -63,6 +63,17 @@ class JobPostService(private val jobPostRepository: JobPostRepository) {
         )
     }
 
+    // 유사 게시글 검색
+    fun findSimilarJobPosts(jobPostId: Int): List<JobPost> {
+        val originalJobPost = findById(jobPostId) ?: throw JobPostNotFoundException(jobPostId)
+
+        return findAll().filter { jobPost ->
+            jobPost.title?.split(" ")?.any { word ->
+                originalJobPost.title?.contains(word, ignoreCase = true) ?: false
+            } == true && jobPost.jobPostId != originalJobPost.jobPostId
+        }
+    }
+
     // 지원자 ID 추가
     fun applyToJobPost(jobPostId: Int, userId: Int) : String{
         val jobPost = findById(jobPostId)

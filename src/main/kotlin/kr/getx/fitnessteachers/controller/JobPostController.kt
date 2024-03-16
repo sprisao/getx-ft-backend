@@ -58,6 +58,13 @@ class JobPostController(
         return ResponseEntity.ok(jobPost)
     }
 
+    // 타이틀 유사한 구인게시판 조회
+    @GetMapping("/{jobPostId}/similar")
+    fun getSimilarJobPosts(@PathVariable jobPostId: Int): ResponseEntity<List<JobPost>> {
+        val similarJobPosts = jobPostService.findSimilarJobPosts(jobPostId)
+        return ResponseEntity.ok(similarJobPosts)
+    }
+
     @PostMapping("/add")
     fun createJobPost(@RequestBody jobPostDto: JobPostDto, authentication: Authentication): ResponseEntity<Any> {
         // SecurityContext 에서 인증 정보 가져오기
@@ -124,7 +131,7 @@ class JobPostController(
 
     // recruitmentStatus, jobCategory, 연결된 center의 locationProvince, locationCity 로 필터 검색 기능
     @GetMapping("/search")
-fun searchJobPosts(
+    fun searchJobPosts(
         @RequestParam(required = false) recruitmentStatus: String?,
         @RequestParam(required = false) jobCategory: String?,
         @RequestParam(required = false) locationProvince: String?,
