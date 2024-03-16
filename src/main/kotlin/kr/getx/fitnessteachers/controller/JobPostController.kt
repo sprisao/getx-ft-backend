@@ -195,9 +195,10 @@ fun searchJobPosts(
             ?: throw JobPostNotFoundException(jobPostId)
 
         val applicantIds = jobPost.applicationUserIds
+
         val resumes = applicantIds.map { userId ->
-            val user = authenticationValidationService.getUserById(userId)
-            resumeService.getResumeByUserId(user.userId)
+            resumeService.getResumeByUserId(userId)?.let { resume ->
+                resume}
         }
         return ResponseEntity.ok().body(resumes)
     }
