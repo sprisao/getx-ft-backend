@@ -37,6 +37,8 @@ class JobPostService(private val jobPostRepository: JobPostRepository) {
             contactPhone = jobPostDto.contactPhone
             contactPerson = jobPostDto.contactPerson
             details = jobPostDto.details
+            jobCategory = jobPostDto.jobCategory
+            title = jobPostDto.title
         }
 
         return jobPostRepository.save(existingJobPost)
