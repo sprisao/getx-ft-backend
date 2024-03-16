@@ -28,7 +28,8 @@ class JobPostController(
     fun getAllJobPosts(): ResponseEntity<List<JobPost>> =
         ResponseEntity.ok(jobPostService.findAll())
 
-    @GetMapping("/{userId}")
+    // userId로 구인게시판 조회 ( 센터 소유주만 조회 가능 )
+    @GetMapping("/owner/{userId}")
     fun getJobPostById(@PathVariable userId: Int, authentication: Authentication): ResponseEntity<List<JobPost>> {
         val requestingUser = authenticationValidationService.getUserFromAuthentication(authentication)
 
@@ -46,6 +47,15 @@ class JobPostController(
         }
 
         return ResponseEntity.ok(jobPosts)
+    }
+
+    // jobPostId로 구인게시판 조회 ( 모두가 조회 가능하게끔 )
+    @GetMapping("/{jobPostId}")
+    fun getJobPostById(@PathVariable jobPostId: Int): ResponseEntity<JobPost> {
+        val jobPost = jobPostService.findById(jobPostId)
+            ?: throw JobPostNotFoundException(jobPostId)
+
+        return ResponseEntity.ok(jobPost)
     }
 
     @PostMapping("/add")
