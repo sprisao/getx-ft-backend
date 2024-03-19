@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.security.core.Authentication
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 @RestController
 @RequestMapping("/api/jobPosts")
@@ -136,9 +138,14 @@ class JobPostController(
         @RequestParam(required = false) jobCategory: String?,
         @RequestParam(required = false) locationProvince: String?,
         @RequestParam(required = false) locationCity: String?,
-        @RequestParam(defaultValue = "10") pageable: Pageable
+        pageable: Pageable
     ): ResponseEntity<Page<JobPostDto>> {
-        val page = jobPostService.searchJobPosts(recruitmentStatus, jobCategory, locationProvince, locationCity, pageable)
+        val decodedRecruitmentStatus = recruitmentStatus?.let { URLDecoder.decode(it, StandardCharsets.UTF_8.toString()) }
+        val decodedJobCategory = jobCategory?.let { URLDecoder.decode(it, StandardCharsets.UTF_8.toString()) }
+        val decodedLocationProvince = locationProvince?.let { URLDecoder.decode(it, StandardCharsets.UTF_8.toString()) }
+        val decodedLocationCity = locationCity?.let { URLDecoder.decode(it, StandardCharsets.UTF_8.toString()) }
+
+        val page = jobPostService.searchJobPosts(decodedRecruitmentStatus, decodedJobCategory, decodedLocationProvince, decodedLocationCity, pageable)
         val pageDto = page.map { jobPost ->
             JobPostDto(
                 jobPostId = jobPost.jobPostId,
