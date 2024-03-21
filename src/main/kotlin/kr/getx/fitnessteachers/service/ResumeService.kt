@@ -46,7 +46,7 @@ class ResumeService(
         // Resume ID를 통해 기존 이력서를 찾습니다.
         val resume = resumeDto.userId.let {
             resumeRepository.findByUserUserId(it) ?: throw ResumeNotFoundException(it)
-        } ?: throw InvalidResumeOperationException("User ID is required to update resume")
+        }
 
         // 유저 정보 업데이트 (필요한 경우)
         val user = userService.findUserById(resumeDto.userId) ?: throw UserNotFoundException(resumeDto.userId)

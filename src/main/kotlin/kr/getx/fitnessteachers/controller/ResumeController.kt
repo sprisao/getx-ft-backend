@@ -59,7 +59,7 @@ class ResumeController(
             ?: throw UserNotFoundException(userId)
 
         // 이력서 업데이트를 위한 데이터 검증 및 설정
-        resumeDto.userId = userId
+        resumeDto.userId = user.userId
 
         try {
             val updatedResume = resumeService.updateResumeWithDetails(resumeDto)
