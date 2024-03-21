@@ -11,6 +11,7 @@ data class ResumeDto(
         val experiences: List<ExperienceDto>,
         val educations: List<EducationDto>,
         val certifications: List<CertificationDto>,
+        var appliedJobPostIds: List<String>? = null,
         val createdAt : LocalDateTime?
 )
 {

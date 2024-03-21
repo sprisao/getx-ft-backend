@@ -2,6 +2,7 @@ package kr.getx.fitnessteachers.service
 
 import kr.getx.fitnessteachers.dto.JobPostDto
 import kr.getx.fitnessteachers.entity.JobPost
+import kr.getx.fitnessteachers.exceptions.InvalidResumeOperationException
 import kr.getx.fitnessteachers.repository.JobPostRepository
 import org.springframework.stereotype.Service
 import org.springframework.data.domain.Page
@@ -9,7 +10,10 @@ import org.springframework.data.domain.Pageable
 import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
 
 @Service
-class JobPostService(private val jobPostRepository: JobPostRepository) {
+class JobPostService(
+    private val jobPostRepository: JobPostRepository,
+    private val resumeService: ResumeService
+) {
 
     fun findAll(): List<JobPost> = jobPostRepository.findAll()
 
@@ -79,11 +83,16 @@ class JobPostService(private val jobPostRepository: JobPostRepository) {
         val jobPost = findById(jobPostId)
             ?: throw JobPostNotFoundException(jobPostId)
 
+        val resume = resumeService.getResumeByUserId(userId)
+            ?: throw InvalidResumeOperationException("이력서를 작성해주세요.")
+
         if (jobPost.applicationUserIds.contains(userId)) {
             throw IllegalArgumentException("이미 지원한 구인게시판입니다.")
         }
 
+        resume.appliedJobPostIds.add(jobPostId)
         jobPost.applicationUserIds.add(userId)
+
         save(jobPost)
         return "구인게시판에 지원하였습니다."
     }
@@ -93,10 +102,14 @@ class JobPostService(private val jobPostRepository: JobPostRepository) {
         val jobPost = findById(jobPostId)
             ?: throw JobPostNotFoundException(jobPostId)
 
+        val resume = resumeService.getResumeByUserId(userId)
+            ?: throw InvalidResumeOperationException("이력서를 작성해주세요.")
+
         if (!jobPost.applicationUserIds.contains(userId)) {
             throw IllegalArgumentException("지원하지 않은 구인게시판입니다.")
         }
 
+        resume.appliedJobPostIds.remove(jobPostId)
         jobPost.applicationUserIds.remove(userId)
         save(jobPost)
         return "구인게시판 지원을 취소하였습니다."

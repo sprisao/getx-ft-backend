@@ -18,6 +18,9 @@ data class Resume(
     @Lob
     var photos: String? = null,
 
+    @ElementCollection
+    var appliedJobPostIds : MutableList<Int> = mutableListOf(),
+
     @CreationTimestamp
     val createdAt: LocalDateTime
 )

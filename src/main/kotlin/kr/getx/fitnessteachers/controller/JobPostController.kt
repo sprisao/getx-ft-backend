@@ -51,7 +51,6 @@ class JobPostController(
         return ResponseEntity.ok(jobPosts)
     }
 
-    // jobPostId로 구인게시판 조회 ( 모두가 조회 가능하게끔 )
     @GetMapping("/{jobPostId}")
     fun getJobPostById(@PathVariable jobPostId: Int): ResponseEntity<JobPost> {
         val jobPost = jobPostService.findById(jobPostId)
@@ -60,7 +59,7 @@ class JobPostController(
         return ResponseEntity.ok(jobPost)
     }
 
-    // 타이틀 유사한 구인게시판 조회
+    // 타이틀 유사한 구인게시판 조회 ( 차후 추가 작업과 함께 구현 예정 )
     @GetMapping("/{jobPostId}/similar")
     fun getSimilarJobPosts(@PathVariable jobPostId: Int): ResponseEntity<List<JobPost>> {
         val similarJobPosts = jobPostService.findSimilarJobPosts(jobPostId)
