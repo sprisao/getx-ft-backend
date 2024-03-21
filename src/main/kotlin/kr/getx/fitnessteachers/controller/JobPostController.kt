@@ -2,7 +2,6 @@ package kr.getx.fitnessteachers.controller
 
 import kr.getx.fitnessteachers.dto.JobPostDto
 import kr.getx.fitnessteachers.entity.JobPost
-import kr.getx.fitnessteachers.exceptions.CenterIdNotFoundExceptionByJobPost
 import kr.getx.fitnessteachers.exceptions.CenterNotFoundException
 import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
 import kr.getx.fitnessteachers.service.AuthenticationValidationService
@@ -106,7 +105,6 @@ class JobPostController(
             ?: throw JobPostNotFoundException(jobPostId)
 
         val centerId = existingJobPost.center.centerId
-            ?: throw CenterIdNotFoundExceptionByJobPost("Center ID not found by job post ID: $jobPostId")
 
         authenticationValidationService.validateCenterOwnership(centerId, user)
 
@@ -121,7 +119,6 @@ class JobPostController(
 
         // jobPost.center.centerId 가 null 이 아닌지 확인합니다.
         val centerId = jobPost.center.centerId
-            ?: throw CenterIdNotFoundExceptionByJobPost("Center ID not found by job post ID: $jobPostId")
 
         // validateCenterOwnership 메서드가 예외를 던지지 않으면 삭제 권한이 있는 것으로 간주합니다.
         authenticationValidationService.validateCenterOwnership(centerId, user)
