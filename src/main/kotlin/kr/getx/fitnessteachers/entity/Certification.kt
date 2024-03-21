@@ -18,7 +18,7 @@ data class Certification(
 
     var name: String,
 
-    var issuedBy: LocalDate,
+    var issuedBy: String,
 
     var issuedDate: LocalDate,
 

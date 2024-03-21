@@ -61,7 +61,7 @@ data class EducationDto(
 data class CertificationDto(
         val certificationId: Int,
         val name: String,
-        val issuedBy: LocalDate,
+        val issuedBy: String,
         val issuedDate: LocalDate,
         val createdAt: LocalDateTime?
 )
