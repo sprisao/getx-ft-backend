@@ -86,4 +86,9 @@ class ResumeService(
 
         resumeRepository.delete(resume)
     }
+
+    fun getAllJobPostsByResumeIdByUserId(userId: Int): List<JobPost> {
+        val resume = resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
+        return jobPostService.getAllJobPostsByResumeId(resume.resumeId)
+    }
 }

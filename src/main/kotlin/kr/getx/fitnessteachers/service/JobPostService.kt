@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
+import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
+import kr.getx.fitnessteachers.repository.ResumeRepository
 
 @Service
 class JobPostService(
     private val jobPostRepository: JobPostRepository,
-    private val resumeService: ResumeService
+    private val resumeService: ResumeService,
+    private val resumeRepository: ResumeRepository
 ) {
 
     fun findAll(): List<JobPost> = jobPostRepository.findAll()
@@ -23,6 +26,12 @@ class JobPostService(
 
     fun deleteById(id: Int) = jobPostRepository.deleteById(id)
 
+    fun getAllJobPostsByResumeId(resumeId: Int): List<JobPost> {
+        val resume = resumeRepository.findById(resumeId).orElseThrow { ResumeNotFoundException(resumeId) }
+        return resume.appliedJobPostIds.mapNotNull { jobPostId ->
+            jobPostRepository.findById(jobPostId).orElse(null)
+        }
+    }
     fun updateJobPost(existingJobPost: JobPost, jobPostDto: JobPostDto): JobPost {
         // JobPostDto의 정보로 기존 JobPost 엔티티 업데이트
         existingJobPost.apply {

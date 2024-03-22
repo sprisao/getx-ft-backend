@@ -79,4 +79,11 @@ class ResumeController(
             ResponseEntity.internalServerError().body(e.message)
         }
     }
+
+    // resumes 데이터속 appliedJobPostIds 로 지원한 JobPosts들 가져오기
+    @GetMapping("/jobPosts/{userId}")
+    fun getAllJobPostsByUserId(@PathVariable userId: Int): List<JobPost> {
+        return resumeService.getAllJobPostsByResumeIdByUserId(userId)
+    }
+
 }
