@@ -11,28 +11,37 @@ class EducationService(private val educationRepository: EducationRepository) {
 
     fun getAllEducations(): List<Education> = educationRepository.findAll()
 
-    fun addEducation(education: Education): Education = educationRepository.save(education)
-
     fun getEducationById(id: Int): Education? = educationRepository.findById(id).orElse(null)
 
-    fun updateEducation(resume: Resume, education: Education) {
+    fun updateEducation(resume: Resume, newEducation: List<Education>) {
       val existingEducation = educationRepository.findByResumeResumeId(resume.resumeId)
 
-        existingEducation.forEach { existingEducation ->
-            if(existingEducation.educationId == education.educationId) {
-                existingEducation.apply {
-                    this.courseName = education.courseName
-                    this.institution = education.institution
-                    this.completionDate = education.completionDate
-                }
-                educationRepository.save(existingEducation)
-            }
-        }
+      newEducation.forEach { newEducation ->
+          val existingEducation = existingEducation.find { it.educationId == newEducation.educationId }
+          // 업데이트
+          if(existingEducation != null) {
+              existingEducation.courseName = newEducation.courseName
+              existingEducation.institution = newEducation.institution
+              existingEducation.completionDate = newEducation.completionDate
+              educationRepository.save(existingEducation)
+          } else {
+          // 추가
+              educationRepository.save(newEducation.apply { this.resume = resume})
+          }
+      }
+
+      // 삭제
+      val newEducationIds = newEducation.mapNotNull { it.educationId }
+      existingEducation.forEach {
+          if(it.educationId !in newEducationIds) {
+              educationRepository.delete(it)
+          }
+      }
     }
 
     fun deleteEducation(id: Int) = educationRepository.deleteById(id)
 
-    fun addEducation(resume: Resume, education: Education): ResponseEntity<Map<String, Any>> {
+    fun addEducation(resume: Resume, education: Education ): ResponseEntity<Map<String, Any>> {
        return try {
            educationRepository.save(education)
            ResponseEntity.ok(mapOf("status" to true, "data" to education))

@@ -14,7 +14,7 @@ data class Certification(
 
     @ManyToOne
     @JoinColumn(name = "resumeId", referencedColumnName = "resumeId")
-    val resume: Resume,
+    var resume: Resume,
 
     var name: String,
 

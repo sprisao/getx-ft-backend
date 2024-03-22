@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable
 import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
 import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 import kr.getx.fitnessteachers.repository.ResumeRepository
+import java.time.LocalDateTime
 
 @Service
 class JobPostService(
@@ -101,6 +102,7 @@ class JobPostService(
 
         resume.appliedJobPostIds.add(jobPostId)
         jobPost.applicationUserIds.add(userId)
+        jobPost.applicationUserTime?.add(LocalDateTime.now())
 
         save(jobPost)
         return "구인게시판에 지원하였습니다."

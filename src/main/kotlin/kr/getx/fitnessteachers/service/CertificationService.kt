@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
-class CertificationService(private val certificationRepository: CertificationRepository) {
+class CertificationService(
+    private val certificationRepository: CertificationRepository
+) {
 
     fun getAllCertifications(): List<Certification> = certificationRepository.findAll()
 
@@ -15,17 +17,28 @@ class CertificationService(private val certificationRepository: CertificationRep
 
     fun getCertificationById(id: Int): Certification? = certificationRepository.findById(id).orElse(null)
 
-    fun updateCertification(resume: Resume,certification: Certification) {
-        val certificationToUpdate = certificationRepository.findByResumeResumeId(resume.resumeId)
+    fun updateCertification(resume: Resume, newCertification: List<Certification>) {
+       val existingCertification = certificationRepository.findByResumeResumeId(resume.resumeId)
 
-        certificationToUpdate.forEach { certificationToUpdate ->
-            if(certificationToUpdate.certificationId == certification.certificationId) {
-                certificationToUpdate.apply {
-                    this.name = certification.name
-                    this.issuedBy = certification.issuedBy
-                    this.issuedDate = certification.issuedDate
-                }
-                certificationRepository.save(certificationToUpdate)
+         newCertification.forEach { newCertification ->
+              val existingCertification = existingCertification.find { it.certificationId == newCertification.certificationId }
+              // 업데이트
+              if(existingCertification != null) {
+                existingCertification.issuedDate = newCertification.issuedDate
+                existingCertification.name = newCertification.name
+                existingCertification.issuedBy = newCertification.issuedBy
+                certificationRepository.save(existingCertification)
+              } else {
+              // 추가
+                certificationRepository.save(newCertification.apply { this.resume = resume})
+              }
+         }
+
+        // 삭제
+        val newCertificationIds = newCertification.mapNotNull { it.certificationId }
+        existingCertification.forEach {
+            if(it.certificationId !in newCertificationIds) {
+                certificationRepository.delete(it)
             }
         }
     }

@@ -2,6 +2,7 @@ package kr.getx.fitnessteachers.service
 
 import jakarta.transaction.Transactional
 import kr.getx.fitnessteachers.dto.ResumeDto
+import kr.getx.fitnessteachers.entity.JobPost
 import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.repository.ResumeRepository
 import kr.getx.fitnessteachers.utils.StringConversionUtils
@@ -16,7 +17,8 @@ class ResumeService(
     private val userService: UserService,
     private val educationService: EducationService,
     private val experienceService: ExperienceService,
-    private val certificationService: CertificationService
+    private val certificationService: CertificationService,
+    private val jobPostService: JobPostService,
 ) {
 
     fun getAllResumes(): List<Resume> = resumeRepository.findAll()
@@ -59,17 +61,15 @@ class ResumeService(
         // 이력서 업데이트
         resumeRepository.save(resume)
 
-        resumeDto.educations.forEach { educationDto ->
-            educationService.updateEducation(resume, educationDto.toEducation(resume))
-        }
+        val education = resumeDto.educations.map { it.toEducation(resume)}
+        educationService.updateEducation(resume, education)
 
-        resumeDto.experiences.forEach { experienceDto ->
-            experienceService.updateExperience(resume, experienceDto.toExperience(resume))
-        }
+        val experience = resumeDto.experiences.map { it.toExperience(resume)}
+        experienceService.updateExperience(resume, experience)
 
-        resumeDto.certifications.forEach { certificationDto ->
-            certificationService.updateCertification(resume, certificationDto.toCertification(resume))
-        }
+        val certification = resumeDto.certifications.map { it.toCertification(resume)}
+        certificationService.updateCertification(resume, certification)
+
         return resume
     }
 

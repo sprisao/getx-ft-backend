@@ -15,18 +15,28 @@ class ExperienceService(private val experienceRepository: ExperienceRepository) 
 
     fun getExperienceById(id: Int): Experience? = experienceRepository.findById(id).orElse(null)
 
-    fun updateExperience(resume: Resume, experience: Experience) {
+    fun updateExperience(resume: Resume, newExperience: List<Experience>) {
         val existingExperience = experienceRepository.findByResumeResumeId(resume.resumeId)
 
-        existingExperience.forEach { existingExperience ->
-            if(existingExperience.experienceId == experience.experienceId) {
-                existingExperience.apply {
-                    this.description = experience.description
-                    this.startDate = experience.startDate
-                    this.endDate = experience.endDate
-                    this.description = experience.description
-                }
+        newExperience.forEach { newExperience ->
+            val existingExperience = existingExperience.find { it.experienceId == newExperience.experienceId }
+        // 업데이트
+            if(existingExperience != null) {
+                existingExperience.description = newExperience.description
+                existingExperience.startDate = newExperience.startDate
+                existingExperience.endDate = newExperience.endDate
                 experienceRepository.save(existingExperience)
+            } else {
+            //추가
+                experienceRepository.save(newExperience.apply { this.resume = resume})
+            }
+        }
+
+        //삭제
+        val newExperienceIds = newExperience.mapNotNull { it.experienceId }
+        existingExperience.forEach {
+            if(it.experienceId !in newExperienceIds) {
+                experienceRepository.delete(it)
             }
         }
     }

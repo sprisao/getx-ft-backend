@@ -5,6 +5,7 @@ import kr.getx.fitnessteachers.dto.CertificationDto
 import kr.getx.fitnessteachers.dto.EducationDto
 import kr.getx.fitnessteachers.dto.ExperienceDto
 import kr.getx.fitnessteachers.dto.ResumeDto
+import kr.getx.fitnessteachers.entity.JobPost
 import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.service.*
 import kr.getx.fitnessteachers.utils.StringConversionUtils

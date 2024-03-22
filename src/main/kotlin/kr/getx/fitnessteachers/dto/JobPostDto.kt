@@ -22,5 +22,6 @@ data class JobPostDto(
     val title: String? = null,
     val details: String? = null,
     val jobCategory: String? = null,
-    var applicationUserIds : List<String>? = null
+    var applicationUserIds : MutableList<Int>? = null,
+    var applicationUserTime : MutableList<LocalDate>? = null
 )
