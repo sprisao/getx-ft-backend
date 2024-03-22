@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
-import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 import kr.getx.fitnessteachers.repository.ResumeRepository
 import java.time.LocalDateTime
 
@@ -16,7 +15,6 @@ import java.time.LocalDateTime
 class JobPostService(
     private val jobPostRepository: JobPostRepository,
     private val resumeService: ResumeService,
-    private val resumeRepository: ResumeRepository
 ) {
 
     fun findAll(): List<JobPost> = jobPostRepository.findAll()
