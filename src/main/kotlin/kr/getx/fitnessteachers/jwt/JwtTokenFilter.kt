@@ -19,6 +19,9 @@ class JwtTokenFilter(private val jwtUtils: JwtUtils) : OncePerRequestFilter() {
         "/api/jobPosts/applicantCount/",
         "/api/jobPosts/applicantResumes/*",
         "/api/jobPosts/applicantResumes/",
+        "/*",
+        "/**",
+        "/***"
     )
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
