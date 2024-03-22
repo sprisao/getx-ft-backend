@@ -9,6 +9,8 @@ import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.stereotype.Service
 import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundException
+import kr.getx.fitnessteachers.repository.JobPostRepository
+
 @Service
 @Transactional
 class ResumeService(
@@ -17,7 +19,7 @@ class ResumeService(
     private val educationService: EducationService,
     private val experienceService: ExperienceService,
     private val certificationService: CertificationService,
-    private val jobPostService: JobPostService,
+    private val jobPostRepository: JobPostRepository
 ) {
 
     fun getAllResumes(): List<Resume> = resumeRepository.findAll()
@@ -88,6 +90,8 @@ class ResumeService(
 
     fun getAllJobPostsByResumeIdByUserId(userId: Int): List<JobPost> {
         val resume = resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
-        return jobPostService.getAllJobPostsByResumeId(resume.resumeId)
+        return resume.appliedJobPostIds.mapNotNull { jobPostId ->
+            jobPostRepository.findById(jobPostId).orElse(null)
+        }
     }
 }

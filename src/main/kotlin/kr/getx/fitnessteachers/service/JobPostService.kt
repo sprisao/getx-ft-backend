@@ -27,12 +27,6 @@ class JobPostService(
 
     fun deleteById(id: Int) = jobPostRepository.deleteById(id)
 
-    fun getAllJobPostsByResumeId(resumeId: Int): List<JobPost> {
-        val resume = resumeRepository.findById(resumeId).orElseThrow { ResumeNotFoundException(resumeId) }
-        return resume.appliedJobPostIds.mapNotNull { jobPostId ->
-            jobPostRepository.findById(jobPostId).orElse(null)
-        }
-    }
     fun updateJobPost(existingJobPost: JobPost, jobPostDto: JobPostDto): JobPost {
         // JobPostDto의 정보로 기존 JobPost 엔티티 업데이트
         existingJobPost.apply {
