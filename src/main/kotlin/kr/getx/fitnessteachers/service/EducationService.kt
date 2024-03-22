@@ -13,6 +13,8 @@ class EducationService(private val educationRepository: EducationRepository) {
 
     fun getEducationById(id: Int): Education? = educationRepository.findById(id).orElse(null)
 
+    fun addEducation(education: Education): Education = educationRepository.save(education)
+
     fun updateEducation(resume: Resume, newEducation: List<Education>) {
       val existingEducation = educationRepository.findByResumeResumeId(resume.resumeId)
 

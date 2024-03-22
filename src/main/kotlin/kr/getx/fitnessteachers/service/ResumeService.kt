@@ -9,7 +9,6 @@ import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.stereotype.Service
 import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundException
-import kr.getx.fitnessteachers.exceptions.InvalidResumeOperationException
 @Service
 @Transactional
 class ResumeService(
