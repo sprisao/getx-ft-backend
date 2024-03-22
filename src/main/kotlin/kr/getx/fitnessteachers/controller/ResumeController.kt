@@ -42,6 +42,7 @@ class ResumeController(
             resumeId = resume.resumeId,
             userId = user.userId,
             photos = StringConversionUtils.convertStringToList(resume.photos ?: " "),
+            appliedJobPostIds = resume.appliedJobPostIds,
             createdAt = resume.createdAt,
             experiences = experienceService.getExperienceByResumeId(resume.resumeId)
                 .map { ExperienceDto(it.experienceId, it.description, it.startDate, it.endDate, it.createdAt) },
