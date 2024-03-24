@@ -2,14 +2,12 @@ package kr.getx.fitnessteachers.service
 
 import jakarta.transaction.Transactional
 import kr.getx.fitnessteachers.dto.ResumeDto
-import kr.getx.fitnessteachers.entity.JobPost
 import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.repository.ResumeRepository
 import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.stereotype.Service
 import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundException
-import kr.getx.fitnessteachers.repository.JobPostRepository
 
 @Service
 @Transactional
@@ -19,7 +17,6 @@ class ResumeService(
     private val educationService: EducationService,
     private val experienceService: ExperienceService,
     private val certificationService: CertificationService,
-    private val jobPostRepository: JobPostRepository
 ) {
 
     fun getAllResumes(): List<Resume> = resumeRepository.findAll()
@@ -86,12 +83,5 @@ class ResumeService(
         certificationService.deleteAllByResume(resume)
 
         resumeRepository.delete(resume)
-    }
-
-    fun getAllJobPostsByResumeIdByUserId(userId: Int): List<JobPost> {
-        val resume = resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
-        return resume.appliedJobPostIds.mapNotNull { jobPostId ->
-            jobPostRepository.findById(jobPostId).orElse(null)
-        }
     }
 }

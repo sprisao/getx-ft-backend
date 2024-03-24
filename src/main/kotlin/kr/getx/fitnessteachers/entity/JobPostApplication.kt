@@ -5,19 +5,20 @@ import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "resumes")
-data class Resume(
+@Table(name = "jobPostApplications")
+data class JobPostApplication(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val resumeId: Int = 0,
+    val jobPostApplicationId: Int = 0,
+
+    @ManyToOne
+    @JoinColumn(name = "jobPostId", referencedColumnName = "jobPostId")
+    val jobPost: JobPost,
 
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     val user: User,
 
-    @Lob
-    var photos: String? = null,
-
     @CreationTimestamp
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime = LocalDateTime.now()
 )

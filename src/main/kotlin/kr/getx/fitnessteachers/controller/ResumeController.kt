@@ -5,7 +5,6 @@ import kr.getx.fitnessteachers.dto.CertificationDto
 import kr.getx.fitnessteachers.dto.EducationDto
 import kr.getx.fitnessteachers.dto.ExperienceDto
 import kr.getx.fitnessteachers.dto.ResumeDto
-import kr.getx.fitnessteachers.entity.JobPost
 import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.service.*
 import kr.getx.fitnessteachers.utils.StringConversionUtils
@@ -43,7 +42,6 @@ class ResumeController(
             resumeId = resume.resumeId,
             userId = user.userId,
             photos = StringConversionUtils.convertStringToList(resume.photos ?: " "),
-            appliedJobPostIds = resume.appliedJobPostIds,
             createdAt = resume.createdAt,
             experiences = experienceService.getExperienceByResumeId(resume.resumeId)
                 .map { ExperienceDto(it.experienceId, it.description, it.startDate, it.endDate, it.createdAt) },
@@ -81,11 +79,4 @@ class ResumeController(
             ResponseEntity.internalServerError().body(e.message)
         }
     }
-
-    // resumes 데이터속 appliedJobPostIds 로 지원한 JobPosts들 가져오기
-    @GetMapping("/jobPosts/{userId}")
-    fun getAllJobPostsByUserId(@PathVariable userId: Int): List<JobPost> {
-        return resumeService.getAllJobPostsByResumeIdByUserId(userId)
-    }
-
 }
