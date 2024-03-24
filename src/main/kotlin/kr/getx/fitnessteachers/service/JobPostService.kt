@@ -4,7 +4,6 @@ import kr.getx.fitnessteachers.dto.JobPostDto
 import kr.getx.fitnessteachers.entity.Center
 import kr.getx.fitnessteachers.entity.JobPost
 import kr.getx.fitnessteachers.entity.User
-import kr.getx.fitnessteachers.exceptions.CenterNotFoundException
 import kr.getx.fitnessteachers.repository.JobPostRepository
 import org.springframework.stereotype.Service
 import org.springframework.data.domain.Page

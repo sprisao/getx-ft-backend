@@ -1,25 +1,18 @@
 package kr.getx.fitnessteachers.controller
 
 import kr.getx.fitnessteachers.dto.JobPostDto
-import kr.getx.fitnessteachers.entity.JobPost
-import kr.getx.fitnessteachers.exceptions.CenterNotFoundException
-import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
 import kr.getx.fitnessteachers.service.AuthenticationValidationService
-import kr.getx.fitnessteachers.service.CenterService
 import kr.getx.fitnessteachers.service.JobPostService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.security.core.Authentication
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import java.net.URLDecoder
-import java.nio.charset.StandardCharsets
 
 @RestController
 @RequestMapping("/api/jobPosts")
 class JobPostController(
     private val jobPostService: JobPostService,
-    private val centerService: CenterService,
     private val authenticationValidationService: AuthenticationValidationService,
 ) {
 
