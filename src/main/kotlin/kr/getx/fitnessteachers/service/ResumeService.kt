@@ -25,6 +25,8 @@ class ResumeService(
 
     fun getAllResumes(): List<Resume> = resumeRepository.findAll()
 
+    fun findByResumeId(resumeId: Int): Resume? = resumeRepository.findById(resumeId).orElse(null)
+
     fun addResumeWithDetails(resumeDto: ResumeDto): Resume {
         val user = userService.findUserById(resumeDto.userId) ?: throw UserNotFoundException(resumeDto.userId)
         val photoString = StringConversionUtils.convertListToString(resumeDto.photos)
@@ -37,13 +39,13 @@ class ResumeService(
         val saveResume = resumeRepository.save(newResume)
 
         resumeDto.educations.forEach {
-            educationService.addEducation(saveResume, it.toEducation(saveResume))
+            educationService.addEducationForResume(saveResume, it)
         }
         resumeDto.experiences.forEach {
-            experienceService.addExperience(saveResume, it.toExperience(saveResume))
+            experienceService.addExperienceForResume(saveResume, it)
         }
         resumeDto.certifications.forEach {
-            certificationService.addCertification(saveResume, it.toCertification(saveResume))
+            certificationService.addCertificationForResume(saveResume, it)
         }
         return saveResume
     }

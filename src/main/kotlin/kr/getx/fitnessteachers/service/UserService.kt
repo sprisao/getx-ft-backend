@@ -7,7 +7,6 @@ import kr.getx.fitnessteachers.exceptions.UserLoginFailedException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundExceptionByEmail
 import kr.getx.fitnessteachers.repository.UserRepository
 import org.springframework.stereotype.Service
-import org.springframework.http.ResponseEntity
 @Service
 class UserService(
     private val userRepository: UserRepository

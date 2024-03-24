@@ -1,63 +1,53 @@
 package kr.getx.fitnessteachers.service
 
+import kr.getx.fitnessteachers.dto.EducationDto
 import kr.getx.fitnessteachers.entity.Education
 import kr.getx.fitnessteachers.entity.Resume
+import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 import kr.getx.fitnessteachers.repository.EducationRepository
 import org.springframework.stereotype.Service
-import org.springframework.http.ResponseEntity
 
 @Service
-class EducationService(private val educationRepository: EducationRepository) {
+class EducationService(
+    private val educationRepository: EducationRepository,
+    private val resumeService: ResumeService
+) {
 
     fun getAllEducations(): List<Education> = educationRepository.findAll()
 
     fun getEducationById(id: Int): Education? = educationRepository.findById(id).orElse(null)
 
-    fun addEducation(education: Education): Education = educationRepository.save(education)
+    fun addEducation(educationDto: EducationDto, resumeId: Int): Education {
+        val resume = resumeService.findByResumeId(resumeId) ?: throw ResumeNotFoundException(resumeId)
+        return educationRepository.save(educationDto.toEducation(resume))
+    }
+    fun addEducationForResume(resume: Resume, educationDto: EducationDto ): Education = educationRepository.save(educationDto.toEducation(resume))
 
-    fun updateEducation(resume: Resume, newEducation: List<Education>) {
-      val existingEducation = educationRepository.findByResumeResumeId(resume.resumeId)
+    fun updateEducation(resume: Resume, newEducations: List<Education>) {
+        val existingEducations = educationRepository.findByResumeResumeId(resume.resumeId).associateBy { it.educationId }
 
-      newEducation.forEach { newEducation ->
-          val existingEducation = existingEducation.find { it.educationId == newEducation.educationId }
-          // 업데이트
-          if(existingEducation != null) {
-              existingEducation.courseName = newEducation.courseName
-              existingEducation.institution = newEducation.institution
-              existingEducation.completionDate = newEducation.completionDate
-              educationRepository.save(existingEducation)
-          } else {
-          // 추가
-              educationRepository.save(newEducation.apply { this.resume = resume})
-          }
-      }
+        // 새 교육 정보를 반복하며 업데이트 또는 추가
+        newEducations.forEach { newEdu ->
+            val existingEdu = existingEducations[newEdu.educationId]
+            educationRepository.save(existingEdu?.apply {
+                courseName = newEdu.courseName
+                institution = newEdu.institution
+                completionDate = newEdu.completionDate
+            } ?: newEdu.apply { this.resume = resume })
+        }
 
-      // 삭제
-      val newEducationIds = newEducation.mapNotNull { it.educationId }
-      existingEducation.forEach {
-          if(it.educationId !in newEducationIds) {
-              educationRepository.delete(it)
-          }
-      }
+        // 더 이상 존재하지 않는 교육 정보 삭제
+        existingEducations.values.forEach {
+            if (newEducations.none { newEdu -> newEdu.educationId == it.educationId}) {
+                educationRepository.delete(it)
+            }
+        }
     }
 
     fun deleteEducation(id: Int) = educationRepository.deleteById(id)
 
-    fun addEducation(resume: Resume, education: Education ): ResponseEntity<Map<String, Any>> {
-       return try {
-           educationRepository.save(education)
-           ResponseEntity.ok(mapOf("status" to true, "data" to education))
-       } catch (e : Exception) {
-           ResponseEntity.badRequest().body(mapOf("status" to false, "data" to e.message as Any))
-       }
-    }
+    fun getEducationByResumeId(resumeId: Int): List<Education> = educationRepository.findByResumeResumeId(resumeId)
 
-    fun getEducationByResumeId(resumeId: Int): List<Education> {
-        return educationRepository.findByResumeResumeId(resumeId)
-    }
-
-    fun deleteAllByResume(resume: Resume) {
-        educationRepository.deleteAllByResume(resume)
-    }
+    fun deleteAllByResume(resume: Resume) = educationRepository.deleteAllByResume(resume)
 }
 

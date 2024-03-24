@@ -7,15 +7,15 @@ import java.time.LocalDateTime
 
 
 data class CertificationDto(
-    val certificationId: Int,
+    val certificationId: Int? = null,
     val name: String,
     val issuedBy: String,
     val issuedDate: LocalDate,
-    val createdAt: LocalDateTime?
+    val createdAt: LocalDateTime? = null
 )
 {
     fun toCertification(resume: Resume): Certification = Certification(
-        certificationId = this.certificationId,
+        certificationId = this.certificationId ?: 0,
         resume = resume,
         name = this.name,
         issuedBy = this.issuedBy,
