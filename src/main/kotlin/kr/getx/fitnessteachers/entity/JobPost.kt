@@ -16,7 +16,11 @@ data class JobPost(
     @JoinColumn(name = "centerId", referencedColumnName = "centerId")
     val center: Center,
 
-    var recruitmentStatus: String? = null,
+    // 작성 전, 작성 완료
+    var isDisplayAlready: Boolean? = false,
+
+    // 모집중, 모집마감
+    var recruitmentStatus: Boolean? = false,
 
     @Column(length = 10000)
     var responsibilities: String? = null,
