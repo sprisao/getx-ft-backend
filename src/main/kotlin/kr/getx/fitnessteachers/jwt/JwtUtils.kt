@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest
 import kr.getx.fitnessteachers.dto.UserDto
 import kr.getx.fitnessteachers.entity.TeacherType
 import org.springframework.stereotype.Component
-import org.springframework.beans.factory.annotation.Value
 
 @Component
 class JwtUtils {
