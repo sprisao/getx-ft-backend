@@ -1,7 +1,10 @@
 package kr.getx.fitnessteachers.service
 
 import kr.getx.fitnessteachers.dto.JobPostDto
+import kr.getx.fitnessteachers.entity.Center
 import kr.getx.fitnessteachers.entity.JobPost
+import kr.getx.fitnessteachers.entity.User
+import kr.getx.fitnessteachers.exceptions.CenterNotFoundException
 import kr.getx.fitnessteachers.repository.JobPostRepository
 import org.springframework.stereotype.Service
 import org.springframework.data.domain.Page
@@ -11,43 +14,53 @@ import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
 @Service
 class JobPostService(
     private val jobPostRepository: JobPostRepository,
+    private val centerService: CenterService,
+    private val authenticationValidationService: AuthenticationValidationService
 ) {
 
     fun findAll(): List<JobPost> = jobPostRepository.findAll()
 
     fun findById(id: Int): JobPost? = jobPostRepository.findById(id).orElse(null)
 
-    fun save(jobPost: JobPost): JobPost = jobPostRepository.save(jobPost)
+    fun createJobPost(jobPostDto: JobPostDto, center:Center, user: User): JobPost {
+        authenticationValidationService.validateCenterOwnership(center.centerId, user)
+
+        val jobPost = jobPostDto.toEntity(center)
+        return jobPostRepository.save(jobPost)
+    }
 
     fun deleteById(id: Int) = jobPostRepository.deleteById(id)
 
-    fun updateJobPost(existingJobPost: JobPost, jobPostDto: JobPostDto): JobPost {
-        // JobPostDto의 정보로 기존 JobPost 엔티티 업데이트
-        existingJobPost.apply {
-            isDisplayAlready = jobPostDto.isDisplayAlready
-            recruitmentStatus = jobPostDto.recruitmentStatus
-            responsibilities = jobPostDto.responsibilities
-            workLocation = jobPostDto.workLocation
-            workHours = jobPostDto.workHours
-            workDays = jobPostDto.workDays
-            employmentType = jobPostDto.employmentType
-            numberOfPositions = jobPostDto.numberOfPositions
-            salary = jobPostDto.salary
-            qualifications = jobPostDto.qualifications
-            applicationPeriodStart = jobPostDto.applicationPeriodStart
-            applicationPeriodEnd = jobPostDto.applicationPeriodEnd
-            contactEmail = jobPostDto.contactEmail
-            contactPhone = jobPostDto.contactPhone
-            contactPerson = jobPostDto.contactPerson
-            details = jobPostDto.details
-            jobCategory = jobPostDto.jobCategory
-            title = jobPostDto.title
-        }
+    fun updateJobPost(jobPostId: Int, jobPostDto: JobPostDto, user:User): JobPost {
+        val jobPost = findById(jobPostId) ?: throw JobPostNotFoundException(jobPostId)
+        authenticationValidationService.validateCenterOwnership(jobPost.center.centerId, user)
 
-        return jobPostRepository.save(existingJobPost)
+        // DTO의 데이터로 JobPost 엔티티 업데이트
+        jobPost.apply {
+            isDisplayAlready = jobPostDto.isDisplayAlready ?: isDisplayAlready
+            recruitmentStatus = jobPostDto.recruitmentStatus ?: recruitmentStatus
+            responsibilities = jobPostDto.responsibilities ?: responsibilities
+            workLocation = jobPostDto.workLocation ?: workLocation
+            workHours = jobPostDto.workHours ?: workHours
+            workDays = jobPostDto.workDays ?: workDays
+            employmentType = jobPostDto.employmentType ?: employmentType
+            numberOfPositions = jobPostDto.numberOfPositions ?: numberOfPositions
+            salary = jobPostDto.salary ?: salary
+            qualifications = jobPostDto.qualifications ?: qualifications
+            applicationPeriodStart = jobPostDto.applicationPeriodStart ?: applicationPeriodStart
+            applicationPeriodEnd = jobPostDto.applicationPeriodEnd ?: applicationPeriodEnd
+            contactEmail = jobPostDto.contactEmail ?: contactEmail
+            contactPhone = jobPostDto.contactPhone ?: contactPhone
+            contactPerson = jobPostDto.contactPerson ?: contactPerson
+            title = jobPostDto.title ?: title
+            details = jobPostDto.details ?: details
+            jobCategory = jobPostDto.jobCategory ?: jobCategory
+        }
+        return jobPostRepository.save(jobPost)
     }
 
-    fun findByCenterId(centerId: Int): List<JobPost> = jobPostRepository.findByCenter_CenterId(centerId)
+    fun findJobPostsByUserId(userId: Int): List<JobPost> =
+        centerService.getCenterByUserId(userId).flatMap { jobPostRepository.findByCenterCenterId(centerId = it.centerId) }
 
     // 검색 기능 추가
     fun searchJobPosts(
@@ -56,13 +69,13 @@ class JobPostService(
         locationProvince: String?,
         locationCity: String?,
         pageable: Pageable
-    ) : Page<JobPost> {
-        return jobPostRepository.findByRecruitmentStatusAndJobCategoryAndCenterLocationProvinceAndCenterLocationCity(
-            recruitmentStatus,
-            jobCategory,
-            locationProvince,
-            locationCity,
-            pageable
+    ): Page<JobPost> {
+        return jobPostRepository.search(
+            recruitmentStatus = recruitmentStatus,
+            jobCategory = jobCategory,
+            locationProvince = locationProvince,
+            locationCity = locationCity,
+            pageable = pageable
         )
     }
 
