@@ -22,7 +22,6 @@ class JobPostController(
     private val jobPostService: JobPostService,
     private val centerService: CenterService,
     private val authenticationValidationService: AuthenticationValidationService,
-    private val resumeService: ResumeService
 ) {
 
     @GetMapping("/all")
