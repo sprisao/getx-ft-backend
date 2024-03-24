@@ -12,16 +12,16 @@ import org.springframework.security.core.context.SecurityContextHolder
 class JwtTokenFilter(private val jwtUtils: JwtUtils) : OncePerRequestFilter() {
 
     private val publicEndpoint = arrayOf(
-        "/api/users/all",
-        "/api/jobPosts/all",
-        "/api/centers/all",
-        "/api/jobPosts/applicantCount/*",
-        "/api/jobPosts/applicantCount/",
-        "/api/jobPosts/applicantResumes/*",
-        "/api/jobPosts/applicantResumes/",
-        "/*",
+//        "/api/users/all",
+//        "/api/jobPosts/all",
+//        "/api/centers/all",
+//        "/api/jobPosts/applicantCount/*",
+//        "/api/jobPosts/applicantCount/",
+//        "/api/jobPosts/applicantResumes/*",
+//        "/api/jobPosts/applicantResumes/",
+//        "/*",
         "/**",
-        "/***"
+//        "/***"
     )
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
