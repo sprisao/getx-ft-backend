@@ -4,7 +4,6 @@ import kr.getx.fitnessteachers.dto.ExperienceDto
 import kr.getx.fitnessteachers.entity.Experience
 import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.repository.ExperienceRepository
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service

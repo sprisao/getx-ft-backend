@@ -12,10 +12,3 @@ data class ResumeDto(
         val certifications: List<CertificationDto>,
         val createdAt : LocalDateTime?
 )
-{
-        fun toResume(user: User, photosString: String): Resume = Resume(
-                user = user,
-                photos = photosString,
-                createdAt = this.createdAt ?: LocalDateTime.now()
-        )
-}

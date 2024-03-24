@@ -56,8 +56,8 @@ class JobPostApplicationService (
             ?: throw IllegalArgumentException("해당 구직 공고가 존재하지 않습니다.")
         val application = jobPostApplicationRepository.findByJobPost(jobPost)
 
-        return application.mapNotNull { application ->
-            val user = application.user
+        return application.mapNotNull { appli ->
+            val user = appli.user
             val resume = resumeService.getResumeByUserId(user.userId)
             resume?.let {
                 ResumeDto(
