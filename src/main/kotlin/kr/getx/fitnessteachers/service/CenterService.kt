@@ -1,7 +1,9 @@
 package kr.getx.fitnessteachers.service
 
-import kr.getx.fitnessteachers.dto.UpdateCenterDto
+import kr.getx.fitnessteachers.dto.CenterDto
 import kr.getx.fitnessteachers.entity.Center
+import kr.getx.fitnessteachers.exceptions.CenterNotFoundException
+import kr.getx.fitnessteachers.exceptions.CenterOwnershipException
 import kr.getx.fitnessteachers.repository.CenterRepository
 import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.stereotype.Service
@@ -9,43 +11,32 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Page
 
 @Service
-class CenterService(private val centerRepository: CenterRepository) {
-
+class CenterService(
+    private val centerRepository: CenterRepository
+) {
     fun getAllCenters(): List<Center> = centerRepository.findAll()
 
     fun findById(centerId: Int): Center? = centerRepository.findById(centerId).orElse(null)
 
     fun addCenter(center: Center): Center = centerRepository.save(center)
 
-    fun updateCenter(centerId: Int, updateCenterDto: UpdateCenterDto): Center {
-        val center = centerRepository.findById(centerId).orElseThrow{ throw Exception("해당 센터가 존재하지 않습니다.") }
-
-        center.apply {
-            centerName = updateCenterDto.centerName ?: centerName
-            photos = updateCenterDto.photos.let { StringConversionUtils.convertListToString(it) }
-            locationProvince = updateCenterDto.locationProvince ?: locationProvince
-            locationCity = updateCenterDto.locationCity ?: locationCity
-            description = updateCenterDto.description ?: description
-        }
-
-        return centerRepository.save(center)
-    }
+    fun updateCenter(centerId: Int, centerDto: CenterDto): Center =
+        centerRepository.findById(centerId).orElseThrow { CenterNotFoundException(centerId) }.apply {
+            if (user.userId != centerDto.userId) throw CenterOwnershipException(centerDto.userId, centerId)
+            centerName = centerDto.centerName ?: centerName
+            photos = StringConversionUtils.convertListToString(centerDto.photos ?: emptyList())
+            locationProvince = centerDto.locationProvince ?: locationProvince
+            locationCity = centerDto.locationCity ?: locationCity
+            description = centerDto.description ?: description
+        }.let (centerRepository::save)
 
     fun deleteCenter(centerId: Int) {
-        val center = centerRepository.findById(centerId)
-        if(center.isPresent) {
-            centerRepository.delete(center.get())
-        } else {
-            throw Exception("해당 센터가 존재하지 않습니다.")
-        }
+        val center = centerRepository.findById(centerId) ?: throw CenterNotFoundException(centerId)
+        centerRepository.delete(center.get())
     }
 
-    fun getCenterByUserId(userId: Int): List<Center> {
-        return centerRepository.findByUser_UserId(userId)
-    }
+    fun getCenterByUserId(userId: Int): List<Center> = centerRepository.findByUser_UserId(userId)
 
-    // 센터 검색 기능
-    fun searchCenters(centerName: String?, locationProvince: String?, locationCity: String?, pageable: Pageable): Page<Center> {
-        return centerRepository.findByCenterNameAndLocationProvinceAndLocationCity(centerName, locationProvince, locationCity, pageable)
-    }
+    fun searchCenters(centerName: String?, locationProvince: String?, locationCity: String?, pageable: Pageable): Page<Center> =
+        centerRepository.findByCenterNameAndLocationProvinceAndLocationCity(centerName, locationProvince, locationCity, pageable)
 }

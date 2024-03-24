@@ -1,16 +1,10 @@
 package kr.getx.fitnessteachers.controller
 
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.validation.Valid
 import kr.getx.fitnessteachers.dto.CenterDto
-import kr.getx.fitnessteachers.dto.UpdateCenterDto
 import kr.getx.fitnessteachers.entity.Center
-import kr.getx.fitnessteachers.exceptions.CenterNotFoundException
-import kr.getx.fitnessteachers.exceptions.CenterOwnershipException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundException
 import kr.getx.fitnessteachers.service.CenterService
 import kr.getx.fitnessteachers.service.UserService
-import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
 import org.springframework.data.domain.Pageable
@@ -23,98 +17,35 @@ class CenterController(
 ) {
 
     @GetMapping("/all")
-    fun getAllCenters(): ResponseEntity<Any> {
-        val centers = centerService.getAllCenters().map { center ->
-            CenterDto(
-                centerId = center.centerId,
-                centerName = center.centerName,
-                photos = StringConversionUtils.convertStringToList(center.photos ?: ""),
-                locationProvince = center.locationProvince,
-                locationCity = center.locationCity,
-                description = center.description,
-                userId = center.user.userId
-            )
-        }
-        return ResponseEntity.ok().body(centers.takeIf { it.isNotEmpty() } ?: "등록된 센터가 존재하지 않습니다.")
-    }
+    fun getAllCenters(): ResponseEntity<List<CenterDto>> =
+        ResponseEntity.ok(centerService.getAllCenters().map { CenterDto.fromEntity(it) })
 
     @PostMapping("/add")
-    fun addCenter(@RequestBody centerDto: CenterDto, request: HttpServletRequest): ResponseEntity<Any> {
-        val user = userService.findUserById(centerDto.userId)
-            ?: throw UserNotFoundException(centerDto.userId)
-
-        val photoString = StringConversionUtils.convertListToString(centerDto.photos ?: emptyList())
-        val center = Center(
-                user = user,
-                centerName = centerDto.centerName,
-                photos = photoString,
-                locationProvince = centerDto.locationProvince,
-                locationCity = centerDto.locationCity,
-                description = centerDto.description
-        )
-
-        val saveCenter = centerService.addCenter(center)
-        return ResponseEntity.ok(saveCenter)
-    }
+    fun addCenter(@RequestBody centerDto: CenterDto): ResponseEntity<Center> =
+        ResponseEntity.ok(centerService.addCenter(centerDto.toEntity(userService.findUserById(centerDto.userId)
+            ?: throw UserNotFoundException(centerDto.userId))))
 
     @GetMapping("/{userId}")
-    fun getCenterByUserId(@PathVariable userId: Int): ResponseEntity<Any> {
-        val user = userService.findUserById(userId)
-            ?: throw UserNotFoundException(userId)
-
-        val centers = centerService.getCenterByUserId(user.userId).map { center ->
-            CenterDto(
-                centerId = center.centerId,
-                centerName = center.centerName,
-                photos = StringConversionUtils.convertStringToList(center.photos ?: ""),
-                locationProvince = center.locationProvince,
-                locationCity = center.locationCity,
-                description = center.description,
-                userId = center.user.userId
-            )
-        }
-        return ResponseEntity.ok().body(centers.takeIf { it.isNotEmpty() } ?: "등록된 센터가 존재하지 않습니다.")
-    }
+    fun getCenterByUserId(@PathVariable userId: Int): ResponseEntity<List<CenterDto>> =
+        ResponseEntity.ok(centerService.getCenterByUserId(userId).map { CenterDto.fromEntity(it) })
 
     @PutMapping("/update/{centerId}")
-    fun updateCenter(@PathVariable centerId: Int,@RequestBody @Valid updateCenterDto: UpdateCenterDto): ResponseEntity<Any>{
-        val center = centerService.findById(centerId)
-            ?: throw CenterNotFoundException(centerId)
-        if (updateCenterDto.userId != center.user.userId) {
-            throw CenterOwnershipException(updateCenterDto.userId, centerId)
-        }
-        val updateCenter = centerService.updateCenter(centerId, updateCenterDto)
-        return ResponseEntity.ok(updateCenter)
-    }
+    fun updateCenter(@PathVariable centerId: Int,@RequestBody centerDto: CenterDto): ResponseEntity<Center> =
+        ResponseEntity.ok(centerService.updateCenter(centerId, centerDto))
+
     @DeleteMapping("/delete/{centerId}")
-    fun deleteCenter(@PathVariable centerId: Int): ResponseEntity<Any>{
-        val center = centerService.findById(centerId)
-            ?: throw CenterNotFoundException(centerId)
+    fun deleteCenter(@PathVariable centerId: Int): ResponseEntity<String>{
         centerService.deleteCenter(centerId)
         return ResponseEntity.ok().body("센터가 성공적으로 삭제되었습니다.")
     }
 
-    // 검색 기능 추가
     @GetMapping("/search")
     fun searchCenters(
         @RequestParam(required = false) centerName: String?,
         @RequestParam(required = false) locationProvince: String?,
         @RequestParam(required = false) locationCity: String?,
-        @RequestParam(defaultValue = "10") pageable: Pageable
-    ): ResponseEntity<Page<CenterDto>> {
-        val page = centerService.searchCenters(centerName, locationProvince, locationCity, pageable)
-        val pageDto = page.map {center ->
-            CenterDto(
-                centerId = center.centerId,
-                centerName = center.centerName,
-                photos = StringConversionUtils.convertStringToList(center.photos ?: ""),
-                locationProvince = center.locationProvince,
-                locationCity = center.locationCity,
-                description = center.description,
-                userId = center.user.userId
-            )
-
-        }
-        return ResponseEntity.ok().body(pageDto)
-    }
+        pageable: Pageable
+    ): ResponseEntity<Page<CenterDto>> =
+        ResponseEntity.ok(centerService.searchCenters(centerName, locationProvince, locationCity, pageable)
+            .map { CenterDto.fromEntity(it) })
 }
