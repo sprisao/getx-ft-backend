@@ -77,6 +77,7 @@ class JobPostController(
 
         val jobPost = JobPost(
             center = center,
+            isDisplayAlready = jobPostDto.isDisplayAlready,
             recruitmentStatus = jobPostDto.recruitmentStatus,
             responsibilities = jobPostDto.responsibilities,
             workLocation = jobPostDto.workLocation,
@@ -146,6 +147,7 @@ class JobPostController(
             JobPostDto(
                 jobPostId = jobPost.jobPostId,
                 centerId = jobPost.center.centerId,
+                isDisplayAlready = jobPost.isDisplayAlready,
                 recruitmentStatus = jobPost.recruitmentStatus,
                 responsibilities = jobPost.responsibilities,
                 workLocation = jobPost.workLocation,

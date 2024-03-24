@@ -28,6 +28,7 @@ class JobPostService(
     fun updateJobPost(existingJobPost: JobPost, jobPostDto: JobPostDto): JobPost {
         // JobPostDto의 정보로 기존 JobPost 엔티티 업데이트
         existingJobPost.apply {
+            isDisplayAlready = jobPostDto.isDisplayAlready
             recruitmentStatus = jobPostDto.recruitmentStatus
             responsibilities = jobPostDto.responsibilities
             workLocation = jobPostDto.workLocation

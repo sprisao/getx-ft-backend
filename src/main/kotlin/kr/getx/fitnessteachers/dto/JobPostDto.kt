@@ -5,7 +5,8 @@ import java.time.LocalDate
 data class JobPostDto(
     val jobPostId: Int,
     val centerId: Int,
-    val recruitmentStatus: String? = null,
+    val isDisplayAlready: Boolean? = false,
+    val recruitmentStatus: Boolean? = false,
     val responsibilities: String? = null,
     val workLocation: String? = null,
     val workHours: String? = null,
