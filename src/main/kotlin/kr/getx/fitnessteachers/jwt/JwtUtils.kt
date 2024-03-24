@@ -9,14 +9,15 @@ import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.security.Keys
 import jakarta.servlet.http.HttpServletRequest
 import kr.getx.fitnessteachers.dto.UserDto
+import kr.getx.fitnessteachers.entity.TeacherType
 import org.springframework.stereotype.Component
 import org.springframework.beans.factory.annotation.Value
 
 @Component
 class JwtUtils {
 
-    @Value("\${jwt.secret}")
-    private lateinit var jwtSecret: String
+//    @Value("\${jwt.secret}")
+//    private lateinit var jwtSecret: String
 
     fun validateToken(authToken: String): Boolean {
         try {
@@ -62,7 +63,7 @@ class JwtUtils {
         val socialType = claims["socialType"] as String
 
         return if (email != null && name != null) {
-            UserDto(name, "", email, socialType, false, "", "", false, false, false)
+            UserDto(name, "", email, socialType, false, "", false, TeacherType.FITNESS, false, false, false)
         } else {
             throw Exception("Invalid Token")
         }

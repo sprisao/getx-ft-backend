@@ -56,6 +56,7 @@ class UserService(private val userRepository: UserRepository) {
         editUser.userTypeStatus = userDto.userTypeStatus
         editUser.resumeStatus = userDto.resumeStatus
         editUser.centerStatus = userDto.centerStatus
+        editUser.teacherType = userDto.teacherType
 
         return userRepository.save(editUser)
     }
@@ -81,6 +82,7 @@ class UserService(private val userRepository: UserRepository) {
             profileStatus = userDto.profileStatus
             resumeStatus = userDto.resumeStatus
             centerStatus = userDto.centerStatus
+            teacherType = userDto.teacherType
         }
 
         return userRepository.save(editUser)

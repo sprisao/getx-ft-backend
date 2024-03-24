@@ -27,7 +27,10 @@ data class User(
 
     var socialType: String,
 
-    var userType: String? = "",
+    var userType: Boolean? = false,
+
+    @Enumerated(EnumType.STRING)
+    var teacherType: TeacherType? = null,
 
     var profileStatus: Boolean = false,
 
@@ -40,3 +43,9 @@ data class User(
     @CreationTimestamp
     val createdAt: LocalDateTime = LocalDateTime.now()
 )
+
+enum class TeacherType {
+    YOGA,
+    PILATES,
+    FITNESS
+}
