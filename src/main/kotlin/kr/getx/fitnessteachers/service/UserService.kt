@@ -9,83 +9,60 @@ import kr.getx.fitnessteachers.repository.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.http.ResponseEntity
 @Service
-class UserService(private val userRepository: UserRepository) {
-
+class UserService(
+    private val userRepository: UserRepository
+) {
     fun getAllUsers(): List<User> = userRepository.findAll()
 
-    fun getUser(email: String?): User? = userRepository.findByEmail(email)
+    fun getUser(email: String): User = userRepository.findByEmail(email) ?: throw UserNotFoundExceptionByEmail(email)
 
-    fun findUserByEmail(email: String): User? {
-        return userRepository.findByEmail(email)
-    }
-
-    fun findUserById(userId: Int): User?{
-        return userRepository.findById(userId).orElseThrow {
-            EntityNotFoundException("User not found with ID: $userId")
-        }
-    }
+    fun findUserById(userId: Int): User = userRepository.findById(userId).orElseThrow { EntityNotFoundException("해당 유저 ID 값이 존재하지 않습니다. : $userId") }
 
     fun deleteUser(email: String) {
-        val user = userRepository.findByEmail(email)
-            ?: throw UserNotFoundExceptionByEmail(email)
-        userRepository.delete(user)
+        userRepository.findByEmail(email)?.let { userRepository.delete(it) } ?: throw UserNotFoundExceptionByEmail(email)
     }
 
     // 회원가입 & 로그인
-   fun processUserLogin(userDto : UserDto): ResponseEntity<Map<String, Any>> {
-       val existingUser = userRepository.findByEmail(userDto.email)
-
-        existingUser?.let {
-            if(it.socialType != userDto.socialType) {
-                throw UserLoginFailedException("User Login Failed: Social Type Mismatch")
-            }
-            return ResponseEntity.ok(mapOf("loginStatus" to true, "data" to loginUser(it)))
-        } ?: run {
-            return ResponseEntity.ok(mapOf("loginStatus" to false, "data" to registerUser(userDto)))
-        }
+   fun processUserLogin(userDto : UserDto): Map<String, Any> {
+       val existingUser = userRepository.findByEmail(userDto.email) ?: return mapOf("loginStatus" to false, "data" to registerUser(userDto))
+       if (existingUser.socialType != userDto.socialType) {
+           throw UserLoginFailedException("이메일 로그인 실패 : 이미 다른 소셜로 가입된 이메일입니다.")
+       }
+       return mapOf("loginStatus" to true, "data" to loginUser(existingUser))
    }
 
-   // 개인정보 추가 기입 (유저 타입, 프로필 사진, 프로필 상태, 유저 타입 상태, 이력서 상태, 센터 상태, 유저 타입)
+   // 개인정보 추가 기입
     fun processUserTypeEdit(userDto : UserDto): User {
-        val editUser = userRepository.findByEmail(userDto.email) ?: throw UserNotFoundExceptionByEmail(userDto.email)
-
-        editUser.nickname = userDto.nickname ?: "닉네임 없음"
-        editUser.profileUrl = userDto.profileUrl
-        editUser.userType = userDto.userType
-        editUser.profileStatus = userDto.profileStatus
-        editUser.userTypeStatus = userDto.userTypeStatus
-        editUser.resumeStatus = userDto.resumeStatus
-        editUser.centerStatus = userDto.centerStatus
-        editUser.teacherType = userDto.teacherType
-
-        return userRepository.save(editUser)
+        val user = userRepository.findByEmail(userDto.email) ?: throw UserNotFoundExceptionByEmail(userDto.email)
+        return updateUserDetails(user, userDto)
     }
 
-    private fun loginUser(existingUser : User): User {
-        return existingUser
-    }
-
-    private fun registerUser(userDto : UserDto): User {
-        return User (
-            name = userDto.name,
-            email = userDto.email,
-            socialType = userDto.socialType
-        ).also { userRepository.save(it) }
-    }
-
+   // 유저 정보 수정
     fun processUserEdit(email: String, userDto: UserDto): User {
-        val editUser = userRepository.findByEmail(email) ?: throw UserNotFoundExceptionByEmail(email)
+        val user = userRepository.findByEmail(email) ?: throw UserNotFoundExceptionByEmail(email)
+        return updateUserDetails(user, userDto)
+    }
 
-        editUser.apply {
+    private fun loginUser(user : User): User = user
+
+    private fun registerUser(userDto : UserDto): User = User(
+        name = userDto.name,
+        email = userDto.email,
+        socialType = userDto.socialType
+    ).also { userRepository.save(it) }
+
+    private fun updateUserDetails(user: User, userDto: UserDto): User {
+        user.apply {
             nickname = userDto.nickname ?: "닉네임 없음"
             profileUrl = userDto.profileUrl
+            userType = userDto.userType
             profileStatus = userDto.profileStatus
+            userTypeStatus = userDto.userTypeStatus
             resumeStatus = userDto.resumeStatus
             centerStatus = userDto.centerStatus
             teacherType = userDto.teacherType
         }
-
-        return userRepository.save(editUser)
+        return userRepository.save(user)
     }
 }
 

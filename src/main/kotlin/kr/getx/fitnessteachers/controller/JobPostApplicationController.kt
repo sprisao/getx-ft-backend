@@ -34,8 +34,8 @@ class JobPostApplicationController (
         return ResponseEntity.ok(count)
     }
 
-    // 오너 -> 지원한 지원자들의 이력서
-    // 구직 공고 지원자 이력서 조회
+    // 오너 -> 지원한 지원자들의 이력서들
+    // 구직 공고 지원자 이력서들 전부 조회
     @GetMapping("/{jobPostId}/applicantResumes")
     fun getApplicantResumes(@PathVariable jobPostId: Int): ResponseEntity<Any> {
         val resumes = jobPostApplicationService.getApplicantResumes(jobPostId)

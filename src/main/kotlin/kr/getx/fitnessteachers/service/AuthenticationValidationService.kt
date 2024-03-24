@@ -20,7 +20,7 @@ class AuthenticationValidationService (
         val userDto = authentication.principal as UserDto
         val userEmail = userDto.email
             ?: throw AuthenticationEmailNotFoundException()
-        return userService.findUserByEmail(userEmail)
+        return userService.getUser(userEmail)
             ?: throw UserNotFoundExceptionByEmail(userEmail)
     }
 
