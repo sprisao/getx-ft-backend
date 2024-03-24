@@ -1,6 +1,9 @@
 package kr.getx.fitnessteachers.service
 
 import jakarta.transaction.Transactional
+import kr.getx.fitnessteachers.dto.CertificationDto
+import kr.getx.fitnessteachers.dto.EducationDto
+import kr.getx.fitnessteachers.dto.ExperienceDto
 import kr.getx.fitnessteachers.dto.ResumeDto
 import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.repository.ResumeRepository
@@ -8,6 +11,7 @@ import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.stereotype.Service
 import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundException
+import java.time.LocalDateTime
 
 @Service
 @Transactional
@@ -23,57 +27,59 @@ class ResumeService(
 
     fun addResumeWithDetails(resumeDto: ResumeDto): Resume {
         val user = userService.findUserById(resumeDto.userId) ?: throw UserNotFoundException(resumeDto.userId)
-
         val photoString = StringConversionUtils.convertListToString(resumeDto.photos)
+        val newResume = Resume(
+            user = user,
+            photos = photoString,
+            createdAt = resumeDto.createdAt ?: LocalDateTime.now()
+        )
 
-        val resume = resumeRepository.save(resumeDto.toResume(user, photoString))
+        val saveResume = resumeRepository.save(newResume)
 
-        resumeDto.educations.forEach { educationDto ->
-            educationService.addEducation(resume, educationDto.toEducation(resume))
+        resumeDto.educations.forEach {
+            educationService.addEducation(saveResume, it.toEducation(saveResume))
         }
-
-        resumeDto.experiences.forEach { experienceDto ->
-            experienceService.addExperience(resume, experienceDto.toExperience(resume))
+        resumeDto.experiences.forEach {
+            experienceService.addExperience(saveResume, it.toExperience(saveResume))
         }
-
-        resumeDto.certifications.forEach { certificationDto ->
-            certificationService.addCertification(resume, certificationDto.toCertification(resume))
+        resumeDto.certifications.forEach {
+            certificationService.addCertification(saveResume, it.toCertification(saveResume))
         }
-        return resume
+        return saveResume
     }
 
-    fun updateResumeWithDetails(resumeDto: ResumeDto): Resume {
-        // Resume ID를 통해 기존 이력서를 찾습니다.
-        val resume = resumeDto.userId.let {
-            resumeRepository.findByUserUserId(it) ?: throw ResumeNotFoundException(it)
-        }
-
-        // 유저 정보 업데이트 (필요한 경우)
-        val user = userService.findUserById(resumeDto.userId) ?: throw UserNotFoundException(resumeDto.userId)
-
-
-        // 사진 정보 업데이트
-        val photoString = StringConversionUtils.convertListToString(resumeDto.photos)
-        resume.photos = photoString
-
-        // 이력서 업데이트
-        resumeRepository.save(resume)
-
-        val education = resumeDto.educations.map { it.toEducation(resume)}
-        educationService.updateEducation(resume, education)
-
-        val experience = resumeDto.experiences.map { it.toExperience(resume)}
-        experienceService.updateExperience(resume, experience)
-
-        val certification = resumeDto.certifications.map { it.toCertification(resume)}
-        certificationService.updateCertification(resume, certification)
-
-        return resume
+    fun getResumeDetailsByUserId(userId: Int): ResumeDto {
+        val resume = getResumeByUserId(userId)
+        return ResumeDto(
+            resumeId = resume.resumeId,
+            userId = userId,
+            photos = StringConversionUtils.convertStringToList(resume.photos ?: " "),
+            createdAt = resume.createdAt,
+            experiences = experienceService.getExperienceByResumeId(resume.resumeId)
+                .map { ExperienceDto.fromEntity(it) },
+            educations = educationService.getEducationByResumeId(resume.resumeId)
+                .map { EducationDto.fromEntity(it) },
+            certifications = certificationService.getCertificationByResumeId(resume.resumeId)
+                .map { CertificationDto.fromEntity(it) }
+        )
     }
 
-    fun getResumeByUserId(userId: Int): Resume? {
-        return resumeRepository.findByUserUserId(userId)
+    fun updateResumeWithDetails(userId: Int, resumeDto: ResumeDto): Resume {
+        val user = userService.findUserById(userId) ?: throw UserNotFoundException(userId)
+        val resume = resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
+
+        resume.photos = StringConversionUtils.convertListToString(resumeDto.photos)
+
+        val updateResume = resumeRepository.save(resume)
+
+        educationService.updateEducation(updateResume, resumeDto.educations.map { it.toEducation(resume)})
+        experienceService.updateExperience(updateResume, resumeDto.experiences.map { it.toExperience(resume)})
+        certificationService.updateCertification(updateResume, resumeDto.certifications.map { it.toCertification(resume)})
+
+        return updateResume
     }
+
+    fun getResumeByUserId(userId: Int): Resume = resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
 
     fun deleteResumeAndRelatedDetails(userId: Int) {
         val resume = resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
