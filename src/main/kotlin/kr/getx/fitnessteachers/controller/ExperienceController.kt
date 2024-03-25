@@ -1,6 +1,8 @@
 package kr.getx.fitnessteachers.controller
 
 import kr.getx.fitnessteachers.dto.ExperienceDto
+import kr.getx.fitnessteachers.dto.ResumeDto
+import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.service.ExperienceService
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
@@ -14,8 +16,8 @@ class ExperienceController(private val experienceService: ExperienceService) {
         ResponseEntity.ok(experienceService.getAllExperiences().map(ExperienceDto::fromEntity))
 
     @PostMapping("/add")
-    fun addExperience(@RequestBody experienceDto: ExperienceDto, @RequestParam resumeId: Int): ResponseEntity<ExperienceDto> =
-        ResponseEntity.ok(ExperienceDto.fromEntity(experienceService.addExperience(experienceDto, resumeId)))
+    fun addExperience(@RequestBody experienceDto: ExperienceDto, @RequestBody resume: Resume): ResponseEntity<ExperienceDto> =
+        ResponseEntity.ok(ExperienceDto.fromEntity(experienceService.addExperience(experienceDto, resume)))
 
     @GetMapping("/{id}")
     fun getExperience(@PathVariable id: Int): ResponseEntity<ExperienceDto> =

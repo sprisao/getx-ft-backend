@@ -9,15 +9,11 @@ import org.springframework.stereotype.Service
 @Service
 class ExperienceService(
     private val experienceRepository: ExperienceRepository,
-    private val resumeService: ResumeService
 ) {
 
     fun getAllExperiences(): List<Experience> = experienceRepository.findAll()
     fun getExperienceById(id: Int): Experience? = experienceRepository.findById(id).orElse(null)
-    fun addExperience(experienceDto: ExperienceDto, resumeId: Int): Experience {
-        val resume = resumeService.findByResumeId(resumeId) ?: throw Exception("해당 이력서를 찾을 수 없습니다.")
-        return experienceRepository.save(experienceDto.toExperience(resume))
-    }
+    fun addExperience(experienceDto: ExperienceDto, resume: Resume): Experience = experienceRepository.save(experienceDto.toExperience(resume))
     fun addExperienceForResume(resume: Resume, experienceDto: ExperienceDto): Experience = experienceRepository.save(experienceDto.toExperience(resume))
 
     fun updateExperience(resume: Resume, newExperience: List<Experience>) {

@@ -1,6 +1,7 @@
 package kr.getx.fitnessteachers.controller
 
 import kr.getx.fitnessteachers.dto.CertificationDto
+import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.service.CertificationService
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
@@ -14,8 +15,8 @@ class CertificationController(private val certificationService: CertificationSer
         ResponseEntity.ok(certificationService.getAllCertifications().map(CertificationDto::fromEntity))
 
     @PostMapping("/add")
-    fun addCertification(@RequestBody certificationDto: CertificationDto, @RequestParam resumeId: Int): ResponseEntity<CertificationDto> =
-        ResponseEntity.ok(CertificationDto.fromEntity(certificationService.addCertification(certificationDto, resumeId)))
+    fun addCertification(@RequestBody certificationDto: CertificationDto, @RequestBody resume: Resume): ResponseEntity<CertificationDto> =
+        ResponseEntity.ok(CertificationDto.fromEntity(certificationService.addCertification(certificationDto, resume)))
 
     @GetMapping("/{id}")
     fun getCertification(@PathVariable id: Int): ResponseEntity<CertificationDto> =

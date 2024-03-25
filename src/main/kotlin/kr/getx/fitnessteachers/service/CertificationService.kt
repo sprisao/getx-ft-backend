@@ -10,17 +10,13 @@ import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 @Service
 class CertificationService(
     private val certificationRepository: CertificationRepository,
-    private val resumeService: ResumeService
 ) {
 
     fun getAllCertifications(): List<Certification> = certificationRepository.findAll()
 
     fun getCertificationById(id: Int): Certification? = certificationRepository.findById(id).orElse(null)
 
-    fun addCertification(certificationDto: CertificationDto, resumeId: Int): Certification {
-        val resume = resumeService.findByResumeId(resumeId) ?: throw ResumeNotFoundException(resumeId)
-        return certificationRepository.save(certificationDto.toCertification(resume))
-    }
+    fun addCertification(certificationDto: CertificationDto, resume: Resume): Certification = certificationRepository.save(certificationDto.toCertification(resume))
 
     fun addCertificationForResume(resume: Resume, certificationDto: CertificationDto): Certification = certificationRepository.save(certificationDto.toCertification(resume))
 

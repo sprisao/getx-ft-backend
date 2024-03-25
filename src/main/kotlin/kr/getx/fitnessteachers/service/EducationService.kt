@@ -10,17 +10,13 @@ import org.springframework.stereotype.Service
 @Service
 class EducationService(
     private val educationRepository: EducationRepository,
-    private val resumeService: ResumeService
 ) {
 
     fun getAllEducations(): List<Education> = educationRepository.findAll()
 
     fun getEducationById(id: Int): Education? = educationRepository.findById(id).orElse(null)
 
-    fun addEducation(educationDto: EducationDto, resumeId: Int): Education {
-        val resume = resumeService.findByResumeId(resumeId) ?: throw ResumeNotFoundException(resumeId)
-        return educationRepository.save(educationDto.toEducation(resume))
-    }
+    fun addEducation(educationDto: EducationDto, resume: Resume): Education = educationRepository.save(educationDto.toEducation(resume))
     fun addEducationForResume(resume: Resume, educationDto: EducationDto ): Education = educationRepository.save(educationDto.toEducation(resume))
 
     fun updateEducation(resume: Resume, newEducations: List<Education>) {
