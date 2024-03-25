@@ -1,7 +1,6 @@
 package kr.getx.fitnessteachers.controller
 
 import kr.getx.fitnessteachers.dto.ExperienceDto
-import kr.getx.fitnessteachers.dto.ResumeDto
 import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.service.ExperienceService
 import org.springframework.web.bind.annotation.*

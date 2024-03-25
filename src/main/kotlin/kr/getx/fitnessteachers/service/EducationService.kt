@@ -3,7 +3,6 @@ package kr.getx.fitnessteachers.service
 import kr.getx.fitnessteachers.dto.EducationDto
 import kr.getx.fitnessteachers.entity.Education
 import kr.getx.fitnessteachers.entity.Resume
-import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 import kr.getx.fitnessteachers.repository.EducationRepository
 import org.springframework.stereotype.Service
 

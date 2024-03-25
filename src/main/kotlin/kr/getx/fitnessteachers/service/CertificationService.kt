@@ -5,7 +5,6 @@ import kr.getx.fitnessteachers.entity.Certification
 import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.repository.CertificationRepository
 import org.springframework.stereotype.Service
-import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 
 @Service
 class CertificationService(
