@@ -10,28 +10,38 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 
 class JwtTokenFilter(private val jwtUtils: JwtUtils) : OncePerRequestFilter() {
-
-    private val publicEndpoint = arrayOf(
-//        "/api/users/all",
-//        "/api/jobPosts/all",
-//        "/api/centers/all",
-//        "/api/jobPosts/applicantCount/*",
-//        "/api/jobPosts/applicantCount/",
-//        "/api/jobPosts/applicantResumes/*",
-//        "/api/jobPosts/applicantResumes/",
-//        "/*",
-        "/**",
-//        "/***"
-    )
-
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
         if(request.method.equals("OPTIONS", ignoreCase = true)) {
             filterChain.doFilter(request, response)
             return
         }
-        val requestURI = request.requestURI
 
+        val token = jwtUtils.resolveToken(request)
+        if (token != null && jwtUtils.validateToken(token)) {
+            val userData = jwtUtils.getSocialLoginInfo(token)
+            val userDto = UserDto(name = userData.name, email = userData.email, socialType = userData.socialType)
+            val auth = UsernamePasswordAuthenticationToken(userDto, null, listOf(SimpleGrantedAuthority("ROLE_USER")))
+            SecurityContextHolder.getContext().authentication = auth
+            request.setAttribute("userData", userData)
+        }
+
+        filterChain.doFilter(request, response)
+    }
+}
+    /*
+
+    private val publicEndpoint = arrayOf(
+        "/**",
+    )
+
+    override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
+        val requestURI = request.requestURI
         if(publicEndpoint.any { requestURI.startsWith(it) }) {
+            filterChain.doFilter(request, response)
+            return
+        }
+
+        if(request.method.equals("OPTIONS", ignoreCase = true)) {
             filterChain.doFilter(request, response)
             return
         }
@@ -59,4 +69,4 @@ class JwtTokenFilter(private val jwtUtils: JwtUtils) : OncePerRequestFilter() {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰 값이 유효하지 않습니다.")
         }
     }
-}
+     */

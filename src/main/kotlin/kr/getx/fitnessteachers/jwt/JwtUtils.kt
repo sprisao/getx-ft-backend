@@ -15,9 +15,6 @@ import org.springframework.stereotype.Component
 @Component
 class JwtUtils {
 
-//    @Value("\${jwt.secret}")
-//    private lateinit var jwtSecret: String
-
     fun validateToken(authToken: String): Boolean {
         try {
             Jwts.parserBuilder()
