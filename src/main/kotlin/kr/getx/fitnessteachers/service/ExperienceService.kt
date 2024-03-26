@@ -12,7 +12,7 @@ class ExperienceService(
 ) {
 
     fun getAllExperiences(): List<Experience> = experienceRepository.findAll()
-    fun getExperienceById(id: Int): Experience? = experienceRepository.findById(id).orElse(null)
+    fun getExperienceById(experienceId: Int): Experience? = experienceRepository.findById(experienceId).orElse(null)
     fun addExperience(experienceDto: ExperienceDto, resume: Resume): Experience = experienceRepository.save(experienceDto.toExperience(resume))
     fun addExperienceForResume(resume: Resume, experienceDto: ExperienceDto): Experience = experienceRepository.save(experienceDto.toExperience(resume))
 
@@ -37,7 +37,7 @@ class ExperienceService(
         }
     }
 
-    fun deleteExperience(id: Int) = experienceRepository.deleteById(id)
+    fun deleteExperience(experienceId: Int) = experienceRepository.deleteById(experienceId)
 
     fun getExperienceByResumeId(resumeId: Int): List<Experience> = experienceRepository.findByResumeResumeId(resumeId)
 

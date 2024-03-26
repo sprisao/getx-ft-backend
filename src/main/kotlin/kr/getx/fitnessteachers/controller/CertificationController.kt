@@ -18,14 +18,14 @@ class CertificationController(private val certificationService: CertificationSer
     fun addCertification(@RequestBody certificationDto: CertificationDto, @RequestBody resume: Resume): ResponseEntity<CertificationDto> =
         ResponseEntity.ok(CertificationDto.fromEntity(certificationService.addCertification(certificationDto, resume)))
 
-    @GetMapping("/{id}")
-    fun getCertification(@PathVariable id: Int): ResponseEntity<CertificationDto> =
-        certificationService.getCertificationById(id)?.let { ResponseEntity.ok(CertificationDto.fromEntity(it)) }
+    @GetMapping("/{certificationId}")
+    fun getCertification(@PathVariable certificationId: Int): ResponseEntity<CertificationDto> =
+        certificationService.getCertificationById(certificationId)?.let { ResponseEntity.ok(CertificationDto.fromEntity(it)) }
             ?: ResponseEntity.notFound().build()
 
-    @DeleteMapping("/delete/{id}")
-    fun deleteCertification(@PathVariable id: Int): ResponseEntity<Void> {
-        certificationService.deleteCertification(id)
+    @DeleteMapping("/delete/{certificationId}")
+    fun deleteCertification(@PathVariable certificationId: Int): ResponseEntity<Void> {
+        certificationService.deleteCertification(certificationId)
         return ResponseEntity.noContent().build()
     }
 }

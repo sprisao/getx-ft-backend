@@ -18,15 +18,15 @@ class ExperienceController(private val experienceService: ExperienceService) {
     fun addExperience(@RequestBody experienceDto: ExperienceDto, @RequestBody resume: Resume): ResponseEntity<ExperienceDto> =
         ResponseEntity.ok(ExperienceDto.fromEntity(experienceService.addExperience(experienceDto, resume)))
 
-    @GetMapping("/{id}")
-    fun getExperience(@PathVariable id: Int): ResponseEntity<ExperienceDto> =
-        experienceService.getExperienceById(id)?.let { ResponseEntity.ok(ExperienceDto.fromEntity(it)) }
+    @GetMapping("/{experienceId}")
+    fun getExperience(@PathVariable experienceId: Int): ResponseEntity<ExperienceDto> =
+        experienceService.getExperienceById(experienceId)?.let { ResponseEntity.ok(ExperienceDto.fromEntity(it)) }
             ?: ResponseEntity.notFound().build()
 
 
-    @DeleteMapping("/delete/{id}")
-    fun deleteExperience(@PathVariable id: Int): ResponseEntity<Void> {
-        experienceService.deleteExperience(id)
+    @DeleteMapping("/delete/{experienceId}")
+    fun deleteExperience(@PathVariable experienceId: Int): ResponseEntity<Void> {
+        experienceService.deleteExperience(experienceId)
         return ResponseEntity.noContent().build()
     }
 }

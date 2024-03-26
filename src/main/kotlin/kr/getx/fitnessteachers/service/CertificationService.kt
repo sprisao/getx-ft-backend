@@ -13,7 +13,7 @@ class CertificationService(
 
     fun getAllCertifications(): List<Certification> = certificationRepository.findAll()
 
-    fun getCertificationById(id: Int): Certification? = certificationRepository.findById(id).orElse(null)
+    fun getCertificationById(certificationId: Int): Certification? = certificationRepository.findById(certificationId).orElse(null)
 
     fun addCertification(certificationDto: CertificationDto, resume: Resume): Certification = certificationRepository.save(certificationDto.toCertification(resume))
 
@@ -41,7 +41,7 @@ class CertificationService(
 
     }
 
-    fun deleteCertification(id: Int) = certificationRepository.deleteById(id)
+    fun deleteCertification(certificationId: Int) = certificationRepository.deleteById(certificationId)
 
     fun getCertificationByResumeId(resumeId: Int): List<Certification> = certificationRepository.findByResumeResumeId(resumeId)
 

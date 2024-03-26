@@ -13,7 +13,7 @@ class EducationService(
 
     fun getAllEducations(): List<Education> = educationRepository.findAll()
 
-    fun getEducationById(id: Int): Education? = educationRepository.findById(id).orElse(null)
+    fun getEducationById(educationId: Int): Education? = educationRepository.findById(educationId).orElse(null)
 
     fun addEducation(educationDto: EducationDto, resume: Resume): Education = educationRepository.save(educationDto.toEducation(resume))
     fun addEducationForResume(resume: Resume, educationDto: EducationDto ): Education = educationRepository.save(educationDto.toEducation(resume))
@@ -39,7 +39,7 @@ class EducationService(
         }
     }
 
-    fun deleteEducation(id: Int) = educationRepository.deleteById(id)
+    fun deleteEducation(educationId: Int) = educationRepository.deleteById(educationId)
 
     fun getEducationByResumeId(resumeId: Int): List<Education> = educationRepository.findByResumeResumeId(resumeId)
 

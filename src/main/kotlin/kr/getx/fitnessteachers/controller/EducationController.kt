@@ -18,14 +18,14 @@ class EducationController(private val educationService: EducationService) {
     fun addEducation(@RequestBody educationDto: EducationDto, @RequestBody resume: Resume): ResponseEntity<EducationDto> =
         ResponseEntity.ok(EducationDto.fromEntity(educationService.addEducation(educationDto, resume)))
 
-    @GetMapping("/{id}")
-    fun getEducation(@PathVariable id : Int): ResponseEntity<EducationDto> =
-        educationService.getEducationById(id)?.let { ResponseEntity.ok(EducationDto.fromEntity(it)) }
+    @GetMapping("/{educationId}")
+    fun getEducation(@PathVariable educationId : Int): ResponseEntity<EducationDto> =
+        educationService.getEducationById(educationId)?.let { ResponseEntity.ok(EducationDto.fromEntity(it)) }
             ?: ResponseEntity.notFound().build()
 
-    @DeleteMapping("/delete/{id}")
-        fun deleteEducation(@PathVariable id: Int): ResponseEntity<Void> {
-            educationService.deleteEducation(id)
+    @DeleteMapping("/delete/{educationId}")
+        fun deleteEducation(@PathVariable educationId: Int): ResponseEntity<Void> {
+            educationService.deleteEducation(educationId)
             return ResponseEntity.noContent().build()
         }
 }
