@@ -17,7 +17,7 @@ data class JobPost(
     val center: Center,
 
     // 작성 전, 작성 완료
-    var isDisplayAlready: Boolean? = false,
+    var isDisplayReady: Boolean? = false,
 
     // 모집중, 모집마감
     var recruitmentStatus: Boolean? = false,
