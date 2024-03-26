@@ -92,4 +92,19 @@ class ResumeService(
 
         resumeRepository.delete(resume)
     }
+
+    fun toDto(resume: Resume): ResumeDto {
+        return ResumeDto(
+            resumeId = resume.resumeId,
+            userId = resume.user.userId,
+            photos = StringConversionUtils.convertStringToList(resume.photos ?: " "),
+            createdAt = resume.createdAt,
+            experiences = experienceService.getExperienceByResumeId(resume.resumeId)
+                .map { ExperienceDto.fromEntity(it) },
+            educations = educationService.getEducationByResumeId(resume.resumeId)
+                .map { EducationDto.fromEntity(it) },
+            certifications = certificationService.getCertificationByResumeId(resume.resumeId)
+                .map { CertificationDto.fromEntity(it) }
+        )
+    }
 }
