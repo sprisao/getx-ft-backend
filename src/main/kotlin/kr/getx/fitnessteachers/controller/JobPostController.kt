@@ -23,29 +23,17 @@ class JobPostController(
     fun getAllJobPosts(): ResponseEntity<List<JobPostDto>> =
         ResponseEntity.ok(jobPostService.findAll().map(JobPostDto::fromEntity))
 
-    // userId로 구인게시판 조회 ( 센터 소유주만 조회 가능 )
-    // "아니 bye bye bye"
-    @GetMapping("/owner/{userId}")
-    fun getJobPostByUserId(@PathVariable userId: Int): ResponseEntity<List<JobPostDto>> {
-        return ResponseEntity.ok(jobPostService.findJobPostsByUserId(userId).map(JobPostDto::fromEntity))
-    }
-
-    @GetMapping("/{jobPostId}")
-    fun getJobPostById(@PathVariable jobPostId: Int): ResponseEntity<JobPostDto> =
-        jobPostService.findById(jobPostId)?.let { jobPost -> ResponseEntity.ok(JobPostDto.fromEntity(jobPost)) }
-            ?: ResponseEntity.notFound().build()
-
-    // 타이틀 유사한 구인게시판 조회 ( 차후 추가 작업과 함께 구현 예정 )
-    @GetMapping("/{jobPostId}/similar")
-    fun getSimilarJobPosts(@PathVariable jobPostId: Int): ResponseEntity<List<JobPostDto>> =
-        ResponseEntity.ok(jobPostService.findSimilarJobPosts(jobPostId).map(JobPostDto::fromEntity))
-
     @PostMapping("/add")
     fun createJobPost(@RequestBody jobPostDto: JobPostDto): ResponseEntity<JobPostDto> {
         val center = centerService.findById(jobPostDto.centerId) ?: throw CenterNotFoundException(jobPostDto.centerId)
         val user = userService.findUserById(center.user.userId) ?: throw UserNotFoundException(center.user.userId)
         val createdJobPost = jobPostService.createJobPost(jobPostDto, center, user)
         return ResponseEntity.ok(JobPostDto.fromEntity(createdJobPost))
+    }
+
+    @GetMapping("/owner/{userId}")
+    fun getJobPostByUserId(@PathVariable userId: Int): ResponseEntity<List<JobPostDto>> {
+        return ResponseEntity.ok(jobPostService.findJobPostsByUserId(userId).map(JobPostDto::fromEntity))
     }
 
     @PutMapping("/update/{jobPostId}")
@@ -61,6 +49,16 @@ class JobPostController(
         jobPostService.deleteById(jobPostId)
         return ResponseEntity.ok().build()
     }
+
+    @GetMapping("/{jobPostId}")
+    fun getJobPostById(@PathVariable jobPostId: Int): ResponseEntity<JobPostDto> =
+        jobPostService.findById(jobPostId)?.let { jobPost -> ResponseEntity.ok(JobPostDto.fromEntity(jobPost)) }
+            ?: ResponseEntity.notFound().build()
+
+    // 타이틀 유사한 구인게시판 조회 ( 차후 추가 작업과 함께 구현 예정 )
+    @GetMapping("/{jobPostId}/similar")
+    fun getSimilarJobPosts(@PathVariable jobPostId: Int): ResponseEntity<List<JobPostDto>> =
+        ResponseEntity.ok(jobPostService.findSimilarJobPosts(jobPostId))
 
     @GetMapping("/search")
     fun searchJobPosts(

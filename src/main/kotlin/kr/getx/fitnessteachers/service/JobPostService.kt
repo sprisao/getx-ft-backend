@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
+import kotlin.math.min
 
 @Service
 class JobPostService(
@@ -75,13 +76,27 @@ class JobPostService(
     }
 
     // 유사 게시글 검색
-    fun findSimilarJobPosts(jobPostId: Int): List<JobPost> {
-        val originalJobPost = findById(jobPostId) ?: throw JobPostNotFoundException(jobPostId)
+    fun findSimilarJobPosts(jobPostId: Int): List<JobPostDto> {
+        val targetJobPosts = jobPostRepository.findById(jobPostId).orElseThrow {
+            JobPostNotFoundException(jobPostId) }
 
-        return findAll().filter { jobPost ->
-            jobPost.title?.split(" ")?.any { word ->
-                originalJobPost.title?.contains(word, ignoreCase = true) ?: false
-            } == true && jobPost.jobPostId != originalJobPost.jobPostId
-        }
+        val allJobPosts = jobPostRepository.findAll()
+
+        return allJobPosts.asSequence()
+            .map { JobPostDto.fromEntity(it) }
+            .filter { it.jobPostId != jobPostId }
+            .filter { it.jobCategory == targetJobPosts.jobCategory }
+            .sortedByDescending {
+                calculateSimilarity(it.title ?: "", targetJobPosts.title ?: "")
+                calculateSimilarity(it.details ?: "", targetJobPosts.details ?: "")
+            }
+            .take(5) // 가장 유사한 상위 5개 게시물 반환
+            .toList()
+    }
+
+    // 유사도 계산
+    private fun calculateSimilarity(str1: String, str2: String): Double {
+        val maxLength = min(str1.length, str2.length)
+        return (0 until maxLength).count { str1[it] == str2[it] }.toDouble() / maxLength
     }
 }
