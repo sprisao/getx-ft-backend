@@ -40,7 +40,7 @@ class JobPostController(
     @PostMapping("/add")
     fun createJobPost(@RequestBody jobPostDto: JobPostDto, authentication: Authentication): ResponseEntity<JobPostDto> {
         val user = authenticationValidationService.getUserFromAuthentication(authentication)
-        val center = authenticationValidationService.validateCenterOwnership(jobPostDto.centerId, user)
+        val center = authenticationValidationService.validateCenterOwnership(jobPostDto.center.centerId, user)
         val createdJobPost = jobPostService.createJobPost(jobPostDto, center, user)
         return ResponseEntity.ok(JobPostDto.fromEntity(createdJobPost))
     }

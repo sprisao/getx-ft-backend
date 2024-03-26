@@ -36,7 +36,7 @@ class JobPostService(
 
         // DTO의 데이터로 JobPost 엔티티 업데이트
         jobPost.apply {
-            isDisplayAlready = jobPostDto.isDisplayAlready ?: isDisplayAlready
+            isDisplayReady = jobPostDto.isDisplayReady ?: isDisplayReady
             recruitmentStatus = jobPostDto.recruitmentStatus ?: recruitmentStatus
             responsibilities = jobPostDto.responsibilities ?: responsibilities
             workLocation = jobPostDto.workLocation ?: workLocation

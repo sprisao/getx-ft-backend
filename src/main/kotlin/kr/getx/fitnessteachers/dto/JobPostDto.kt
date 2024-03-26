@@ -6,8 +6,7 @@ import java.time.LocalDate
 
 data class JobPostDto(
     val jobPostId: Int? = null,
-    val centerId: Int,
-    val isDisplayAlready: Boolean? = false,
+    val center: Center,
     val isDisplayReady: Boolean? = false,
     val recruitmentStatus: Boolean? = false,
     val responsibilities: String? = null,
@@ -52,8 +51,7 @@ data class JobPostDto(
     companion object {
         fun fromEntity(jobPost: JobPost): JobPostDto = JobPostDto(
             jobPostId = jobPost.jobPostId,
-            centerId = jobPost.center.centerId,
-            isDisplayAlready = jobPost.isDisplayAlready,
+            center = jobPost.center,
             isDisplayReady = jobPost.isDisplayReady,
             recruitmentStatus = jobPost.recruitmentStatus,
             responsibilities = jobPost.responsibilities,
