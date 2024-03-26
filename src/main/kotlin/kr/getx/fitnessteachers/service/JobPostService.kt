@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
-import kotlin.math.min
+import kotlin.math.ln
+import kotlin.math.sqrt
 
 @Service
 class JobPostService(
@@ -77,26 +78,54 @@ class JobPostService(
 
     // 유사 게시글 검색
     fun findSimilarJobPosts(jobPostId: Int): List<JobPostDto> {
-        val targetJobPosts = jobPostRepository.findById(jobPostId).orElseThrow {
-            JobPostNotFoundException(jobPostId) }
+        val targetJobPost = jobPostRepository.findById(jobPostId).orElseThrow {
+            IllegalArgumentException("JobPost not found: $jobPostId")
+        }
 
-        val allJobPosts = jobPostRepository.findAll()
+        val jobPosts = jobPostRepository.findAll()
+        val documents = jobPosts.map { it.details ?: "" }
+        val tfidfVectorizer = TfidfVectorizer()
+        val tfidfMatrix = tfidfVectorizer.fitTransform(documents)
 
-        return allJobPosts.asSequence()
-            .map { JobPostDto.fromEntity(it) }
-            .filter { it.jobPostId != jobPostId }
-            .filter { it.jobCategory == targetJobPosts.jobCategory }
-            .sortedByDescending {
-                calculateSimilarity(it.title ?: "", targetJobPosts.title ?: "")
-                calculateSimilarity(it.details ?: "", targetJobPosts.details ?: "")
+        val targetIndex = jobPosts.indexOfFirst { it.jobPostId == jobPostId }
+        val targetVector = tfidfMatrix[targetIndex]
+
+        return jobPosts.asSequence()
+            .mapIndexedNotNull { index, jobPost ->
+                if (index == targetIndex) null
+                else jobPost to cosineSimilarity(tfidfMatrix[index], targetVector)
             }
-            .take(5) // 가장 유사한 상위 5개 게시물 반환
+            .filter { it.second > 0.5 }
+            .sortedByDescending { it.second }
+            .take(5)
+            .map { JobPostDto.fromEntity(it.first) }
             .toList()
     }
 
-    // 유사도 계산
-    private fun calculateSimilarity(str1: String, str2: String): Double {
-        val maxLength = min(str1.length, str2.length)
-        return (0 until maxLength).count { str1[it] == str2[it] }.toDouble() / maxLength
+    private fun cosineSimilarity(vec1: Map<String, Double>, vec2: Map<String, Double>): Double {
+        val intersection = vec1.keys.intersect(vec2.keys)
+        val numerator = intersection.sumOf { vec1[it]!! * vec2[it]!! }
+        val denominator = sqrt(vec1.values.sumOf { it * it }) * sqrt(vec2.values.sumOf { it * it })
+        return if (denominator > 0) numerator / denominator else 0.0
+    }
+}
+
+class TfidfVectorizer {
+    private lateinit var idfValues: Map<String, Double>
+
+    fun fitTransform(documents: List<String>): List<Map<String, Double>> {
+        val docFreq = documents.flatMap { it.split("\\s+").toSet() }.groupingBy { it }.eachCount()
+        val totalDocs = documents.size.toDouble()
+
+        idfValues = docFreq.mapValues { (_, count) -> ln(totalDocs / (1 + count)) }
+
+        return documents.map { doc -> tfidf(doc) }
+    }
+
+    private fun tfidf(document: String): Map<String, Double> {
+        val termFreq = document.split("\\s+").groupingBy { it }.eachCount()
+        val docSize = termFreq.values.sum().toDouble()
+
+        return termFreq.mapValues { (term, count) -> (count / docSize) * idfValues.getValue(term) }
     }
 }
