@@ -1,8 +1,11 @@
 package kr.getx.fitnessteachers.controller
 
 import kr.getx.fitnessteachers.dto.JobPostDto
-import kr.getx.fitnessteachers.service.AuthenticationValidationService
+import kr.getx.fitnessteachers.exceptions.CenterNotFoundException
+import kr.getx.fitnessteachers.exceptions.UserNotFoundException
+import kr.getx.fitnessteachers.service.CenterService
 import kr.getx.fitnessteachers.service.JobPostService
+import kr.getx.fitnessteachers.service.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.security.core.Authentication
@@ -13,7 +16,8 @@ import org.springframework.data.domain.Pageable
 @RequestMapping("/api/jobPosts")
 class JobPostController(
     private val jobPostService: JobPostService,
-    private val authenticationValidationService: AuthenticationValidationService,
+    private val userService: UserService,
+    private val centerService: CenterService,
 ) {
 
     @GetMapping("/all")
@@ -21,9 +25,9 @@ class JobPostController(
         ResponseEntity.ok(jobPostService.findAll().map(JobPostDto::fromEntity))
 
     // userId로 구인게시판 조회 ( 센터 소유주만 조회 가능 )
+    // "아니 bye bye bye"
     @GetMapping("/owner/{userId}")
-    fun getJobPostById(@PathVariable userId: Int, authentication: Authentication): ResponseEntity<List<JobPostDto>> {
-        authenticationValidationService.validateRequestingUser(userId, authentication)
+    fun getJobPostByUserId(@PathVariable userId: Int): ResponseEntity<List<JobPostDto>> {
         return ResponseEntity.ok(jobPostService.findJobPostsByUserId(userId).map(JobPostDto::fromEntity))
     }
 
@@ -38,25 +42,23 @@ class JobPostController(
         ResponseEntity.ok(jobPostService.findSimilarJobPosts(jobPostId).map(JobPostDto::fromEntity))
 
     @PostMapping("/add")
-    fun createJobPost(@RequestBody jobPostDto: JobPostDto, authentication: Authentication): ResponseEntity<JobPostDto> {
-        val user = authenticationValidationService.getUserFromAuthentication(authentication)
-        val center = authenticationValidationService.validateCenterOwnership(jobPostDto.center.centerId, user)
+    fun createJobPost(@RequestBody jobPostDto: JobPostDto): ResponseEntity<JobPostDto> {
+        val center = centerService.findById(jobPostDto.centerId) ?: throw CenterNotFoundException(jobPostDto.centerId)
+        val user = userService.findUserById(center.user.userId) ?: throw UserNotFoundException(center.user.userId)
         val createdJobPost = jobPostService.createJobPost(jobPostDto, center, user)
         return ResponseEntity.ok(JobPostDto.fromEntity(createdJobPost))
     }
 
     @PutMapping("/update/{jobPostId}")
-    fun updateJobPost(@PathVariable jobPostId: Int, @RequestBody jobPostDto: JobPostDto, authentication: Authentication): ResponseEntity<JobPostDto> {
-        val user = authenticationValidationService.getUserFromAuthentication(authentication)
-        authenticationValidationService.validateJobPostModification(jobPostId, user)
+    fun updateJobPost(@PathVariable jobPostId: Int, @RequestBody jobPostDto: JobPostDto): ResponseEntity<JobPostDto> {
+        val center = centerService.findById(jobPostDto.centerId) ?: throw CenterNotFoundException(jobPostDto.centerId)
+        val user = userService.findUserById(center.user.userId) ?: throw UserNotFoundException(center.user.userId)
         val updatedJobPost = jobPostService.updateJobPost(jobPostId, jobPostDto, user)
         return ResponseEntity.ok(JobPostDto.fromEntity(updatedJobPost))
     }
 
     @DeleteMapping("/delete/{jobPostId}")
-    fun deleteJobPost(@PathVariable jobPostId: Int, authentication: Authentication): ResponseEntity<Void> {
-        val user = authenticationValidationService.getUserFromAuthentication(authentication)
-        authenticationValidationService.validateJobPostDeletion(jobPostId, user)
+    fun deleteJobPost(@PathVariable jobPostId: Int): ResponseEntity<Void> {
         jobPostService.deleteById(jobPostId)
         return ResponseEntity.ok().build()
     }

@@ -14,7 +14,6 @@ import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
 class JobPostService(
     private val jobPostRepository: JobPostRepository,
     private val centerService: CenterService,
-    private val authenticationValidationService: AuthenticationValidationService
 ) {
 
     fun findAll(): List<JobPost> = jobPostRepository.findAll()
@@ -22,8 +21,6 @@ class JobPostService(
     fun findById(id: Int): JobPost? = jobPostRepository.findById(id).orElse(null)
 
     fun createJobPost(jobPostDto: JobPostDto, center:Center, user: User): JobPost {
-        authenticationValidationService.validateCenterOwnership(center.centerId, user)
-
         val jobPost = jobPostDto.toEntity(center)
         return jobPostRepository.save(jobPost)
     }
@@ -32,7 +29,6 @@ class JobPostService(
 
     fun updateJobPost(jobPostId: Int, jobPostDto: JobPostDto, user:User): JobPost {
         val jobPost = findById(jobPostId) ?: throw JobPostNotFoundException(jobPostId)
-        authenticationValidationService.validateCenterOwnership(jobPost.center.centerId, user)
 
         // DTO의 데이터로 JobPost 엔티티 업데이트
         jobPost.apply {
