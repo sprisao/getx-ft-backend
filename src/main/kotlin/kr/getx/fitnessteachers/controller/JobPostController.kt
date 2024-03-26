@@ -8,7 +8,6 @@ import kr.getx.fitnessteachers.service.JobPostService
 import kr.getx.fitnessteachers.service.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.security.core.Authentication
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
