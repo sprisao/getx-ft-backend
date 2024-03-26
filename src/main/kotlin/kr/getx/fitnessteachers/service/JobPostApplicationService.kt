@@ -21,21 +21,21 @@ class JobPostApplicationService (
     }
 
     fun cancelApplication(userId: Int, jobPostId: Int) {
-        val application = jobPostApplicationRepository.findByUserAndJobPost(userId, jobPostId)
+        val application = jobPostApplicationRepository.findByUserUserIdAndJobPostJobPostId(userId, jobPostId)
             ?: throw IllegalArgumentException("해당 사용자가 해당 구직 공고에 지원한 내역이 존재하지 않습니다.")
         jobPostApplicationRepository.delete(application)
     }
 
     fun getApplicantCount(jobPostId: Int): Int =
-        jobPostApplicationRepository.countByJobPostId(jobPostId)
+        jobPostApplicationRepository.countByJobPostJobPostId(jobPostId)
 
     fun getApplicantResumes(jobPostId: Int): List<ResumeDto> =
-        jobPostApplicationRepository.findByJobPostId(jobPostId).mapNotNull {
+        jobPostApplicationRepository.findByJobPostJobPostId(jobPostId).mapNotNull {
             val resume = resumeService.getResumeByUserId(it.user.userId)
             resumeService.toDto(resume)
         }
     fun getAppliedJobPosts(userId: Int): List<JobPostDto> =
-        jobPostApplicationRepository.findByUserId(userId).map {
+        jobPostApplicationRepository.findByUserUserId(userId).map {
             JobPostDto.fromEntity(it.jobPost)
         }
 }
