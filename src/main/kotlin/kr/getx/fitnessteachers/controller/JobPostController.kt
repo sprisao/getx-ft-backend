@@ -2,7 +2,6 @@ package kr.getx.fitnessteachers.controller
 
 import kr.getx.fitnessteachers.dto.JobPostDto
 import kr.getx.fitnessteachers.exceptions.CenterNotFoundException
-import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundException
 import kr.getx.fitnessteachers.service.CenterService
 import kr.getx.fitnessteachers.service.JobPostService
