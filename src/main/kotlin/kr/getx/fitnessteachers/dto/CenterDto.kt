@@ -6,7 +6,7 @@ import kr.getx.fitnessteachers.utils.StringConversionUtils
 
 
 data class CenterDto(
-        val centerId: Int? = null,
+        val centerId: Int,
         var centerName: String? = null,
         var photos: List<String>? = null,
         var locationProvince: String? = null,

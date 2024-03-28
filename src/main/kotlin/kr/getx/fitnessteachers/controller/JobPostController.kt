@@ -2,6 +2,7 @@ package kr.getx.fitnessteachers.controller
 
 import kr.getx.fitnessteachers.dto.JobPostDto
 import kr.getx.fitnessteachers.exceptions.CenterNotFoundException
+import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundException
 import kr.getx.fitnessteachers.service.CenterService
 import kr.getx.fitnessteachers.service.JobPostService
@@ -25,7 +26,7 @@ class JobPostController(
 
     @PostMapping("/add")
     fun createJobPost(@RequestBody jobPostDto: JobPostDto): ResponseEntity<JobPostDto> {
-        val center = centerService.findById(jobPostDto.centerId) ?: throw CenterNotFoundException(jobPostDto.centerId)
+        val center = centerService.findById(jobPostDto.center.centerId) ?: throw CenterNotFoundException(jobPostDto.center.centerId)
         val user = userService.findUserById(center.user.userId) ?: throw UserNotFoundException(center.user.userId)
         val createdJobPost = jobPostService.createJobPost(jobPostDto, center, user)
         return ResponseEntity.ok(JobPostDto.fromEntity(createdJobPost))
@@ -38,7 +39,7 @@ class JobPostController(
 
     @PutMapping("/update/{jobPostId}")
     fun updateJobPost(@PathVariable jobPostId: Int, @RequestBody jobPostDto: JobPostDto): ResponseEntity<JobPostDto> {
-        val center = centerService.findById(jobPostDto.centerId) ?: throw CenterNotFoundException(jobPostDto.centerId)
+        val center = centerService.findById(jobPostDto.center.centerId) ?: throw CenterNotFoundException(jobPostDto.center.centerId)
         val user = userService.findUserById(center.user.userId) ?: throw UserNotFoundException(center.user.userId)
         val updatedJobPost = jobPostService.updateJobPost(jobPostId, jobPostDto, user)
         return ResponseEntity.ok(JobPostDto.fromEntity(updatedJobPost))
