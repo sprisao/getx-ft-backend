@@ -9,8 +9,11 @@ data class CenterDto(
         val centerId: Int,
         var centerName: String? = null,
         var photos: List<String>? = null,
-        var locationProvince: String? = null,
-        var locationCity: String? = null,
+        var roadAddress: String? = null,
+        var sido: String? = null,
+        var sidoEnglish: String? = null,
+        var sigungu: String? = null,
+        var sigunguEnglish: String? = null,
         var description: String? = null,
         var userId: Int
 ) {
@@ -20,8 +23,11 @@ data class CenterDto(
                                 centerId = center.centerId,
                                 centerName = center.centerName,
                                 photos = StringConversionUtils.convertStringToList(center.photos ?: ""),
-                                locationProvince = center.locationProvince,
-                                locationCity = center.locationCity,
+                                roadAddress = center.roadAddress,
+                                sido = center.sido,
+                                sidoEnglish = center.sidoEnglish,
+                                sigungu = center.sigungu,
+                                sigunguEnglish = center.sigunguEnglish,
                                 description = center.description,
                                 userId = center.user.userId
                         )
@@ -32,8 +38,11 @@ data class CenterDto(
                         centerId = this.centerId ?: 0,
                         centerName = this.centerName ?: "",
                         photos = StringConversionUtils.convertListToString(this.photos ?: emptyList()),
-                        locationProvince = this.locationProvince ?: "",
-                        locationCity = this.locationCity ?: "",
+                        roadAddress = this.roadAddress ?: "",
+                        sido = this.sido ?: "",
+                        sidoEnglish = this.sidoEnglish ?: "",
+                        sigungu = this.sigungu ?: "",
+                        sigunguEnglish = this.sigunguEnglish ?: "",
                         description = this.description ?: "",
                         user = user
                 )

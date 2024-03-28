@@ -20,9 +20,19 @@ data class Center(
         @Lob
         var photos: String? = null,
 
-        var locationProvince: String? = null,
+        var roadAddress: String? = null,
 
-        var locationCity: String? = null,
+        var sido: String? = null,
+
+        var sidoEnglish: String? = null,
+
+        var sigungu: String? = null,
+
+        var sigunguEnglish: String? = null,
+
+//        var locationProvince: String? = null,
+
+//        var locationCity: String? = null,
 
         var description: String? = null,
 

@@ -9,10 +9,10 @@ import org.springframework.data.domain.Pageable
 interface CenterRepository : JpaRepository<Center, Int> {
     fun findByUser_UserId(userId: Int): List<Center>
 
-    fun findByCenterNameAndLocationProvinceAndLocationCity(
-        centerName: String?,
-        locationProvince: String?,
-        locationCity: String?,
-        pageable: Pageable
-    ): Page<Center>
+//    fun findByCenterNameAndLocationProvinceAndLocationCity(
+//        centerName: String?,
+//        locationProvince: String?,
+//        locationCity: String?,
+//        pageable: Pageable
+//    ): Page<Center>
 }

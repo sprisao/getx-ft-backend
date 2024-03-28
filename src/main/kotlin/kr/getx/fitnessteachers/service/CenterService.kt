@@ -25,8 +25,11 @@ class CenterService(
             if (user.userId != centerDto.userId) throw CenterOwnershipException(centerDto.userId, centerId)
             centerName = centerDto.centerName ?: centerName
             photos = StringConversionUtils.convertListToString(centerDto.photos ?: emptyList())
-            locationProvince = centerDto.locationProvince ?: locationProvince
-            locationCity = centerDto.locationCity ?: locationCity
+            roadAddress = centerDto.roadAddress ?: roadAddress
+            sido = centerDto.sido ?: sido
+            sidoEnglish = centerDto.sidoEnglish ?: sidoEnglish
+            sigungu = centerDto.sigungu ?: sigungu
+            sigunguEnglish = centerDto.sigunguEnglish ?: sigunguEnglish
             description = centerDto.description ?: description
         }.let (centerRepository::save)
 
@@ -37,6 +40,6 @@ class CenterService(
 
     fun getCenterByUserId(userId: Int): List<Center> = centerRepository.findByUser_UserId(userId)
 
-    fun searchCenters(centerName: String?, locationProvince: String?, locationCity: String?, pageable: Pageable): Page<Center> =
-        centerRepository.findByCenterNameAndLocationProvinceAndLocationCity(centerName, locationProvince, locationCity, pageable)
+//    fun searchCenters(centerName: String?, locationProvince: String?, locationCity: String?, pageable: Pageable): Page<Center> =
+//        centerRepository.findByCenterNameAndLocationProvinceAndLocationCity(centerName, locationProvince, locationCity, pageable)
 }

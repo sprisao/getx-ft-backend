@@ -39,13 +39,13 @@ class CenterController(
         return ResponseEntity.ok().body("센터가 성공적으로 삭제되었습니다.")
     }
 
-    @GetMapping("/search")
-    fun searchCenters(
-        @RequestParam(required = false) centerName: String?,
-        @RequestParam(required = false) locationProvince: String?,
-        @RequestParam(required = false) locationCity: String?,
-        pageable: Pageable
-    ): ResponseEntity<Page<CenterDto>> =
-        ResponseEntity.ok(centerService.searchCenters(centerName, locationProvince, locationCity, pageable)
-            .map { CenterDto.fromEntity(it) })
+//    @GetMapping("/search")
+//    fun searchCenters(
+//        @RequestParam(required = false) centerName: String?,
+//        @RequestParam(required = false) locationProvince: String?,
+//        @RequestParam(required = false) locationCity: String?,
+//        pageable: Pageable
+//    ): ResponseEntity<Page<CenterDto>> =
+//        ResponseEntity.ok(centerService.searchCenters(centerName, locationProvince, locationCity, pageable)
+//            .map { CenterDto.fromEntity(it) })
 }
