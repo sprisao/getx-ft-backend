@@ -19,7 +19,7 @@ class JwtTokenFilter(private val jwtUtils: JwtUtils) : OncePerRequestFilter() {
         val token = jwtUtils.resolveToken(request)
         if (token != null && jwtUtils.validateToken(token)) {
             val userData = jwtUtils.getSocialLoginInfo(token)
-            val userDto = UserDto(name = userData.name, email = userData.email, socialType = userData.socialType)
+            val userDto = UserDto(userId = 0, name = userData.name, email = userData.email, socialType = userData.socialType)
             val auth = UsernamePasswordAuthenticationToken(userDto, null, listOf(SimpleGrantedAuthority("ROLE_USER")))
             SecurityContextHolder.getContext().authentication = auth
             request.setAttribute("userData", userData)

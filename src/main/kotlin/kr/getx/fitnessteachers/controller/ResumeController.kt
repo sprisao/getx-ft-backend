@@ -16,13 +16,18 @@ class ResumeController(
     fun getAllResumes(): ResponseEntity<List<Resume>> = ResponseEntity.ok(resumeService.getAllResumes())
 
     @PostMapping("/add")
-    fun addResume(@RequestBody resumeDto: ResumeDto): ResponseEntity<Resume> = ResponseEntity.ok(resumeService.addResumeWithDetails(resumeDto))
+    fun addResume(@RequestBody resumeDto: ResumeDto): ResponseEntity<ResumeDto> {
+        val savedResume = resumeService.addResumeWithDetails(resumeDto)
+        return ResponseEntity.ok(resumeService.toDto(savedResume))
+    }
 
     @GetMapping("/{userId}")
-    fun getResumeByUserId(@PathVariable userId: Int): ResponseEntity<ResumeDto> = ResponseEntity.ok(resumeService.getResumeDetailsByUserId(userId))
+    fun getResumeByUserId(@PathVariable userId: Int): ResponseEntity<ResumeDto> =
+        ResponseEntity.ok(resumeService.getResumeDetailsByUserId(userId))
 
     @PutMapping("/update/{userId}")
-    fun updateResumeByUserId(@PathVariable userId: Int, @RequestBody resumeDto: ResumeDto): ResponseEntity<Resume> = ResponseEntity.ok(resumeService.updateResumeWithDetails(userId, resumeDto))
+    fun updateResumeByUserId(@PathVariable userId: Int, @RequestBody resumeDto: ResumeDto): ResponseEntity<ResumeDto> =
+        ResponseEntity.ok(resumeService.toDto(resumeService.updateResumeWithDetails(userId, resumeDto)))
 
     @DeleteMapping("/delete/{userId}")
     fun deleteResume(@PathVariable userId: Int): ResponseEntity<String> {

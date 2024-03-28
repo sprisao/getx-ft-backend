@@ -1,10 +1,7 @@
 package kr.getx.fitnessteachers.service
 
 import jakarta.transaction.Transactional
-import kr.getx.fitnessteachers.dto.CertificationDto
-import kr.getx.fitnessteachers.dto.EducationDto
-import kr.getx.fitnessteachers.dto.ExperienceDto
-import kr.getx.fitnessteachers.dto.ResumeDto
+import kr.getx.fitnessteachers.dto.*
 import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.repository.ResumeRepository
 import kr.getx.fitnessteachers.utils.StringConversionUtils
@@ -25,16 +22,9 @@ class ResumeService(
 
     fun getAllResumes(): List<Resume> = resumeRepository.findAll()
 
-    fun findByResumeId(resumeId: Int): Resume? = resumeRepository.findById(resumeId).orElse(null)
-
     fun addResumeWithDetails(resumeDto: ResumeDto): Resume {
-        val user = userService.findUserById(resumeDto.userId) ?: throw UserNotFoundException(resumeDto.userId)
-        val photoString = StringConversionUtils.convertListToString(resumeDto.photos)
-        val newResume = Resume(
-            user = user,
-            photos = photoString,
-            createdAt = resumeDto.createdAt ?: LocalDateTime.now()
-        )
+        val user = userService.findUserById(resumeDto.user.userId)
+        val newResume = resumeDto.toEntity(user)
 
         val saveResume = resumeRepository.save(newResume)
 
@@ -52,18 +42,7 @@ class ResumeService(
 
     fun getResumeDetailsByUserId(userId: Int): ResumeDto {
         val resume = getResumeByUserId(userId)
-        return ResumeDto(
-            resumeId = resume.resumeId,
-            userId = userId,
-            photos = StringConversionUtils.convertStringToList(resume.photos ?: " "),
-            createdAt = resume.createdAt,
-            experiences = experienceService.getExperienceByResumeId(resume.resumeId)
-                .map { ExperienceDto.fromEntity(it) },
-            educations = educationService.getEducationByResumeId(resume.resumeId)
-                .map { EducationDto.fromEntity(it) },
-            certifications = certificationService.getCertificationByResumeId(resume.resumeId)
-                .map { CertificationDto.fromEntity(it) }
-        )
+        return toDto(resume)
     }
 
     fun updateResumeWithDetails(userId: Int, resumeDto: ResumeDto): Resume {
@@ -81,7 +60,8 @@ class ResumeService(
         return updateResume
     }
 
-    fun getResumeByUserId(userId: Int): Resume = resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
+    fun getResumeByUserId(userId: Int): Resume =
+        resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
 
     fun deleteResumeAndRelatedDetails(userId: Int) {
         val resume = resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
@@ -94,17 +74,13 @@ class ResumeService(
     }
 
     fun toDto(resume: Resume): ResumeDto {
-        return ResumeDto(
-            resumeId = resume.resumeId,
-            userId = resume.user.userId,
-            photos = StringConversionUtils.convertStringToList(resume.photos ?: " "),
-            createdAt = resume.createdAt,
-            experiences = experienceService.getExperienceByResumeId(resume.resumeId)
-                .map { ExperienceDto.fromEntity(it) },
-            educations = educationService.getEducationByResumeId(resume.resumeId)
-                .map { EducationDto.fromEntity(it) },
-            certifications = certificationService.getCertificationByResumeId(resume.resumeId)
-                .map { CertificationDto.fromEntity(it) }
-        )
+        val experiences = experienceService.getExperienceByResumeId(resume.resumeId)
+           .map { ExperienceDto.fromEntity(it) }
+        val educations = educationService.getEducationByResumeId(resume.resumeId)
+              .map { EducationDto.fromEntity(it) }
+        val certifications = certificationService.getCertificationByResumeId(resume.resumeId)
+            .map { CertificationDto.fromEntity(it) }
+
+        return ResumeDto.fromEntity(resume, educations, experiences, certifications)
     }
 }
