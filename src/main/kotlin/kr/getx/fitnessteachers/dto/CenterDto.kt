@@ -35,7 +35,7 @@ data class CenterDto(
         }
         fun toEntity(user: User): Center {
                 return Center(
-                        centerId = this.centerId ?: 0,
+                        centerId = this.centerId,
                         centerName = this.centerName ?: "",
                         photos = StringConversionUtils.convertListToString(this.photos ?: emptyList()),
                         roadAddress = this.roadAddress ?: "",
