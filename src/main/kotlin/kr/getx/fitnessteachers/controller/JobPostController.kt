@@ -60,15 +60,15 @@ class JobPostController(
     fun getSimilarJobPosts(@PathVariable jobPostId: Int): ResponseEntity<List<JobPostDto>> =
         ResponseEntity.ok(jobPostService.findSimilarJobPosts(jobPostId))
 
-//    @GetMapping("/search")
-//    fun searchJobPosts(
-//        @RequestParam(required = false) recruitmentStatus: String?,
-//        @RequestParam(required = false) jobCategory: String?,
-//        @RequestParam(required = false) locationProvince: String?,
-//        @RequestParam(required = false) locationCity: String?,
-//        pageable: Pageable
-//    ): ResponseEntity<Page<JobPostDto>> {
-//        val page = jobPostService.searchJobPosts(recruitmentStatus, jobCategory, locationProvince, locationCity, pageable)
-//        return ResponseEntity.ok(page.map(JobPostDto::fromEntity))
-//    }
+    @GetMapping("/search")
+    fun searchJobPosts(
+        @RequestParam(required = false) recruitmentStatus: Boolean?, // 채용 상태
+        @RequestParam(required = false) jobCategory: String?, // 직업 카테고리
+        @RequestParam(required = false) sidoEnglish: String?, // 시/도 영어
+        @RequestParam(required = false) sigunguEnglish: String?, // 시/군/구 영어
+        pageable: Pageable
+    ): ResponseEntity<Page<JobPostDto>> {
+        val page = jobPostService.searchJobPosts(recruitmentStatus, jobCategory, sidoEnglish, sigunguEnglish, pageable)
+        return ResponseEntity.ok(page.map(JobPostDto::fromEntity))
+    }
 }
