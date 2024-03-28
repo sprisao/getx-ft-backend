@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 @RestController
 @RequestMapping("/api/jobPosts")
@@ -68,7 +70,8 @@ class JobPostController(
         @RequestParam(required = false) sigunguEnglish: String?, // 시/군/구 영어
         pageable: Pageable
     ): ResponseEntity<Page<JobPostDto>> {
-        val page = jobPostService.searchJobPosts(recruitmentStatus, jobCategory, sidoEnglish, sigunguEnglish, pageable)
+        val decodedJobCategory = jobCategory?.let { URLDecoder.decode(it, StandardCharsets.UTF_8.name()) }
+        val page = jobPostService.searchJobPosts(recruitmentStatus, decodedJobCategory, sidoEnglish, sigunguEnglish, pageable)
         return ResponseEntity.ok(page.map(JobPostDto::fromEntity))
     }
 }
