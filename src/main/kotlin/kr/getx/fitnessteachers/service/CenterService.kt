@@ -7,8 +7,6 @@ import kr.getx.fitnessteachers.exceptions.CenterOwnershipException
 import kr.getx.fitnessteachers.repository.CenterRepository
 import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.stereotype.Service
-import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Page
 
 @Service
 class CenterService(
@@ -39,7 +37,4 @@ class CenterService(
     }
 
     fun getCenterByUserId(userId: Int): List<Center> = centerRepository.findByUser_UserId(userId)
-
-//    fun searchCenters(centerName: String?, locationProvince: String?, locationCity: String?, pageable: Pageable): Page<Center> =
-//        centerRepository.findByCenterNameAndLocationProvinceAndLocationCity(centerName, locationProvince, locationCity, pageable)
 }

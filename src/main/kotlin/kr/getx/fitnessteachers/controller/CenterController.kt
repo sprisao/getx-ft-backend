@@ -7,8 +7,6 @@ import kr.getx.fitnessteachers.service.CenterService
 import kr.getx.fitnessteachers.service.UserService
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
-import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Page
 @RestController
 @RequestMapping("/api/centers")
 class CenterController(
@@ -38,14 +36,4 @@ class CenterController(
         centerService.deleteCenter(centerId)
         return ResponseEntity.ok().body("센터가 성공적으로 삭제되었습니다.")
     }
-
-//    @GetMapping("/search")
-//    fun searchCenters(
-//        @RequestParam(required = false) centerName: String?,
-//        @RequestParam(required = false) locationProvince: String?,
-//        @RequestParam(required = false) locationCity: String?,
-//        pageable: Pageable
-//    ): ResponseEntity<Page<CenterDto>> =
-//        ResponseEntity.ok(centerService.searchCenters(centerName, locationProvince, locationCity, pageable)
-//            .map { CenterDto.fromEntity(it) })
 }
