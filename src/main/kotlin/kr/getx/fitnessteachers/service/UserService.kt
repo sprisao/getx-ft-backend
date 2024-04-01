@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service
 class UserService(
     private val userRepository: UserRepository
 ) {
+    // jenkins Test
     fun getAllUsers(): List<User> = userRepository.findAll()
 
     fun getUser(email: String): User = userRepository.findByEmail(email) ?: throw UserNotFoundExceptionByEmail(email)
