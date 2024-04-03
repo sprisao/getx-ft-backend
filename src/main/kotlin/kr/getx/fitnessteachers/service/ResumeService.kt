@@ -21,6 +21,8 @@ class ResumeService(
 
     fun getAllResumes(): List<Resume> = resumeRepository.findAll()
 
+    fun findById(resumeId: Int): Resume = resumeRepository.findById(resumeId).orElseThrow { ResumeNotFoundException(resumeId) }
+
     fun addResumeWithDetails(resumeDto: ResumeDto): Resume {
         val user = userService.findUserById(resumeDto.user.userId)
         val newResume = resumeDto.toEntity(user)
