@@ -30,10 +30,6 @@ data class Center(
 
         var sigunguEnglish: String? = null,
 
-//        var locationProvince: String? = null,
-
-//        var locationCity: String? = null,
-
         var description: String? = null,
 
         @CreationTimestamp
