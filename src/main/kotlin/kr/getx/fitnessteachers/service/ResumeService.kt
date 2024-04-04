@@ -50,6 +50,7 @@ class ResumeService(
         val user = userService.findUserById(userId) ?: throw UserNotFoundException(userId)
         val resume = resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
 
+        resume.description = resumeDto.description
         resume.photos = StringConversionUtils.convertListToString(resumeDto.photos)
 
         val updateResume = resumeRepository.save(resume)
