@@ -15,6 +15,8 @@ data class Resume(
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     val user: User,
 
+    var description: String? = null,
+
     @Lob
     var photos: String? = null,
 
