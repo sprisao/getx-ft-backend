@@ -97,7 +97,7 @@ class JobPostService(
             }
             .filter { it.second > 0.5 }
             .sortedByDescending { it.second }
-            .take(5)
+            .take(5) // 5개만 가져오기
             .map { JobPostDto.fromEntity(it.first) }
             .toList()
     }
