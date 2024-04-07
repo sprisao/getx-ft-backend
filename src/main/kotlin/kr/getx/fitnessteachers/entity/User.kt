@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 @DynamicUpdate
 @Entity
 @Getter
-@Table(name = "users")
+@Table(name = "user")
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
