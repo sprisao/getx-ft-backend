@@ -44,11 +44,22 @@ class UserService(
 
     private fun loginUser(user : User): User = user
 
-    private fun registerUser(userDto : UserDto): User = User(
-        name = userDto.name,
-        email = userDto.email,
-        socialType = userDto.socialType
-    ).also { userRepository.save(it) }
+    private fun registerUser(userDto : UserDto): User {
+        val nickname = if (userDto.nickname.isBlank()) {
+            "회원_&{UUID.randomUUID().toString.take(8)}"
+        } else {
+            userDto.nickname
+        }
+
+        return User(
+            name = userDto.name,
+            email = userDto.email,
+            socialType = userDto.socialType,
+            nickname = nickname
+        ).also {
+            userRepository.save(it)
+        }
+    }
 
     private fun updateUserDetails(user: User, userDto: UserDto): User {
         user.apply {

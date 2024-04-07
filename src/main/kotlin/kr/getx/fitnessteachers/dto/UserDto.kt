@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 data class UserDto(
     val userId: Int,
     val name: String,
-    var nickname: String? = "",
+    var nickname: String,
     val email: String,
     val socialType: String,
     var profileStatus: Boolean = false,

@@ -18,7 +18,7 @@ data class User(
 
     val name: String,
 
-    var nickname: String? = "",
+    var nickname: String,
 
     @Column(name = "email", unique = true)
     val email: String,
