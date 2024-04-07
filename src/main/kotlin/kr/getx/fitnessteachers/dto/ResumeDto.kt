@@ -8,7 +8,8 @@ data class ResumeDto(
         var resumeId : Int,
         var user: UserDto,
         val photos: List<String>,
-        val description: String?,
+        val mainPhoto: String,
+        val description: String,
         val isDisplay: Boolean,
         val isEditing: Boolean,
         val experiences: List<ExperienceDto>,
@@ -24,6 +25,7 @@ data class ResumeDto(
                         isDisplay = this.isDisplay,
                         isEditing = this.isEditing,
                         photos = StringConversionUtils.convertListToString(this.photos),
+                        mainPhoto = this.mainPhoto,
                         createdAt = this.createdAt ?: LocalDateTime.now()
                 )
         }
@@ -39,9 +41,10 @@ data class ResumeDto(
                                 resumeId = resume.resumeId,
                                 user = UserDto.fromEntity(resume.user),
                                 photos = StringConversionUtils.convertStringToList(resume.photos ?: " "),
+                                mainPhoto = resume.mainPhoto ?: "",
                                 isDisplay = resume.isDisplay,
                                 isEditing = resume.isEditing,
-                                description = resume.description,
+                                description = resume.description ?: " ",
                                 educations = educations,
                                 experiences = experiences,
                                 certifications = certifications,

@@ -20,6 +20,8 @@ data class Resume(
     @Lob
     var photos: String? = null,
 
+    val mainPhoto: String? = null,
+
     val isDisplay: Boolean = true,
 
     val isEditing: Boolean = false,
