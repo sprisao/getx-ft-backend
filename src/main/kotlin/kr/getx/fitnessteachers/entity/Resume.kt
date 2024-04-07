@@ -20,6 +20,10 @@ data class Resume(
     @Lob
     var photos: String? = null,
 
+    val isDisplay: Boolean = true,
+
+    val isEditing: Boolean = false,
+
     @CreationTimestamp
     val createdAt: LocalDateTime
 )
