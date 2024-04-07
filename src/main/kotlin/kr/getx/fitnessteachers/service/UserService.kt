@@ -63,7 +63,7 @@ class UserService(
 
     private fun updateUserDetails(user: User, userDto: UserDto): User {
         user.apply {
-            nickname = userDto.nickname ?: "닉네임 없음"
+            nickname = userDto.nickname
             profileUrl = userDto.profileUrl
             userType = userDto.userType
             profileStatus = userDto.profileStatus
