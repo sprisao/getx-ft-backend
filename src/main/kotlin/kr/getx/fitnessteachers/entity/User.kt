@@ -23,22 +23,22 @@ data class User(
     @Column(name = "email", unique = true)
     val email: String,
 
-    var profileUrl: String? = "",
+    var photo: String?,
 
     var socialType: String,
 
-    var userType: Boolean? = false,
+    var userType: Boolean?,
 
     @Enumerated(EnumType.STRING)
-    var teacherType: TeacherType? = null,
+    var teacherType: TeacherType,
 
-    var profileStatus: Boolean = false,
+    var photoIsDisplay: Boolean,
 
-    var resumeStatus: Boolean = false,
+    var resumeExists: Boolean,
 
-    var centerStatus: Boolean = false,
+    var centerExists: Boolean,
 
-    var userTypeStatus: Boolean = false,
+    var userTypeStatus: Boolean,
 
     @CreationTimestamp
     val createdAt: LocalDateTime = LocalDateTime.now()
