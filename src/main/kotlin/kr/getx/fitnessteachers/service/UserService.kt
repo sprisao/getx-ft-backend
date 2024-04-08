@@ -2,6 +2,7 @@ package kr.getx.fitnessteachers.service
 
 import jakarta.persistence.EntityNotFoundException
 import kr.getx.fitnessteachers.dto.UserDto
+import kr.getx.fitnessteachers.entity.TeacherType
 import kr.getx.fitnessteachers.entity.User
 import kr.getx.fitnessteachers.exceptions.UserLoginFailedException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundExceptionByEmail
@@ -55,7 +56,14 @@ class UserService(
             name = userDto.name,
             email = userDto.email,
             socialType = userDto.socialType,
-            nickname = nickname
+            nickname = nickname,
+            photo = userDto.photo,
+            userType = userDto.userType,
+            teacherType = userDto.teacherType ?: TeacherType.FITNESS,
+            photoIsDisplay = userDto.photoIsDisplay,
+            resumeExists = userDto.resumeExists,
+            centerExists = userDto.centerExists,
+            userTypeStatus = userDto.userTypeStatus
         ).also {
             userRepository.save(it)
         }
@@ -64,12 +72,12 @@ class UserService(
     private fun updateUserDetails(user: User, userDto: UserDto): User {
         user.apply {
             nickname = userDto.nickname
-            profileUrl = userDto.profileUrl
+            photo = userDto.photo
+            photoIsDisplay = userDto.photoIsDisplay
             userType = userDto.userType
-            profileStatus = userDto.profileStatus
+            resumeExists = userDto.resumeExists
+            centerExists = userDto.centerExists
             userTypeStatus = userDto.userTypeStatus
-            resumeStatus = userDto.resumeStatus
-            centerStatus = userDto.centerStatus
             teacherType = userDto.teacherType
         }
         return userRepository.save(user)

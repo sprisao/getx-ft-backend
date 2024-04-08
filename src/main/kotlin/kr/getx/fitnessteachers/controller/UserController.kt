@@ -19,13 +19,16 @@ class UserController(
 
     @GetMapping("/all")
     fun getAllUsers(): ResponseEntity<List<User>> = ResponseEntity.ok(userService.getAllUsers())
+
     @GetMapping("/{email}")
     fun getUser(@PathVariable email: String): ResponseEntity<User> = ResponseEntity.ok(userService.getUser(email))
+
     @DeleteMapping("/delete/{email}")
     fun deleteUser(@PathVariable email: String): ResponseEntity<Void> {
         userService.deleteUser(email)
         return ResponseEntity.ok().build()
     }
+
     @PostMapping("/login")
     fun loginUser(request: HttpServletRequest): ResponseEntity<Any> {
       val userDto = request.getAttribute("userData") as? UserDto
