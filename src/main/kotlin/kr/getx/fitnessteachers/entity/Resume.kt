@@ -15,16 +15,19 @@ data class Resume(
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     val user: User,
 
-    var description: String? = null,
+    val description: String?,
 
     @Lob
-    var photos: String? = null,
+    val photos: String?,
 
-    val mainPhoto: String? = null,
+    val mainPhoto: String?,
 
-    val isDisplay: Boolean = true,
+    // 이력서 공개 여부
+    val isDisplay: Boolean?,
 
-    val isEditing: Boolean = false,
+    // 이력서 수정 상태
+    val isEditing: Boolean?,
+
 
     @CreationTimestamp
     val createdAt: LocalDateTime
