@@ -34,24 +34,27 @@ class JobPostService(
 
         // DTO의 데이터로 JobPost 엔티티 업데이트
         jobPost.apply {
-            isDisplayReady = jobPostDto.isDisplayReady ?: isDisplayReady
-            recruitmentStatus = jobPostDto.recruitmentStatus ?: recruitmentStatus
-            responsibilities = jobPostDto.responsibilities ?: responsibilities
-            workLocation = jobPostDto.workLocation ?: workLocation
-            workHours = jobPostDto.workHours ?: workHours
-            workDays = jobPostDto.workDays ?: workDays
-            employmentType = jobPostDto.employmentType ?: employmentType
-            numberOfPositions = jobPostDto.numberOfPositions ?: numberOfPositions
-            salary = jobPostDto.salary ?: salary
-            qualifications = jobPostDto.qualifications ?: qualifications
-            applicationPeriodStart = jobPostDto.applicationPeriodStart ?: applicationPeriodStart
-            applicationPeriodEnd = jobPostDto.applicationPeriodEnd ?: applicationPeriodEnd
-            contactEmail = jobPostDto.contactEmail ?: contactEmail
-            contactPhone = jobPostDto.contactPhone ?: contactPhone
-            contactPerson = jobPostDto.contactPerson ?: contactPerson
-            title = jobPostDto.title ?: title
-            details = jobPostDto.details ?: details
-            jobCategory = jobPostDto.jobCategory ?: jobCategory
+            isPostCompleted = jobPostDto.isPostCompleted
+            isRecruitmentOpen = jobPostDto.isRecruitmentOpen
+            jobCategory = jobPostDto.jobCategory
+            workLocation = jobPostDto.workLocation
+            workHours = jobPostDto.workHours
+            workDays = jobPostDto.workDays
+            employmentType = jobPostDto.employmentType
+            hasBaseSalary = jobPostDto.hasBaseSalary
+            salaryRange = jobPostDto.salaryRange
+            experienceLevel = jobPostDto.experienceLevel
+            isSecondLanguageAvailable = jobPostDto.isSecondLanguageAvailable
+            isMajorDegreeRequired = jobPostDto.isMajorDegreeRequired
+            numberOfPositions = jobPostDto.numberOfPositions
+            qualifications = jobPostDto.qualifications
+            preferences = jobPostDto.preferences
+            details = jobPostDto.details
+            applicationPeriodEnd = jobPostDto.applicationPeriodEnd
+            workStartDate = jobPostDto.workStartDate
+            contactEmail = jobPostDto.contactEmail
+            contactPhone = jobPostDto.contactPhone
+            contactPerson = jobPostDto.contactPerson
         }
         return jobPostRepository.save(jobPost)
     }
