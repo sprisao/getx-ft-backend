@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import kr.getx.fitnessteachers.dto.UserDto
+import kr.getx.fitnessteachers.entity.TeacherType
 import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -19,7 +20,7 @@ class JwtTokenFilter(private val jwtUtils: JwtUtils) : OncePerRequestFilter() {
         val token = jwtUtils.resolveToken(request)
         if (token != null && jwtUtils.validateToken(token)) {
             val userData = jwtUtils.getSocialLoginInfo(token)
-            val userDto = UserDto(userId = 0, name = userData.name, email = userData.email, socialType = userData.socialType)
+            val userDto = UserDto(userId = 0, name = userData.name, email = userData.email, socialType = userData.socialType, teacherType = userData.teacherType, nickname = userData.nickname, photoIsDisplay = userData.photoIsDisplay, photo = userData.photo, userType = userData.userType, userTypeStatus = userData.userTypeStatus, resumeExists = userData.resumeExists, centerExists = userData.centerExists)
             val auth = UsernamePasswordAuthenticationToken(userDto, null, listOf(SimpleGrantedAuthority("ROLE_USER")))
             SecurityContextHolder.getContext().authentication = auth
             request.setAttribute("userData", userData)
