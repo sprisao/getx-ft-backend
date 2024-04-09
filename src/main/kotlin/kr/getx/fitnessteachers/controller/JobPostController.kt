@@ -62,16 +62,24 @@ class JobPostController(
     fun getSimilarJobPosts(@PathVariable jobPostId: Int): ResponseEntity<List<JobPostDto>> =
         ResponseEntity.ok(jobPostService.findSimilarJobPosts(jobPostId))
 
-    @GetMapping("/search")
-    fun searchJobPosts(
-        @RequestParam(required = false) recruitmentStatus: Boolean?, // 채용 상태
-        @RequestParam(required = false) jobCategory: String?, // 직업 카테고리
-        @RequestParam(required = false) sidoEnglish: String?, // 시/도 영어
-        @RequestParam(required = false) sigunguEnglish: String?, // 시/군/구 영어
-        pageable: Pageable
-    ): ResponseEntity<Page<JobPostDto>> {
-        val decodedJobCategory = jobCategory?.let { URLDecoder.decode(it, StandardCharsets.UTF_8.name()) }
-        val page = jobPostService.searchJobPosts(recruitmentStatus, decodedJobCategory, sidoEnglish, sigunguEnglish, pageable)
-        return ResponseEntity.ok(page.map(JobPostDto::fromEntity))
+//    @GetMapping("/search")
+//    fun searchJobPosts(
+//        @RequestParam(required = false) recruitmentStatus: Boolean?, // 채용 상태
+//        @RequestParam(required = false) jobCategory: String?, // 직업 카테고리
+//        @RequestParam(required = false) sidoEnglish: String?, // 시/도 영어
+//        @RequestParam(required = false) sigunguEnglish: String?, // 시/군/구 영어
+//        pageable: Pageable
+//    ): ResponseEntity<Page<JobPostDto>> {
+//        val decodedJobCategory = jobCategory?.let { URLDecoder.decode(it, StandardCharsets.UTF_8.name()) }
+//        val page = jobPostService.searchJobPosts(recruitmentStatus, decodedJobCategory, sidoEnglish, sigunguEnglish, pageable)
+//        return ResponseEntity.ok(page.map(JobPostDto::fromEntity))
+//    }
+
+    // 단축 공유 URL 생성 API
+    @GetMapping("/{jobPostId}/shortUrl")
+    fun generateShortUrl(@PathVariable jobPostId:Int): ResponseEntity<String> {
+        val jobPost = jobPostService.findById(jobPostId) ?: return ResponseEntity.notFound().build()
+        val shortUrl = jobPostService.generateShortUrl(jobPost)
+        return ResponseEntity.ok(shortUrl)
     }
 }

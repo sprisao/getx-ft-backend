@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
+import java.util.Base64
 import kotlin.math.ln
 import kotlin.math.sqrt
 
@@ -62,22 +63,22 @@ class JobPostService(
     fun findJobPostsByUserId(userId: Int): List<JobPost> =
         centerService.getCenterByUserId(userId).flatMap { jobPostRepository.findByCenterCenterId(centerId = it.centerId) }
 
-    // 검색 기능 추가
-    fun searchJobPosts(
-        recruitmentStatus: Boolean?,
-        jobCategory: String?,
-        sidoEnglish: String?,
-        sigunguEnglish: String?,
-        pageable: Pageable
-    ): Page<JobPost> {
-        return jobPostRepository.search(
-            recruitmentStatus = recruitmentStatus,
-            jobCategory = jobCategory,
-            sidoEnglish = sidoEnglish,
-            sigunguEnglish = sigunguEnglish,
-            pageable = pageable
-        )
-    }
+//    // 검색 기능 추가
+//    fun searchJobPosts(
+//        recruitmentStatus: Boolean?,
+//        jobCategory: String?,
+//        sidoEnglish: String?,
+//        sigunguEnglish: String?,
+//        pageable: Pageable
+//    ): Page<JobPost> {
+//        return jobPostRepository.search(
+//            recruitmentStatus = recruitmentStatus,
+//            jobCategory = jobCategory,
+//            sidoEnglish = sidoEnglish,
+//            sigunguEnglish = sigunguEnglish,
+//            pageable = pageable
+//        )
+//    }
 
     // 유사 게시글 검색
     fun findSimilarJobPosts(jobPostId: Int): List<JobPostDto> {
@@ -110,6 +111,13 @@ class JobPostService(
         val numerator = intersection.sumOf { vec1[it]!! * vec2[it]!! }
         val denominator = sqrt(vec1.values.sumOf { it * it }) * sqrt(vec2.values.sumOf { it * it })
         return if (denominator > 0) numerator / denominator else 0.0
+    }
+
+    // 단축 공유 URL 생성 API Service 구현
+    fun generateShortUrl(jobPost: JobPost): String {
+        val baseUrl = "http://52.79.241.48"
+        val encodedId = Base64.getUrlEncoder().encodeToString(jobPost.jobPostId.toString().toByteArray())
+        return "$baseUrl/s/$encodedId"
     }
 }
 

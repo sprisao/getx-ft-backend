@@ -11,17 +11,17 @@ import org.springframework.data.jpa.repository.Query
 interface JobPostRepository : JpaRepository<JobPost, Int> {
     fun findByCenterCenterId(centerId: Int): List<JobPost>
 
-    @Query("SELECT j FROM JobPost j WHERE " +
-            "(:recruitmentStatus IS NULL OR j.recruitmentStatus = :recruitmentStatus) AND " +
-            "(:jobCategory IS NULL OR j.jobCategory = :jobCategory) AND " +
-            "(:sidoEnglish IS NULL OR j.center.sidoEnglish = :sidoEnglish) AND " +
-            "(:sigunguEnglish IS NULL OR j.center.sigunguEnglish = :sigunguEnglish)")
-
-    fun search(
-        recruitmentStatus: Boolean?,
-        jobCategory: String?,
-        sidoEnglish: String?,
-        sigunguEnglish: String?,
-        pageable: Pageable
-    ) : Page<JobPost>
+//    @Query("SELECT j FROM JobPost j WHERE " +
+//            "(:recruitmentStatus IS NULL OR j.recruitmentStatus = :recruitmentStatus) AND " +
+//            "(:jobCategory IS NULL OR j.jobCategory = :jobCategory) AND " +
+//            "(:sidoEnglish IS NULL OR j.center.sidoEnglish = :sidoEnglish) AND " +
+//            "(:sigunguEnglish IS NULL OR j.center.sigunguEnglish = :sigunguEnglish)")
+//
+//    fun search(
+//        recruitmentStatus: Boolean?,
+//        jobCategory: String?,
+//        sidoEnglish: String?,
+//        sigunguEnglish: String?,
+//        pageable: Pageable
+//    ) : Page<JobPost>
 }
