@@ -24,7 +24,7 @@ data class JobPost(
 
     // 모집 직종 ( 요갸, 필라테스, 트레이너 )
     @ElementCollection
-    var jobCategory: List<String>,
+    var jobCategories: List<String> = emptyList(),
 
     // 근무 위치
     var workLocation: String,
