@@ -37,7 +37,7 @@ class JobPostService(
         jobPost.apply {
             isPostCompleted = jobPostDto.isPostCompleted
             isRecruitmentOpen = jobPostDto.isRecruitmentOpen
-            jobCategory = jobPostDto.jobCategory
+            jobCategories = jobPostDto.jobCategories
             workLocation = jobPostDto.workLocation
             workHours = jobPostDto.workHours
             workDays = jobPostDto.workDays
@@ -66,7 +66,7 @@ class JobPostService(
     // 검색 기능 추가
     fun searchJobPosts(
         isRecruitmentOpen: Boolean?,
-        jobCategory: List<String>?,
+        jobCategories: List<String>?,
         employmentType: String?,
         hasBaseSalary: Boolean?,
         experienceLevel: Int?,
@@ -76,7 +76,7 @@ class JobPostService(
     ): Page<JobPost> {
         return jobPostRepository.search(
             isRecruitmentOpen = isRecruitmentOpen,
-            jobCategory = jobCategory,
+            jobCategories = jobCategories,
             employmentType = employmentType,
             hasBaseSalary = hasBaseSalary,
             experienceLevel = experienceLevel,

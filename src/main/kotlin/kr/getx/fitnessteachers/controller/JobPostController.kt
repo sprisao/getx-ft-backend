@@ -65,7 +65,7 @@ class JobPostController(
     @GetMapping("/search")
     fun searchJobPosts(
         @RequestParam(required = false) isRecruitmentOpen: Boolean?, // 채용 상태
-        @RequestParam(required = false) jobCategory: List<String>?, // 직업 카테고리
+        @RequestParam(required = false) jobCategories: List<String>?, // 직업 카테고리
         @RequestParam(required = false) employmentType: String?, // 시급, 월급
         @RequestParam(required = false) hasBaseSalary: Boolean?, // 기본급 유무
         @RequestParam(required = false) experienceLevel: Int?, // 경력  N년 이상 관련 요건
@@ -73,7 +73,7 @@ class JobPostController(
         @RequestParam(required = false) sigunguEnglish: String?, // 시/군/구 영어
         pageable: Pageable
     ): ResponseEntity<Page<JobPostDto>> {
-        val decodedJobCategories = jobCategory?.map { URLDecoder.decode(it, StandardCharsets.UTF_8.name()) }
+        val decodedJobCategories = jobCategories?.map { URLDecoder.decode(it, StandardCharsets.UTF_8.name()) }
         val page = jobPostService.searchJobPosts(
             isRecruitmentOpen,
             decodedJobCategories,
