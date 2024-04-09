@@ -63,22 +63,28 @@ class JobPostService(
     fun findJobPostsByUserId(userId: Int): List<JobPost> =
         centerService.getCenterByUserId(userId).flatMap { jobPostRepository.findByCenterCenterId(centerId = it.centerId) }
 
-//    // 검색 기능 추가
-//    fun searchJobPosts(
-//        recruitmentStatus: Boolean?,
-//        jobCategory: String?,
-//        sidoEnglish: String?,
-//        sigunguEnglish: String?,
-//        pageable: Pageable
-//    ): Page<JobPost> {
-//        return jobPostRepository.search(
-//            recruitmentStatus = recruitmentStatus,
-//            jobCategory = jobCategory,
-//            sidoEnglish = sidoEnglish,
-//            sigunguEnglish = sigunguEnglish,
-//            pageable = pageable
-//        )
-//    }
+    // 검색 기능 추가
+    fun searchJobPosts(
+        isRecruitmentOpen: Boolean?,
+        jobCategory: List<String>?,
+        employmentType: String?,
+        hasBaseSalary: Boolean?,
+        experienceLevel: Int?,
+        sidoEnglish: String?,
+        sigunguEnglish: String?,
+        pageable: Pageable
+    ): Page<JobPost> {
+        return jobPostRepository.search(
+            isRecruitmentOpen = isRecruitmentOpen,
+            jobCategory = jobCategory,
+            employmentType = employmentType,
+            hasBaseSalary = hasBaseSalary,
+            experienceLevel = experienceLevel,
+            sidoEnglish = sidoEnglish,
+            sigunguEnglish = sigunguEnglish,
+            pageable = pageable
+        )
+    }
 
     // 유사 게시글 검색
     fun findSimilarJobPosts(jobPostId: Int): List<JobPostDto> {

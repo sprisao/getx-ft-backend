@@ -6,22 +6,28 @@ import org.springframework.stereotype.Repository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 
 @Repository
 interface JobPostRepository : JpaRepository<JobPost, Int> {
     fun findByCenterCenterId(centerId: Int): List<JobPost>
 
-//    @Query("SELECT j FROM JobPost j WHERE " +
-//            "(:recruitmentStatus IS NULL OR j.recruitmentStatus = :recruitmentStatus) AND " +
-//            "(:jobCategory IS NULL OR j.jobCategory = :jobCategory) AND " +
-//            "(:sidoEnglish IS NULL OR j.center.sidoEnglish = :sidoEnglish) AND " +
-//            "(:sigunguEnglish IS NULL OR j.center.sigunguEnglish = :sigunguEnglish)")
-//
-//    fun search(
-//        recruitmentStatus: Boolean?,
-//        jobCategory: String?,
-//        sidoEnglish: String?,
-//        sigunguEnglish: String?,
-//        pageable: Pageable
-//    ) : Page<JobPost>
+    @Query("SELECT j FROM JobPost j WHERE " +
+            "(:isRecruitmentOpen IS NULL OR j.isRecruitmentOpen = :isRecruitmentOpen) AND " +
+            "(:jobCategory IS NULL OR j.jobCategory IN :jobCategory) AND " +
+            "(:employmentType IS NULL OR j.employmentType = :employmentType) AND " +
+            "(:hasBaseSalary IS NULL OR j.hasBaseSalary = :hasBaseSalary) AND " +
+            "(:experienceLevel IS NULL OR j.experienceLevel >= :experienceLevel) AND " +
+            "(:sidoEnglish IS NULL OR j.center.sidoEnglish = :sidoEnglish) AND " +
+            "(:sigunguEnglish IS NULL OR j.center.sigunguEnglish = :sigunguEnglish)")
+    fun search(
+        @Param("isRecruitmentOpen") isRecruitmentOpen: Boolean?,
+        @Param("jobCategory") jobCategory: List<String>?,
+        @Param("employmentType") employmentType: String?,
+        @Param("hasBaseSalary") hasBaseSalary: Boolean?,
+        @Param("experienceLevel") experienceLevel: Int?,
+        @Param("sidoEnglish") sidoEnglish: String?,
+        @Param("sigunguEnglish") sigunguEnglish: String?,
+        pageable: Pageable
+    ): Page<JobPost>
 }
