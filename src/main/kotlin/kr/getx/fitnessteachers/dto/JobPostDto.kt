@@ -16,7 +16,8 @@ data class JobPostDto(
     val workDays: String,
     val employmentType: String,
     val hasBaseSalary: Boolean,
-    val salaryRange: String,
+    val salaryType: String,
+    val salary: String,
     val experienceLevel: Int,
     val isSecondLanguageAvailable: Boolean = false,
     val isMajorDegreeRequired: Boolean = false,
@@ -26,9 +27,6 @@ data class JobPostDto(
     val details: String,
     val applicationPeriodEnd: LocalDate? = null,
     val workStartDate: LocalDate?,
-    val contactEmail: String,
-    val contactPhone: String,
-    val contactPerson: String,
     val postedDate: LocalDateTime = LocalDateTime.now()
 ) {
     fun toEntity(center: Center): JobPost = JobPost(
@@ -42,7 +40,8 @@ data class JobPostDto(
         workDays = workDays,
         employmentType = employmentType,
         hasBaseSalary = hasBaseSalary,
-        salaryRange = salaryRange,
+        salaryType = salaryType,
+        salary = salary,
         experienceLevel = experienceLevel,
         isSecondLanguageAvailable = isSecondLanguageAvailable,
         isMajorDegreeRequired = isMajorDegreeRequired,
@@ -52,9 +51,6 @@ data class JobPostDto(
         details = details,
         applicationPeriodEnd = applicationPeriodEnd,
         workStartDate = workStartDate,
-        contactEmail = contactEmail,
-        contactPhone = contactPhone,
-        contactPerson = contactPerson,
         postedDate = postedDate
     )
     companion object {
@@ -69,7 +65,8 @@ data class JobPostDto(
             workDays = jobPost.workDays,
             employmentType = jobPost.employmentType,
             hasBaseSalary = jobPost.hasBaseSalary,
-            salaryRange = jobPost.salaryRange,
+            salaryType = jobPost.salaryType,
+            salary = jobPost.salary,
             experienceLevel = jobPost.experienceLevel,
             isSecondLanguageAvailable = jobPost.isSecondLanguageAvailable,
             isMajorDegreeRequired = jobPost.isMajorDegreeRequired,
@@ -79,9 +76,6 @@ data class JobPostDto(
             details = jobPost.details,
             applicationPeriodEnd = jobPost.applicationPeriodEnd,
             workStartDate = jobPost.workStartDate,
-            contactEmail = jobPost.contactEmail,
-            contactPhone = jobPost.contactPhone,
-            contactPerson = jobPost.contactPerson,
             postedDate = jobPost.postedDate
         )
     }

@@ -35,14 +35,17 @@ data class JobPost(
     // 근무 요일
     var workDays: String,
 
-    // 임금 유형 ( 시급, 월급 )
+    // 고용 형태 ( 정규직, 계약직, 대강, 직접입력 )
     var employmentType: String,
+
+    // 입금 유형 ( 타임제, 연봉 )
+    var salaryType: String,
+
+    // 급여
+    var salary : String,
 
     // 기본급 유무 ( 있음, 없음 )
     var hasBaseSalary: Boolean,
-
-    // 급여
-    var salaryRange : String,
 
     // 경력 요건 ( 경력 N년 이상 )
     var experienceLevel: Int,
@@ -73,15 +76,6 @@ data class JobPost(
 
     // 근무 시작일
     var workStartDate: LocalDate?,
-
-    // 문의 이메일
-    var contactEmail: String,
-
-    // 문의 연락처
-    var contactPhone: String,
-
-    // 문의 담당자
-    var contactPerson: String,
 
     @CreationTimestamp
     val postedDate: LocalDateTime = LocalDateTime.now()

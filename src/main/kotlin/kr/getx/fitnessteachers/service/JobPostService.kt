@@ -43,7 +43,8 @@ class JobPostService(
             workDays = jobPostDto.workDays
             employmentType = jobPostDto.employmentType
             hasBaseSalary = jobPostDto.hasBaseSalary
-            salaryRange = jobPostDto.salaryRange
+            salaryType = jobPostDto.salaryType
+            salary = jobPostDto.salary
             experienceLevel = jobPostDto.experienceLevel
             isSecondLanguageAvailable = jobPostDto.isSecondLanguageAvailable
             isMajorDegreeRequired = jobPostDto.isMajorDegreeRequired
@@ -53,9 +54,6 @@ class JobPostService(
             details = jobPostDto.details
             applicationPeriodEnd = jobPostDto.applicationPeriodEnd
             workStartDate = jobPostDto.workStartDate
-            contactEmail = jobPostDto.contactEmail
-            contactPhone = jobPostDto.contactPhone
-            contactPerson = jobPostDto.contactPerson
         }
         return jobPostRepository.save(jobPost)
     }
