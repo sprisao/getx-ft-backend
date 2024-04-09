@@ -15,10 +15,10 @@ data class Resume(
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     val user: User,
 
-    val description: String?,
+    var description: String?,
 
     @Lob
-    val photos: String?,
+    var photos: String?,
 
     val mainPhoto: String?,
 
