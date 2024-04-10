@@ -46,12 +46,11 @@ class JobPostService(
             workLocation = jobPostDto.workLocation
             workDays = jobPostDto.workDays.map { it.toEntity(this) }
             employmentType = jobPostDto.employmentType
-            hasBaseSalary = jobPostDto.hasBaseSalary
             salaryType = jobPostDto.salaryType
-            salary = jobPostDto.salary
+            additionalSalary = jobPostDto.additionalSalary
+            minSalary = jobPostDto.minSalary
+            maxSalary = jobPostDto.maxSalary
             experienceLevel = jobPostDto.experienceLevel
-            isSecondLanguageAvailable = jobPostDto.isSecondLanguageAvailable
-            isMajorDegreeRequired = jobPostDto.isMajorDegreeRequired
             numberOfPositions = jobPostDto.numberOfPositions
             qualifications = jobPostDto.qualifications
             preferences = jobPostDto.preferences
@@ -72,7 +71,6 @@ class JobPostService(
         isRecruitmentOpen: Boolean?,
         jobCategories: List<String>?,
         employmentType: String?,
-        hasBaseSalary: Boolean?,
         experienceLevel: Int?,
         sidoEnglish: String?,
         sigunguEnglish: String?,
@@ -85,7 +83,6 @@ class JobPostService(
             isRecruitmentOpen = isRecruitmentOpen,
             jobCategories = jobCategories,
             employmentType = employmentType,
-            hasBaseSalary = hasBaseSalary,
             experienceLevel = experienceLevel,
             sidoEnglish = sidoEnglish,
             sigunguEnglish = sigunguEnglish,

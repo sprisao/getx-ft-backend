@@ -23,7 +23,7 @@ data class JobPost(
     // 모집중, 모집마감
     var isRecruitmentOpen : Boolean = false,
 
-    // 모집 직종 ( 요갸, 필라테스, 트레이너 )
+    // 모집 직종 ( 요가, 필라테스, 트레이너 )
     @ElementCollection
     var jobCategories: List<String> = emptyList(),
 
@@ -34,26 +34,23 @@ data class JobPost(
     @OneToMany(mappedBy = "jobPost", cascade = [CascadeType.ALL])
     var workDays: List<WorkDay> = emptyList(),
 
-    // 고용 형태 ( 정규직, 계약직, 대강, 직접입력 )
+    // 고용 형태 ( 정규직, 프리랜서, 직접입력 )
     var employmentType: String,
 
     // 입금 유형 ( 타임제, 연봉 )
     var salaryType: String,
 
-    // 급여
-    var salary : String,
+    // 임금 추가 사항 ( 옵션 )
+    var additionalSalary: String,
 
-    // 기본급 유무 ( 있음, 없음 )
-    var hasBaseSalary: Boolean,
+    // 최소 급여
+    var minSalary : Int,
+
+    // 최대 급여
+    var maxSalary : Int,
 
     // 경력 요건 ( 경력 N년 이상 )
     var experienceLevel: Int,
-
-    // 제2외국어 가능 여부
-    var isSecondLanguageAvailable: Boolean = false,
-
-    // 전공 학위 필요 여부
-    var isMajorDegreeRequired: Boolean = false,
 
     // 모집 인원
     var numberOfPositions: Int,

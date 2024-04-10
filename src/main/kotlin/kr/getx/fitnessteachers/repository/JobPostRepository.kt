@@ -16,7 +16,6 @@ interface JobPostRepository : JpaRepository<JobPost, Int> {
             "(:isRecruitmentOpen IS NULL OR j.isRecruitmentOpen = :isRecruitmentOpen) AND " +
             "(:jobCategories IS NULL OR EXISTS (SELECT 1 FROM j.jobCategories jc WHERE jc IN :jobCategories)) AND " +
             "(:employmentType IS NULL OR j.employmentType = :employmentType) AND " +
-            "(:hasBaseSalary IS NULL OR j.hasBaseSalary = :hasBaseSalary) AND " +
             "(:experienceLevel IS NULL OR j.experienceLevel >= :experienceLevel) AND " +
             "(:sidoEnglish IS NULL OR j.center.sidoEnglish = :sidoEnglish) AND " +
             "(:sigunguEnglish IS NULL OR j.center.sigunguEnglish = :sigunguEnglish) AND " +
@@ -27,7 +26,6 @@ interface JobPostRepository : JpaRepository<JobPost, Int> {
         @Param("isRecruitmentOpen") isRecruitmentOpen: Boolean?,
         @Param("jobCategories") jobCategories: List<String>?,
         @Param("employmentType") employmentType: String?,
-        @Param("hasBaseSalary") hasBaseSalary: Boolean?,
         @Param("experienceLevel") experienceLevel: Int?,
         @Param("sidoEnglish") sidoEnglish: String?,
         @Param("sigunguEnglish") sigunguEnglish: String?,

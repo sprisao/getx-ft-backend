@@ -67,7 +67,6 @@ class JobPostController(
         @RequestParam(required = false) isRecruitmentOpen: Boolean?, // 채용 상태
         @RequestParam(required = false) jobCategories: List<String>?, // 직업 카테고리
         @RequestParam(required = false) employmentType: String?, // 시급, 월급
-        @RequestParam(required = false) hasBaseSalary: Boolean?, // 기본급 유무
         @RequestParam(required = false) experienceLevel: Int?, // 경력  N년 이상 관련 요건
         @RequestParam(required = false) sidoEnglish: String?, // 시/도 영어
         @RequestParam(required = false) sigunguEnglish: String?, // 시/군/구 영어
@@ -81,7 +80,6 @@ class JobPostController(
             isRecruitmentOpen,
             decodedJobCategories,
             employmentType,
-            hasBaseSalary,
             experienceLevel,
             sidoEnglish,
             sigunguEnglish,
