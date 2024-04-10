@@ -12,8 +12,7 @@ data class JobPostDto(
     val isRecruitmentOpen: Boolean = false,
     val jobCategories: List<String>,
     val workLocation: String,
-    val workHours: String,
-    val workDays: String,
+    val workDays: List<WorkDayDto>,
     val employmentType: String,
     val hasBaseSalary: Boolean,
     val salaryType: String,
@@ -29,30 +28,35 @@ data class JobPostDto(
     val workStartDate: LocalDate?,
     val postedDate: LocalDateTime = LocalDateTime.now()
 ) {
-    fun toEntity(center: Center): JobPost = JobPost(
-        jobPostId = jobPostId,
-        center = center,
-        isPostCompleted = isPostCompleted,
-        isRecruitmentOpen = isRecruitmentOpen,
-        jobCategories = jobCategories,
-        workLocation = workLocation,
-        workHours = workHours,
-        workDays = workDays,
-        employmentType = employmentType,
-        hasBaseSalary = hasBaseSalary,
-        salaryType = salaryType,
-        salary = salary,
-        experienceLevel = experienceLevel,
-        isSecondLanguageAvailable = isSecondLanguageAvailable,
-        isMajorDegreeRequired = isMajorDegreeRequired,
-        numberOfPositions = numberOfPositions,
-        qualifications = qualifications,
-        preferences = preferences,
-        details = details,
-        applicationPeriodEnd = applicationPeriodEnd,
-        workStartDate = workStartDate,
-        postedDate = postedDate
-    )
+    fun toEntity(center: Center): JobPost {
+        val jobPost = JobPost(
+            jobPostId = jobPostId,
+            center = center,
+            isPostCompleted = isPostCompleted,
+            isRecruitmentOpen = isRecruitmentOpen,
+            jobCategories = jobCategories,
+            workLocation = workLocation,
+            employmentType = employmentType,
+            hasBaseSalary = hasBaseSalary,
+            salaryType = salaryType,
+            salary = salary,
+            experienceLevel = experienceLevel,
+            isSecondLanguageAvailable = isSecondLanguageAvailable,
+            isMajorDegreeRequired = isMajorDegreeRequired,
+            numberOfPositions = numberOfPositions,
+            qualifications = qualifications,
+            preferences = preferences,
+            details = details,
+            applicationPeriodEnd = applicationPeriodEnd,
+            workStartDate = workStartDate,
+            postedDate = postedDate
+        )
+
+        jobPost.workDays = workDays.map { it.toEntity(jobPost) }
+
+        return jobPost
+    }
+
     companion object {
         fun fromEntity(jobPost: JobPost): JobPostDto = JobPostDto(
             jobPostId = jobPost.jobPostId,
@@ -61,8 +65,7 @@ data class JobPostDto(
             isRecruitmentOpen = jobPost.isRecruitmentOpen,
             jobCategories = jobPost.jobCategories,
             workLocation = jobPost.workLocation,
-            workHours = jobPost.workHours,
-            workDays = jobPost.workDays,
+            workDays = jobPost.workDays.map{ WorkDayDto.fromEntity(it)},
             employmentType = jobPost.employmentType,
             hasBaseSalary = jobPost.hasBaseSalary,
             salaryType = jobPost.salaryType,

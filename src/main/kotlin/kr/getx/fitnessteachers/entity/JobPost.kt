@@ -1,9 +1,11 @@
 package kr.getx.fitnessteachers.entity
 
 import jakarta.persistence.*
+import kr.getx.fitnessteachers.dto.WorkDayDto
 import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDate
 import java.time.LocalDateTime
+
 
 @Entity
 @Table(name = "jobPosts")
@@ -29,11 +31,9 @@ data class JobPost(
     // 근무 위치
     var workLocation: String,
 
-    // 근무 시간
-    var workHours: String,
-
-    // 근무 요일
-    var workDays: String,
+    // 근무 요일, 시간대 List배열
+    @OneToMany(mappedBy = "jobPost", cascade = [CascadeType.ALL])
+    var workDays: List<WorkDay> = emptyList(),
 
     // 고용 형태 ( 정규직, 계약직, 대강, 직접입력 )
     var employmentType: String,
