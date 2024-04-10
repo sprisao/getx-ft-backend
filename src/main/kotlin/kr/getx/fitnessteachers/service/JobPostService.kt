@@ -25,7 +25,12 @@ class JobPostService(
 
     fun createJobPost(jobPostDto: JobPostDto, center:Center, user: User): JobPost {
         val jobPost = jobPostDto.toEntity(center)
-        return jobPostRepository.save(jobPost)
+        val savedJobPost = jobPostRepository.save(jobPost)
+
+        val workDays = jobPostDto.workDays.map { it.toEntity(savedJobPost) }
+        savedJobPost.workDays = workDays
+
+        return savedJobPost
     }
 
     fun deleteById(id: Int) = jobPostRepository.deleteById(id)
@@ -39,8 +44,7 @@ class JobPostService(
             isRecruitmentOpen = jobPostDto.isRecruitmentOpen
             jobCategories = jobPostDto.jobCategories
             workLocation = jobPostDto.workLocation
-            workHours = jobPostDto.workHours
-            workDays = jobPostDto.workDays
+            workDays = jobPostDto.workDays.map { it.toEntity(this) }
             employmentType = jobPostDto.employmentType
             hasBaseSalary = jobPostDto.hasBaseSalary
             salaryType = jobPostDto.salaryType
@@ -55,6 +59,8 @@ class JobPostService(
             applicationPeriodEnd = jobPostDto.applicationPeriodEnd
             workStartDate = jobPostDto.workStartDate
         }
+
+
         return jobPostRepository.save(jobPost)
     }
 
