@@ -1,7 +1,6 @@
 package kr.getx.fitnessteachers.entity
 
 import jakarta.persistence.*
-import kr.getx.fitnessteachers.dto.WorkDayDto
 import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDate
 import java.time.LocalDateTime
