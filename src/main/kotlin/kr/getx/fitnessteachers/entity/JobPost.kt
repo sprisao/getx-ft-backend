@@ -56,15 +56,12 @@ data class JobPost(
     var numberOfPositions: Int,
 
     // 자격 요건
-    @Column(length = 10000)
     var qualifications: String,
 
     // 우대 사항
-    @Column(length = 10000)
     var preferences: String,
 
     // 간단 소개글
-    @Column(length = 10000)
     var details: String,
 
     // 지원 기간 종료일
