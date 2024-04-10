@@ -76,6 +76,9 @@ class JobPostService(
         experienceLevel: Int?,
         sidoEnglish: String?,
         sigunguEnglish: String?,
+        day: String?,
+        startTime: String?,
+        endTime: String?,
         pageable: Pageable
     ): Page<JobPost> {
         return jobPostRepository.search(
@@ -86,6 +89,9 @@ class JobPostService(
             experienceLevel = experienceLevel,
             sidoEnglish = sidoEnglish,
             sigunguEnglish = sigunguEnglish,
+            day = day,
+            startTime = startTime,
+            endTime = endTime,
             pageable = pageable
         )
     }

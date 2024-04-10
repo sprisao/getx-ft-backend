@@ -71,6 +71,9 @@ class JobPostController(
         @RequestParam(required = false) experienceLevel: Int?, // 경력  N년 이상 관련 요건
         @RequestParam(required = false) sidoEnglish: String?, // 시/도 영어
         @RequestParam(required = false) sigunguEnglish: String?, // 시/군/구 영어
+        @RequestParam(required = false) day: String?, // 요일
+        @RequestParam(required = false) startTime: String?, // 시작 시간
+        @RequestParam(required = false) endTime: String?, // 종료 시간
         pageable: Pageable
     ): ResponseEntity<Page<JobPostDto>> {
         val decodedJobCategories = jobCategories?.map { URLDecoder.decode(it, StandardCharsets.UTF_8.name()) }
@@ -82,6 +85,9 @@ class JobPostController(
             experienceLevel,
             sidoEnglish,
             sigunguEnglish,
+            day,
+            startTime,
+            endTime,
             pageable)
         return ResponseEntity.ok(page.map(JobPostDto::fromEntity))
     }
