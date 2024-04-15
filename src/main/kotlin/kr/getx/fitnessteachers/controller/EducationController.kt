@@ -1,7 +1,6 @@
 package kr.getx.fitnessteachers.controller
 
 import kr.getx.fitnessteachers.dto.EducationDto
-import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.service.EducationService
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity

@@ -1,7 +1,6 @@
 package kr.getx.fitnessteachers.dto
 
 import kr.getx.fitnessteachers.entity.Experience
-import kr.getx.fitnessteachers.entity.Resume
 import java.time.LocalDate
 import java.time.LocalDateTime
 
