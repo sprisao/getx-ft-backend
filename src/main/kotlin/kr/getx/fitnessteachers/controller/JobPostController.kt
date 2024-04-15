@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import java.net.URL
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
@@ -65,7 +66,7 @@ class JobPostController(
     @GetMapping("/search")
     fun searchJobPosts(
         @RequestParam(required = false) isRecruitmentOpen: Boolean?, // 채용 상태
-        @RequestParam(required = false) jobCategories: List<String>?, // 직업 카테고리
+        @RequestParam(required = false) jobCategories: String?, // 직업 카테고리
         @RequestParam(required = false) employmentType: String?, // 정규직, 계약직
         @RequestParam(required = false) salaryType: String?, // 타임, 월급
         @RequestParam(required = false) experienceLevel: Int?, // 경력  N년 이상 관련 요건
@@ -76,7 +77,7 @@ class JobPostController(
         @RequestParam(required = false) endTime: String?, // 종료 시간
         pageable: Pageable
     ): ResponseEntity<Page<JobPostDto>> {
-        val decodedJobCategories = jobCategories?.map { URLDecoder.decode(it, StandardCharsets.UTF_8.name()) }
+        val decodedJobCategories = jobCategories?.let { URLDecoder.decode(it, StandardCharsets.UTF_8.name()) }
         val page = jobPostService.searchJobPosts(
             isRecruitmentOpen,
             decodedJobCategories,

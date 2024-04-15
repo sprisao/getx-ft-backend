@@ -69,7 +69,7 @@ class JobPostService(
     // 검색 기능 추가
     fun searchJobPosts(
         isRecruitmentOpen: Boolean?,
-        jobCategories: List<String>?,
+        jobCategories: String?,
         employmentType: String?,
         salaryType: String?,
         experienceLevel: Int?,
@@ -80,9 +80,10 @@ class JobPostService(
         endTime: String?,
         pageable: Pageable
     ): Page<JobPost> {
+        val jobCategoriesList = jobCategories?.split(",")?.map { it.trim() }
         return jobPostRepository.search(
             isRecruitmentOpen = isRecruitmentOpen,
-            jobCategories = jobCategories,
+            jobCategoriesList = jobCategoriesList,
             employmentType = employmentType,
             salaryType = salaryType,
             experienceLevel = experienceLevel,

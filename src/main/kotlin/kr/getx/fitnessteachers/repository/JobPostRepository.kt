@@ -14,7 +14,7 @@ interface JobPostRepository : JpaRepository<JobPost, Int> {
 
     @Query("SELECT j FROM JobPost j WHERE " +
             "(:isRecruitmentOpen IS NULL OR j.isRecruitmentOpen = :isRecruitmentOpen) AND " +
-            "(:jobCategories IS NULL OR :jobCategories MEMBER OF j.jobCategories) AND " +
+            "(:jobCategoriesList IS NULL OR j.jobCategories IN :jobCategoriesList) AND " +
             "(:employmentType IS NULL OR j.employmentType = :employmentType) AND " +
             "(:salaryType IS NULL OR j.salaryType = :salaryType) AND " +
             "(:experienceLevel IS NULL OR j.experienceLevel >= :experienceLevel) AND " +
@@ -25,7 +25,7 @@ interface JobPostRepository : JpaRepository<JobPost, Int> {
             "(:endTime IS NULL OR EXISTS (SELECT 1 FROM j.workDays wd WHERE wd.endTime <= :endTime))")
     fun search(
         @Param("isRecruitmentOpen") isRecruitmentOpen: Boolean?,
-        @Param("jobCategories") jobCategories: List<String>?,
+        @Param("jobCategoriesList") jobCategoriesList: List<String>?,
         @Param("employmentType") employmentType: String?,
         @Param("salaryType") salaryType: String?,
         @Param("experienceLevel") experienceLevel: Int?,
