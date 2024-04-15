@@ -62,7 +62,7 @@ data class JobPostDto(
             isPostCompleted = jobPost.isPostCompleted,
             isRecruitmentOpen = jobPost.isRecruitmentOpen,
             jobCategories = jobPost.jobCategories,
-            workLocation = jobPost.workLocation,
+            workLocation = jobPost.workLocation ?: "",
             workDays = jobPost.workDays.map{ WorkDayDto.fromEntity(it)},
             employmentType = jobPost.employmentType,
             salaryType = jobPost.salaryType,
