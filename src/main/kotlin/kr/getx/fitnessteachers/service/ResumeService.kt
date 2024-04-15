@@ -8,6 +8,7 @@ import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.stereotype.Service
 import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundException
+import org.hibernate.query.IllegalSelectQueryException
 
 @Service
 @Transactional
@@ -60,9 +61,12 @@ class ResumeService(
     fun getResumeByUserId(userId: Int): Resume =
         resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
 
-    fun deleteResume(userId: Int) {
+    fun deleteResume(userId: Int, resumeId: Int) {
         val resume = resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
-        resumeRepository.delete(resume)
+
+        if(userId == resume.user.userId)
+            resumeRepository.delete(resume)
+        else throw IllegalSelectQueryException("해당 유저 ID로 이력서를 삭제할 수 없습니다.")
     }
 
     fun toDto(resume: Resume): ResumeDto {
