@@ -20,14 +20,31 @@ data class Resume(
     @Lob
     var photos: String?,
 
-    val mainPhoto: String?,
+    var mainPhoto: String?,
 
     // 이력서 공개 여부
-    val isDisplay: Boolean?,
+    var isDisplay: Boolean?,
 
     // 이력서 수정 상태
-    val isEditing: Boolean?,
+    var isEditing: Boolean?,
 
+    // 교육 번호 적어놓기
+    @ElementCollection
+    @CollectionTable(name = "resume_education_ids", joinColumns = [JoinColumn(name = "resume_id")])
+    @Column(name = "education_id")
+    var educationIds: List<Int>? = null,
+
+    // 경력 번호 적어놓기
+    @ElementCollection
+    @CollectionTable(name = "resume_experience_ids", joinColumns = [JoinColumn(name = "resume_id")])
+    @Column(name = "experience_id")
+    var experienceIds: List<Int>? = null,
+
+    // 자격증 번호 적어놓기
+    @ElementCollection
+    @CollectionTable(name = "resume_certification_ids", joinColumns = [JoinColumn(name = "resume_id")])
+    @Column(name = "certification_id")
+    var certificationIds: List<Int>? = null,
 
     @CreationTimestamp
     val createdAt: LocalDateTime

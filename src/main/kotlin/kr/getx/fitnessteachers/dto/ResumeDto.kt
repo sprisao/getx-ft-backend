@@ -12,9 +12,12 @@ data class ResumeDto(
         val description: String,
         val isDisplay: Boolean,
         val isEditing: Boolean,
-        val experiences: List<ExperienceDto>,
-        val educations: List<EducationDto>,
-        val certifications: List<CertificationDto>,
+        val educationIds: List<Int> = listOf(),
+        val experienceIds: List<Int> = listOf(),
+        val certificationIds: List<Int> = listOf(),
+        val educations : List<EducationDto> = listOf(),
+        val experiences : List<ExperienceDto> = listOf(),
+        val certifications : List<CertificationDto> = listOf(),
         val createdAt : LocalDateTime?
 ) {
         fun toEntity(user: User): Resume {
@@ -26,6 +29,9 @@ data class ResumeDto(
                         isEditing = this.isEditing,
                         photos = StringConversionUtils.convertListToString(this.photos),
                         mainPhoto = this.mainPhoto,
+                        educationIds = this.educationIds,
+                        experienceIds = this.experienceIds,
+                        certificationIds = this.certificationIds,
                         createdAt = this.createdAt ?: LocalDateTime.now()
                 )
         }
@@ -45,6 +51,9 @@ data class ResumeDto(
                                 isDisplay = resume.isDisplay ?: true,
                                 isEditing = resume.isEditing ?: false,
                                 description = resume.description ?: " ",
+                                educationIds = resume.educationIds ?: listOf(),
+                                experienceIds = resume.experienceIds ?: listOf(),
+                                certificationIds = resume.certificationIds ?: listOf(),
                                 educations = educations,
                                 experiences = experiences,
                                 certifications = certifications,
