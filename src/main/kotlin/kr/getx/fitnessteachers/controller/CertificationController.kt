@@ -21,7 +21,7 @@ class CertificationController(private val certificationService: CertificationSer
     fun addCertification(@RequestBody certificationDto: List<CertificationDto>): ResponseEntity<List<CertificationDto>> =
         ResponseEntity.ok(certificationService.addCertifications(certificationDto).map(CertificationDto::fromEntity))
 
-    @PutMapping ("/update/{certificationId}")
+    @PutMapping ("/update/{userId}")
     fun updateCertifications(@RequestBody certificationDtos: List<CertificationDto>): ResponseEntity<List<CertificationDto>> =
         ResponseEntity.ok(certificationService.updateCertifications(certificationDtos).map(CertificationDto::fromEntity))
 
