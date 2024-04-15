@@ -80,10 +80,9 @@ class JobPostService(
         endTime: String?,
         pageable: Pageable
     ): Page<JobPost> {
-        val jobCategoriesList = jobCategories?.split(",")?.map { it.trim() }
         return jobPostRepository.search(
             isRecruitmentOpen = isRecruitmentOpen,
-            jobCategoriesList = jobCategoriesList,
+            jobCategories = jobCategories,
             employmentType = employmentType,
             salaryType = salaryType,
             experienceLevel = experienceLevel,
