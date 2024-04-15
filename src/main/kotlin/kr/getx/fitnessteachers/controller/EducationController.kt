@@ -14,18 +14,21 @@ class EducationController(private val educationService: EducationService) {
     fun getAllEducations(): ResponseEntity<List<EducationDto>> =
         ResponseEntity.ok(educationService.getAllEducations().map(EducationDto::fromEntity))
 
-    @PostMapping("/add")
-    fun addEducation(@RequestBody educationDto: EducationDto, @RequestBody resume: Resume): ResponseEntity<EducationDto> =
-        ResponseEntity.ok(EducationDto.fromEntity(educationService.addEducation(educationDto, resume)))
+    @GetMapping("/user/{userId}")
+    fun findEducationsByIds(@PathVariable userId: Int): ResponseEntity<List<EducationDto>> =
+        ResponseEntity.ok(educationService.findEducationsByUserIds(userId).map(EducationDto::fromEntity))
 
-    @GetMapping("/{educationId}")
-    fun getEducation(@PathVariable educationId : Int): ResponseEntity<EducationDto> =
-        educationService.getEducationById(educationId)?.let { ResponseEntity.ok(EducationDto.fromEntity(it)) }
-            ?: ResponseEntity.notFound().build()
+    @PostMapping("/add")
+    fun addEducation(@RequestBody educationDto: List<EducationDto>): ResponseEntity<List<EducationDto>> =
+        ResponseEntity.ok(educationService.addEducations(educationDto).map(EducationDto::fromEntity))
+
+    @PutMapping("/update/{educationId}")
+    fun updateEducations(@RequestBody educationDtos: List<EducationDto>): ResponseEntity<List<EducationDto>> =
+        ResponseEntity.ok(educationService.updateEducations(educationDtos).map(EducationDto::fromEntity))
 
     @DeleteMapping("/delete/{educationId}")
-        fun deleteEducation(@PathVariable educationId: Int): ResponseEntity<Void> {
-            educationService.deleteEducation(educationId)
-            return ResponseEntity.noContent().build()
-        }
+    fun deleteEducations(@RequestBody educationIds: List<Int>): ResponseEntity<Void> {
+        educationService.deleteEducations(educationIds)
+        return ResponseEntity.noContent().build()
+    }
 }

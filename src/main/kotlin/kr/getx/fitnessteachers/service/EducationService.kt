@@ -2,47 +2,61 @@ package kr.getx.fitnessteachers.service
 
 import kr.getx.fitnessteachers.dto.EducationDto
 import kr.getx.fitnessteachers.entity.Education
-import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.repository.EducationRepository
+import kr.getx.fitnessteachers.repository.UserRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class EducationService(
     private val educationRepository: EducationRepository,
+    private val userRepository: UserRepository,
 ) {
 
     fun getAllEducations(): List<Education> = educationRepository.findAll()
 
-    fun getEducationById(educationId: Int): Education? = educationRepository.findById(educationId).orElse(null)
-
-    fun addEducation(educationDto: EducationDto, resume: Resume): Education = educationRepository.save(educationDto.toEducation(resume))
-    fun addEducationForResume(resume: Resume, educationDto: EducationDto ): Education = educationRepository.save(educationDto.toEducation(resume))
-
-    fun updateEducation(resume: Resume, newEducations: List<Education>) {
-        val existingEducations = educationRepository.findByResumeResumeId(resume.resumeId).associateBy { it.educationId }
-
-        // 새 교육 정보를 반복하며 업데이트 또는 추가
-        newEducations.forEach { newEdu ->
-            val existingEdu = existingEducations[newEdu.educationId]
-            educationRepository.save(existingEdu?.apply {
-                courseName = newEdu.courseName
-                institution = newEdu.institution
-                completionDate = newEdu.completionDate
-            } ?: newEdu.apply { this.resume = resume })
+    fun findEducationsByUserIds(userId: Int): List<Education> {
+        val user = userRepository.findById(userId).orElseThrow {
+            IllegalArgumentException("해당 유저를 찾을수 없습니다 !! userId : $userId")
         }
-
-        // 더 이상 존재하지 않는 교육 정보 삭제
-        existingEducations.values.forEach {
-            if (newEducations.none { newEdu -> newEdu.educationId == it.educationId}) {
-                educationRepository.delete(it)
+        return educationRepository.findByUser(user)
+    }
+    fun addEducations(educationDtos: List<EducationDto>): List<Education> {
+        return educationDtos.map { dto ->
+            val user = userRepository.findById(dto.userId).orElseThrow {
+                IllegalArgumentException("해당 유저를 찾을수 없습니다 !! userId : ${dto.userId}")
             }
+            educationRepository.save(
+                Education(
+                    educationId = dto.educationId ?: 0,
+                    user = user,
+                    courseName = dto.courseName,
+                    institution = dto.institution,
+                    completionDate = dto.completionDate,
+                    createdAt = dto.createdAt ?: LocalDateTime.now()
+                )
+            )
         }
     }
 
-    fun deleteEducation(educationId: Int) = educationRepository.deleteById(educationId)
+    fun updateEducations(educationDtos: List<EducationDto>): List<Education> {
+        val educationIds = educationDtos.mapNotNull { it.educationId }
+        val existingEducations = educationRepository.findByEducationIdIn(educationIds).associateBy { it.educationId }
 
-    fun getEducationByResumeId(resumeId: Int): List<Education> = educationRepository.findByResumeResumeId(resumeId)
+        return educationDtos.mapNotNull { dto ->
+            val education = existingEducations[dto.educationId]?.apply {
+                courseName = dto.courseName
+                institution = dto.institution
+                completionDate = dto.completionDate
+            } ?: return@mapNotNull null
+            educationRepository.save(education)
+        }
+    }
 
-    fun deleteAllByResume(resume: Resume) = educationRepository.deleteAllByResume(resume)
+    fun deleteEducations(educationIds: List<Int>) {
+        educationRepository.deleteAllById(educationIds)
+    }
+
+    fun findEducationsByIds(educationIds: List<Int>): List<Education> = educationRepository.findByEducationIdIn(educationIds)
 }
 
