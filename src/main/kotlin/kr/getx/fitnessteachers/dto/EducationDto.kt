@@ -1,30 +1,22 @@
 package kr.getx.fitnessteachers.dto
 
 import kr.getx.fitnessteachers.entity.Education
-import kr.getx.fitnessteachers.entity.Resume
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class EducationDto(
     val educationId: Int? = null,
+    val userId: Int,
     val courseName: String,
     val institution: String,
     val completionDate: LocalDate,
     val createdAt: LocalDateTime? = null
 )
 {
-    fun toEducation(resume: Resume): Education = Education(
-        educationId = this.educationId ?: 0,
-        resume = resume,
-        courseName = this.courseName,
-        institution = this.institution,
-        completionDate = this.completionDate,
-        createdAt = this.createdAt ?: LocalDateTime.now()
-    )
-
     companion object {
         fun fromEntity(education: Education): EducationDto = EducationDto(
             educationId = education.educationId,
+            userId = education.user.userId,
             courseName = education.courseName,
             institution = education.institution,
             completionDate = education.completionDate,
