@@ -1,7 +1,6 @@
 package kr.getx.fitnessteachers.controller
 
 import kr.getx.fitnessteachers.dto.ExperienceDto
-import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.service.ExperienceService
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
@@ -14,19 +13,21 @@ class ExperienceController(private val experienceService: ExperienceService) {
     fun getAllExperiences(): ResponseEntity<List<ExperienceDto>> =
         ResponseEntity.ok(experienceService.getAllExperiences().map(ExperienceDto::fromEntity))
 
+    @GetMapping("/user/{userId}")
+    fun findExperiencesByIds(@PathVariable userId: Int): ResponseEntity<List<ExperienceDto>> =
+        ResponseEntity.ok(experienceService.findExperiencesByUserIds(userId).map(ExperienceDto::fromEntity))
+
     @PostMapping("/add")
-    fun addExperience(@RequestBody experienceDto: ExperienceDto, @RequestBody resume: Resume): ResponseEntity<ExperienceDto> =
-        ResponseEntity.ok(ExperienceDto.fromEntity(experienceService.addExperience(experienceDto, resume)))
+    fun addExperience(@RequestBody experienceDto: List<ExperienceDto>): ResponseEntity<List<ExperienceDto>> =
+        ResponseEntity.ok(experienceService.addExperiences(experienceDto).map(ExperienceDto::fromEntity))
 
-    @GetMapping("/{experienceId}")
-    fun getExperience(@PathVariable experienceId: Int): ResponseEntity<ExperienceDto> =
-        experienceService.getExperienceById(experienceId)?.let { ResponseEntity.ok(ExperienceDto.fromEntity(it)) }
-            ?: ResponseEntity.notFound().build()
-
+    @PutMapping("/update/{userId}")
+    fun updateExperiences(@PathVariable experienceDto: List<ExperienceDto>): ResponseEntity<List<ExperienceDto>> =
+        ResponseEntity.ok(experienceService.updateExperiences(experienceDto).map(ExperienceDto::fromEntity))
 
     @DeleteMapping("/delete/{experienceId}")
-    fun deleteExperience(@PathVariable experienceId: Int): ResponseEntity<Void> {
-        experienceService.deleteExperience(experienceId)
+    fun deleteExperience(@PathVariable experienceIds: List<Int>): ResponseEntity<Void> {
+        experienceService.deleteExperiences(experienceIds)
         return ResponseEntity.noContent().build()
     }
 }

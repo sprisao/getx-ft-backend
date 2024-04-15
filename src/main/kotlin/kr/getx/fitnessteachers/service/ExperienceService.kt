@@ -2,44 +2,61 @@ package kr.getx.fitnessteachers.service
 
 import kr.getx.fitnessteachers.dto.ExperienceDto
 import kr.getx.fitnessteachers.entity.Experience
-import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.repository.ExperienceRepository
+import kr.getx.fitnessteachers.repository.UserRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class ExperienceService(
     private val experienceRepository: ExperienceRepository,
+    private val userRepository: UserRepository,
 ) {
 
     fun getAllExperiences(): List<Experience> = experienceRepository.findAll()
-    fun getExperienceById(experienceId: Int): Experience? = experienceRepository.findById(experienceId).orElse(null)
-    fun addExperience(experienceDto: ExperienceDto, resume: Resume): Experience = experienceRepository.save(experienceDto.toExperience(resume))
-    fun addExperienceForResume(resume: Resume, experienceDto: ExperienceDto): Experience = experienceRepository.save(experienceDto.toExperience(resume))
 
-    fun updateExperience(resume: Resume, newExperience: List<Experience>) {
-        val existingExperiences = experienceRepository.findByResumeResumeId(resume.resumeId).associateBy {it.experienceId}
-
-        // 새 경험 정보를 반복하며 업데이트 또는 추가
-        newExperience.forEach { newExp ->
-            val existingExp = existingExperiences[newExp.experienceId]
-            experienceRepository.save(existingExp?.apply {
-                description = newExp.description
-                startDate = newExp.startDate
-                endDate = newExp.endDate
-            } ?: newExp.apply { this.resume = resume })
+    fun findExperiencesByUserIds(userId: Int): List<Experience> {
+        val user = userRepository.findById(userId).orElseThrow {
+            IllegalArgumentException("해당 유저를 찾을수 없습니다 !! userId : $userId")
         }
+        return experienceRepository.findByUser(user)
+    }
 
-        // 더 이상 존재하지 않는 경험 정보 삭제
-        existingExperiences.values.forEach {
-            if (newExperience.none { newExp -> newExp.experienceId == it.experienceId }) {
-                experienceRepository.delete(it)
+    fun addExperiences(experienceDto: List<ExperienceDto>): List<Experience> {
+        return experienceDto.map { dto ->
+            val user = userRepository.findById(dto.userId).orElseThrow {
+                IllegalArgumentException("해당 유저를 찾을수 없습니다 !! userId : ${dto.userId}")
             }
+            experienceRepository.save(
+                Experience(
+                    experienceId = dto.experienceId ?: 0,
+                    user = user,
+                    description = dto.description,
+                    startDate = dto.startDate,
+                    endDate = dto.endDate,
+                    createdAt = dto.createdAt ?: LocalDateTime.now()
+                )
+            )
         }
     }
 
-    fun deleteExperience(experienceId: Int) = experienceRepository.deleteById(experienceId)
+    fun updateExperiences(experienceDto: List<ExperienceDto>): List<Experience> {
+        val experienceIds = experienceDto.mapNotNull { it.experienceId }
+        val existingExperiences = experienceRepository.findByExperienceIdIn(experienceIds).associateBy { it.experienceId }
 
-    fun getExperienceByResumeId(resumeId: Int): List<Experience> = experienceRepository.findByResumeResumeId(resumeId)
+        return experienceDto.mapNotNull { dto ->
+            val experience = existingExperiences[dto.experienceId]?.apply {
+                description = dto.description
+                startDate = dto.startDate
+                endDate = dto.endDate
+            } ?: return@mapNotNull null
+            experienceRepository.save(experience)
+        }
+    }
 
-    fun deleteAllByResume(resume: Resume) = experienceRepository.deleteAllByResume(resume)
+    fun deleteExperiences(experienceIds: List<Int>) {
+        experienceRepository.deleteAllById(experienceIds)
+    }
+
+    fun findExperiencesByIds(experienceIds: List<Int>): List<Experience> = experienceRepository.findByExperienceIdIn(experienceIds)
 }
