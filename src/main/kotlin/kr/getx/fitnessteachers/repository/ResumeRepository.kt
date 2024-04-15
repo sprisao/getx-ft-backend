@@ -9,6 +9,4 @@ interface ResumeRepository : JpaRepository<Resume, Int> {
     fun findByUserUserId(userId: Int): Resume?
 
     fun findAllByUserUserId(userId: Int): List<Resume>
-
 }
-
