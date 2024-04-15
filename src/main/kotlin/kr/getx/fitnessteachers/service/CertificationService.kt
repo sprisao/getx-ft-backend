@@ -2,48 +2,62 @@ package kr.getx.fitnessteachers.service
 
 import kr.getx.fitnessteachers.dto.CertificationDto
 import kr.getx.fitnessteachers.entity.Certification
-import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.repository.CertificationRepository
+import kr.getx.fitnessteachers.repository.UserRepository
 import org.springframework.stereotype.Service
+import java.lang.IllegalArgumentException
+import java.time.LocalDateTime
 
 @Service
 class CertificationService(
     private val certificationRepository: CertificationRepository,
+    private val userRepository: UserRepository,
 ) {
 
     fun getAllCertifications(): List<Certification> = certificationRepository.findAll()
 
-    fun getCertificationById(certificationId: Int): Certification? = certificationRepository.findById(certificationId).orElse(null)
-
-    fun addCertification(certificationDto: CertificationDto, resume: Resume): Certification = certificationRepository.save(certificationDto.toCertification(resume))
-
-    fun addCertificationForResume(resume: Resume, certificationDto: CertificationDto): Certification = certificationRepository.save(certificationDto.toCertification(resume))
-
-    fun updateCertification(resume: Resume, newCertifications: List<Certification>) {
-        val existingCertifications = certificationRepository.findByResumeResumeId(resume.resumeId).associateBy { it.certificationId }
-
-        // 새 자격증 정보를 반복하며 업데이트 또는 추가
-        newCertifications.forEach { newCert ->
-            val existingCert = existingCertifications[newCert.certificationId]
-            certificationRepository.save(existingCert?.apply {
-                name = newCert.name
-                issuedBy = newCert.issuedBy
-                issuedDate = newCert.issuedDate
-            } ?: newCert.apply { this.resume = resume })
+    fun findCertificationsByUserIds(userId: Int): List<Certification> {
+        val user = userRepository.findById(userId).orElseThrow {
+            IllegalArgumentException("해당 유저를 찾을수 없습니다 !! userId : $userId")
         }
-
-        // 더 이상 존재하지 않는 자격증 정보 삭제
-        existingCertifications.values.forEach {
-            if (newCertifications.none { newCert -> newCert.certificationId == it.certificationId }) {
-                certificationRepository.delete(it)
-            }
-        }
-
+        return certificationRepository.findByUser(user)
     }
 
-    fun deleteCertification(certificationId: Int) = certificationRepository.deleteById(certificationId)
+    fun addCertifications(certificationDtos: List<CertificationDto>): List<Certification> {
+        return certificationDtos.map { dto ->
+            val user = userRepository.findById(dto.userId).orElseThrow {
+                IllegalArgumentException("해당 유저를 찾을수 없습니다 !! userId : ${dto.userId}")
+            }
+            certificationRepository.save(
+                Certification(
+                    certificationId = dto.certificationId ?: 0,
+                    user = user,
+                    name = dto.name,
+                    issuedBy = dto.issuedBy,
+                    issuedDate = dto.issuedDate,
+                    createdAt = dto.createdAt ?: LocalDateTime.now()
+                )
+            )
+        }
+    }
 
-    fun getCertificationByResumeId(resumeId: Int): List<Certification> = certificationRepository.findByResumeResumeId(resumeId)
+    fun updateCertifications(certificationDtos: List<CertificationDto>): List<Certification> {
+        val certificationIds = certificationDtos.mapNotNull { it.certificationId }
+        val existingCertifications = certificationRepository.findByCertificationIdIn(certificationIds).associateBy { it.certificationId }
 
-    fun deleteAllByResume(resume: Resume) = certificationRepository.deleteAllByResume(resume)
+        return certificationDtos.mapNotNull { dto ->
+            val certification = existingCertifications[dto.certificationId]?.apply {
+                name = dto.name
+                issuedBy = dto.issuedBy
+                issuedDate = dto.issuedDate
+            } ?: return@mapNotNull null
+            certificationRepository.save(certification)
+        }
+    }
+
+    fun deleteCertifications(certificationIds: List<Int>) {
+        certificationRepository.deleteAllById(certificationIds)
+    }
+
+    fun findCertificationsByIds(certificationIds: List<Int>): List<Certification> = certificationRepository.findByCertificationIdIn(certificationIds)
 }

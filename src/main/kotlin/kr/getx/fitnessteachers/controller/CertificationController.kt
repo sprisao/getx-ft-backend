@@ -1,7 +1,6 @@
 package kr.getx.fitnessteachers.controller
 
 import kr.getx.fitnessteachers.dto.CertificationDto
-import kr.getx.fitnessteachers.entity.Resume
 import kr.getx.fitnessteachers.service.CertificationService
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
@@ -14,18 +13,21 @@ class CertificationController(private val certificationService: CertificationSer
     fun getAllCertifications(): ResponseEntity<List<CertificationDto>> =
         ResponseEntity.ok(certificationService.getAllCertifications().map(CertificationDto::fromEntity))
 
+    @GetMapping("/user/{userId}")
+    fun findCertificationsByIds(@PathVariable userId: Int): ResponseEntity<List<CertificationDto>> =
+        ResponseEntity.ok(certificationService.findCertificationsByUserIds(userId).map(CertificationDto::fromEntity))
+
     @PostMapping("/add")
-    fun addCertification(@RequestBody certificationDto: CertificationDto, @RequestBody resume: Resume): ResponseEntity<CertificationDto> =
-        ResponseEntity.ok(CertificationDto.fromEntity(certificationService.addCertification(certificationDto, resume)))
+    fun addCertification(@RequestBody certificationDto: List<CertificationDto>): ResponseEntity<List<CertificationDto>> =
+        ResponseEntity.ok(certificationService.addCertifications(certificationDto).map(CertificationDto::fromEntity))
 
     @GetMapping("/{certificationId}")
-    fun getCertification(@PathVariable certificationId: Int): ResponseEntity<CertificationDto> =
-        certificationService.getCertificationById(certificationId)?.let { ResponseEntity.ok(CertificationDto.fromEntity(it)) }
-            ?: ResponseEntity.notFound().build()
+    fun updateCertifications(@RequestBody certificationDtos: List<CertificationDto>): ResponseEntity<List<CertificationDto>> =
+        ResponseEntity.ok(certificationService.updateCertifications(certificationDtos).map(CertificationDto::fromEntity))
 
     @DeleteMapping("/delete/{certificationId}")
-    fun deleteCertification(@PathVariable certificationId: Int): ResponseEntity<Void> {
-        certificationService.deleteCertification(certificationId)
+    fun deleteCertifications(@RequestBody certificationIds: List<Int>): ResponseEntity<Void> {
+        certificationService.deleteCertifications(certificationIds)
         return ResponseEntity.noContent().build()
     }
 }
