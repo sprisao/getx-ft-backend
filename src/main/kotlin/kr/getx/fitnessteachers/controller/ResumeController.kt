@@ -22,7 +22,7 @@ class ResumeController(
     }
 
     @GetMapping("/{userId}")
-    fun getResumeByUserId(@PathVariable userId: Int): ResponseEntity<ResumeDto> =
+    fun getResumeByUserId(@PathVariable userId: Int): ResponseEntity<List<ResumeDto>> =
         ResponseEntity.ok(resumeService.getResumeDetailsByUserId(userId))
 
     @PutMapping("/update/{userId}")
