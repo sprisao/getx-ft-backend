@@ -52,9 +52,9 @@ class JobPostService(
             maxSalary = jobPostDto.maxSalary
             experienceLevel = jobPostDto.experienceLevel
             numberOfPositions = jobPostDto.numberOfPositions
-            qualifications = jobPostDto.qualifications
-            preferences = jobPostDto.preferences
-            details = jobPostDto.details
+            qualifications = jobPostDto.qualifications ?: ""
+            preferences = jobPostDto.preferences ?: ""
+            details = jobPostDto.details ?: ""
             applicationPeriodEnd = jobPostDto.applicationPeriodEnd
             workStartDate = jobPostDto.workStartDate
         }
