@@ -13,8 +13,8 @@ data class Education(
     val educationId: Int = 0,
 
     @ManyToOne
-    @JoinColumn(name = "resumeId", referencedColumnName = "resumeId")
-    var resume: Resume,
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    val user: User,
 
     var courseName: String,
 
