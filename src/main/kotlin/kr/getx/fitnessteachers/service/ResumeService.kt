@@ -37,7 +37,7 @@ class ResumeService(
     }
 
     fun getResumeDetailsByUserId(userId: Int): List<ResumeDto> {
-        val resume = resumeRepository.findByResumesUserUserId(userId)
+        val resume = resumeRepository.findAllByUserUserId(userId)
         return resume.map { toDto(it) }
     }
 
