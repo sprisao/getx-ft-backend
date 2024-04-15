@@ -1,31 +1,23 @@
 package kr.getx.fitnessteachers.dto
 
 import kr.getx.fitnessteachers.entity.Certification
-import kr.getx.fitnessteachers.entity.Resume
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 
 data class CertificationDto(
     val certificationId: Int? = null,
+    val userId: Int,
     val name: String,
     val issuedBy: String,
     val issuedDate: LocalDate,
     val createdAt: LocalDateTime? = null
 )
 {
-    fun toCertification(resume: Resume): Certification = Certification(
-        certificationId = this.certificationId ?: 0,
-        resume = resume,
-        name = this.name,
-        issuedBy = this.issuedBy,
-        issuedDate = this.issuedDate,
-        createdAt = this.createdAt ?: LocalDateTime.now()
-    )
-
     companion object {
         fun fromEntity(certification: Certification): CertificationDto = CertificationDto(
             certificationId = certification.certificationId,
+            userId = certification.user.userId,
             name = certification.name,
             issuedBy = certification.issuedBy,
             issuedDate = certification.issuedDate,
