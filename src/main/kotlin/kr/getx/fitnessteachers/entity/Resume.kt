@@ -48,13 +48,13 @@ data class Resume(
 
     // 프로필 사진 적어놓기
     @ElementCollection
-    @CollectionTable(name = "resumePhotoId", joinColumns = [JoinColumn(name = "resume_id")])
+    @CollectionTable(name = "resume_resumePhoto_ids", joinColumns = [JoinColumn(name = "resume_id")])
     @Column(name = "resumePhoto_id")
     var resumePhotoIds: List<Int>? = null,
 
     // 첨부파일 적어놓기
     @ElementCollection
-    @CollectionTable(name = "resumeAttachmentId", joinColumns = [JoinColumn(name = "resume_id")])
+    @CollectionTable(name = "resume_resumeAttachment_ids", joinColumns = [JoinColumn(name = "resume_id")])
     @Column(name = "resumeAttachment_id")
     var resumeAttachmentIds: List<Int>? = null,
 
