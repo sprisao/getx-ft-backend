@@ -28,7 +28,7 @@ class ResumeAttachmentService(
         val syncedResumeAttachments = mutableListOf<ResumeAttachment>()
 
         resumeAttachmentDto.forEach { dto ->
-            if (dto.resumeAttachmentId == null) {
+            if (dto.resumeAttachmentId == 0) { // id 값이 0일때 추가
                 // 새로운 데이터 추가
                 val user = userRepository.findById(dto.userId).orElseThrow {
                     IllegalArgumentException("해당 유저를 찾을 수 없습니다 !! userId : ${dto.userId}")
@@ -43,13 +43,12 @@ class ResumeAttachmentService(
                 resumeAttachmentIdsToKeep.add(savedResumeAttachment.resumeAttachmentId)
             } else {
                 // 기존 데이터 업데이트
-                existingResumeAttachments[dto.resumeAttachmentId]?.let { resumeAttachment ->
-                    resumeAttachment.apply {
-                        attachmentUrl = dto.attachmentUrl
-                    }
-                    val updatedResumeAttachment = resumeAttachmentRepository.save(resumeAttachment)
-                    syncedResumeAttachments.add(updatedResumeAttachment)
-                    resumeAttachmentIdsToKeep.add(updatedResumeAttachment.resumeAttachmentId)
+                val resumeAttachment = existingResumeAttachments[dto.resumeAttachmentId]?.apply {
+                    attachmentUrl = dto.attachmentUrl
+                }
+                if(resumeAttachment != null) {
+                    syncedResumeAttachments.add(resumeAttachmentRepository.save(resumeAttachment))
+                    resumeAttachmentIdsToKeep.add(resumeAttachment.resumeAttachmentId)
                 }
             }
         }
