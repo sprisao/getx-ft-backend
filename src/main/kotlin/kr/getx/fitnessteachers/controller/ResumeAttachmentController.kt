@@ -22,11 +22,11 @@ class ResumeAttachmentController (
     fun addResumeAttachment(@RequestBody resumeAttachmentDto: List<ResumeAttachmentDto>): ResponseEntity<List<ResumeAttachmentDto>> =
         ResponseEntity.ok(resumeAttachmentService.addResumeAttachment(resumeAttachmentDto).map(ResumeAttachmentDto::fromEntity))
 
-    @PutMapping ("/update/{userId}")
+    @PutMapping ("/update")
     fun updateResumeAttachment(@RequestBody resumeAttachmentDto: List<ResumeAttachmentDto>): ResponseEntity<List<ResumeAttachmentDto>> =
         ResponseEntity.ok(resumeAttachmentService.updateResumeAttachment(resumeAttachmentDto).map(ResumeAttachmentDto::fromEntity))
 
-    @DeleteMapping("/delete/{resumeAttachmentId}")
+    @DeleteMapping("/delete")
     fun deleteResumeAttachment(@RequestBody resumeAttachmentId: List<Int>): ResponseEntity<Void> {
         resumeAttachmentService.deleteResumeAttachment(resumeAttachmentId)
         return ResponseEntity.noContent().build()

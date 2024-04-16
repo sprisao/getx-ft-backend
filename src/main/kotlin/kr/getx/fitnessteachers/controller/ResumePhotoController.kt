@@ -23,11 +23,11 @@ class ResumePhotoController(
     fun addResumePhotos(@RequestBody resumePhotoDto: List<ResumePhotoDto>): ResponseEntity<List<ResumePhotoDto>> =
         ResponseEntity.ok(resumePhotoService.addResumePhotos(resumePhotoDto).map(ResumePhotoDto::fromEntity))
 
-    @PutMapping("/update/{userId}")
+    @PutMapping("/update")
     fun updateResumePhotos(@RequestBody resumePhotoDtos: List<ResumePhotoDto>): ResponseEntity<List<ResumePhotoDto>> =
         ResponseEntity.ok(resumePhotoService.updateResumePhotos(resumePhotoDtos).map(ResumePhotoDto::fromEntity))
 
-    @DeleteMapping("/delete/{resumePhotoId}")
+    @DeleteMapping("/delete")
     fun deleteResumePhotos(@RequestBody resumePhotoIds: List<Int>): ResponseEntity<Void> {
         resumePhotoService.deleteResumePhotos(resumePhotoIds)
         return ResponseEntity.noContent().build()

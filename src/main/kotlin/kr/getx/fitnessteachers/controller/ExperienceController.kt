@@ -21,11 +21,11 @@ class ExperienceController(private val experienceService: ExperienceService) {
     fun addExperience(@RequestBody experienceDto: List<ExperienceDto>): ResponseEntity<List<ExperienceDto>> =
         ResponseEntity.ok(experienceService.addExperiences(experienceDto).map(ExperienceDto::fromEntity))
 
-    @PutMapping("/update/{userId}")
+    @PutMapping("/update")
     fun updateExperiences(@RequestBody experienceDto: List<ExperienceDto>): ResponseEntity<List<ExperienceDto>> =
         ResponseEntity.ok(experienceService.updateExperiences(experienceDto).map(ExperienceDto::fromEntity))
 
-    @DeleteMapping("/delete/{experienceId}")
+    @DeleteMapping("/delete")
     fun deleteExperience(@RequestBody experienceIds: List<Int>): ResponseEntity<Void> {
         experienceService.deleteExperiences(experienceIds)
         return ResponseEntity.noContent().build()

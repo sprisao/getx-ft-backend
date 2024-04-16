@@ -21,11 +21,11 @@ class EducationController(private val educationService: EducationService) {
     fun addEducation(@RequestBody educationDto: List<EducationDto>): ResponseEntity<List<EducationDto>> =
         ResponseEntity.ok(educationService.addEducations(educationDto).map(EducationDto::fromEntity))
 
-    @PutMapping("/update/{userId}")
+    @PutMapping("/update")
     fun updateEducations(@RequestBody educationDtos: List<EducationDto>): ResponseEntity<List<EducationDto>> =
         ResponseEntity.ok(educationService.updateEducations(educationDtos).map(EducationDto::fromEntity))
 
-    @DeleteMapping("/delete/{educationId}")
+    @DeleteMapping("/delete")
     fun deleteEducations(@RequestBody educationIds: List<Int>): ResponseEntity<Void> {
         educationService.deleteEducations(educationIds)
         return ResponseEntity.noContent().build()
