@@ -27,7 +27,7 @@ class ResumePhotoService(
         val syncedResumePhotos = mutableListOf<ResumePhoto>()
 
         resumePhotoDtos.forEach { dto ->
-            if (dto.resumePhotoId == 0) {
+            if (dto.resumePhotoId == 0) { // id 값이 0 일때 추가
                 // 새로운 데이터 추가
                 val user = userRepository.findById(dto.userId).orElseThrow {
                     IllegalArgumentException("해당 유저를 찾을 수 없습니다 !! userId : ${dto.userId}")
