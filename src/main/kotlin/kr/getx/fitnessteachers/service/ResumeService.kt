@@ -69,7 +69,6 @@ class ResumeService(
         resume.description = resumeDto.description
         resume.photos = StringConversionUtils.convertListToString(resumeDto.photos)
         resume.mainPhoto = resumeDto.mainPhoto
-        resume.attachment = resumeDto.attachment
         resume.isDisplay = resumeDto.isDisplay
         resume.isEditing = resumeDto.isEditing
         resume.educationIds = resumeDto.educationIds

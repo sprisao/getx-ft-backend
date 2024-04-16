@@ -22,8 +22,6 @@ data class Resume(
 
     var mainPhoto: String?,
 
-    var attachment: String?,
-
     // 이력서 공개 여부
     var isDisplay: Boolean?,
 
