@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
 import kr.getx.fitnessteachers.dto.ResumePhotoDto
 
+
 @RestController
 @RequestMapping("/api/resumePhotos")
 class ResumePhotoController(
