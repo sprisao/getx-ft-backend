@@ -61,12 +61,9 @@ class ResumeService(
     fun getResumeByUserId(userId: Int): Resume =
         resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
 
-    fun deleteResume(userId: Int, resumeId: Int) {
-        val resume = resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
-
-        if(userId == resume.user.userId)
-            resumeRepository.delete(resume)
-        else throw IllegalSelectQueryException("해당 유저 ID로 이력서를 삭제할 수 없습니다.")
+    fun deleteResume(resumeId: Int) {
+        val resume = resumeRepository.findById(resumeId).orElseThrow { ResumeNotFoundException(resumeId) }
+        resumeRepository.delete(resume)
     }
 
     fun toDto(resume: Resume): ResumeDto {

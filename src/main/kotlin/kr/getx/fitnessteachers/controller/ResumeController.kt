@@ -29,9 +29,9 @@ class ResumeController(
     fun updateResumeByUserId(@PathVariable userId: Int, @RequestBody resumeDto: ResumeDto): ResponseEntity<ResumeDto> =
         ResponseEntity.ok(resumeService.toDto(resumeService.updateResumeWithDetails(userId, resumeDto)))
 
-    @DeleteMapping("/delete/{userId}")
-    fun deleteResume(@PathVariable userId: Int, resumeId: Int): ResponseEntity<String> {
-        resumeService.deleteResume(userId, resumeId)
-        return ResponseEntity.ok("이력서를 성공적으로 삭제하였습니다. 해당 유저 ID : $userId")
+    @DeleteMapping("/delete/{resumeId}")
+    fun deleteResume(@PathVariable resumeId: Int): ResponseEntity<String> {
+        resumeService.deleteResume(resumeId)
+        return ResponseEntity.ok("이력서를 성공적으로 삭제하였습니다. 해당 resume ID : $resumeId")
     }
 }
