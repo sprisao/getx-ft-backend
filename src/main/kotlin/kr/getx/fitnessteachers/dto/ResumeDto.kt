@@ -15,9 +15,13 @@ data class ResumeDto(
         val educationIds: List<Int> = listOf(),
         val experienceIds: List<Int> = listOf(),
         val certificationIds: List<Int> = listOf(),
+        val resumePhotoIds: List<Int> = listOf(),
+        val resumeAttachmentIds: List<Int> = listOf(),
         val educations : List<EducationDto> = listOf(),
         val experiences : List<ExperienceDto> = listOf(),
         val certifications : List<CertificationDto> = listOf(),
+        val resumePhotos : List<ResumePhotoDto> = listOf(),
+        val resumeAttachments : List<ResumeAttachmentDto> = listOf(),
         val createdAt : LocalDateTime?
 ) {
         fun toEntity(user: User): Resume {
@@ -32,6 +36,8 @@ data class ResumeDto(
                         educationIds = this.educationIds,
                         experienceIds = this.experienceIds,
                         certificationIds = this.certificationIds,
+                        resumePhotoIds = this.resumePhotoIds,
+                        resumeAttachmentIds = this.resumeAttachmentIds,
                         createdAt = this.createdAt ?: LocalDateTime.now()
                 )
         }
@@ -41,7 +47,9 @@ data class ResumeDto(
                         resume: Resume,
                         educations: List<EducationDto>,
                         experiences: List<ExperienceDto>,
-                        certifications: List<CertificationDto>
+                        certifications: List<CertificationDto>,
+                        resumePhotos: List<ResumePhotoDto>,
+                        resumeAttachments: List<ResumeAttachmentDto>
                 ): ResumeDto {
                         return ResumeDto(
                                 resumeId = resume.resumeId,
@@ -54,9 +62,13 @@ data class ResumeDto(
                                 educationIds = resume.educationIds ?: listOf(),
                                 experienceIds = resume.experienceIds ?: listOf(),
                                 certificationIds = resume.certificationIds ?: listOf(),
+                                resumePhotoIds = resume.resumePhotoIds ?: listOf(),
+                                resumeAttachmentIds = resume.resumeAttachmentIds ?: listOf(),
                                 educations = educations,
                                 experiences = experiences,
                                 certifications = certifications,
+                                resumePhotos = resumePhotos,
+                                resumeAttachments = resumeAttachments,
                                 createdAt = resume.createdAt
                         )
                 }

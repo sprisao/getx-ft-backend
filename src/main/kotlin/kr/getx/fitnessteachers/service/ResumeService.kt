@@ -3,13 +3,10 @@ package kr.getx.fitnessteachers.service
 import jakarta.transaction.Transactional
 import kr.getx.fitnessteachers.dto.*
 import kr.getx.fitnessteachers.entity.Resume
-import kr.getx.fitnessteachers.repository.ResumeRepository
 import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.stereotype.Service
 import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
-import kr.getx.fitnessteachers.repository.CertificationRepository
-import kr.getx.fitnessteachers.repository.EducationRepository
-import kr.getx.fitnessteachers.repository.ExperienceRepository
+import kr.getx.fitnessteachers.repository.*
 
 @Service
 @Transactional
@@ -21,7 +18,9 @@ class ResumeService(
     private val certificationService: CertificationService,
     private val educationRepository: EducationRepository,
     private val experienceRepository: ExperienceRepository,
-    private val certificationRepository: CertificationRepository
+    private val certificationRepository: CertificationRepository,
+    private val resumePhotoRepository: ResumePhotoRepository,
+    private val resumeAttachmentRepository: ResumeAttachmentRepository
 ) {
 
     fun getAllResumes(): List<Resume> = resumeRepository.findAll()
@@ -32,16 +31,22 @@ class ResumeService(
         val educations = educationRepository.findAllById(resume.educationIds ?: emptyList())
         val experience = experienceRepository.findAllById(resume.experienceIds ?: emptyList())
         val certifications = certificationRepository.findAllById(resume.certificationIds ?: emptyList())
+        val resumePhotos = resumePhotoRepository.findAllById(resume.resumePhotoIds ?: emptyList())
+        val resumeAttachments = resumeAttachmentRepository.findAllById(resume.resumeAttachmentIds ?: emptyList())
 
         val educationDtos = educations.map { EducationDto.fromEntity(it) }
         val experienceDtos = experience.map { ExperienceDto.fromEntity(it) }
         val certificationDtos = certifications.map { CertificationDto.fromEntity(it) }
+        val resumePhotoDtos = resumePhotos.map { ResumePhotoDto.fromEntity(it) }
+        val resumeAttachmentDtos = resumeAttachments.map { ResumeAttachmentDto.fromEntity(it) }
 
         return ResumeDto.fromEntity(
             resume,
             educationDtos,
             experienceDtos,
-            certificationDtos
+            certificationDtos,
+            resumePhotoDtos,
+            resumeAttachmentDtos
         )
     }
 
@@ -53,6 +58,8 @@ class ResumeService(
         newResume.educationIds = resumeDto.educationIds
         newResume.experienceIds = resumeDto.experienceIds
         newResume.certificationIds = resumeDto.certificationIds
+        newResume.resumePhotoIds = resumeDto.resumePhotoIds
+        newResume.resumeAttachmentIds = resumeDto.resumeAttachmentIds
 
         val saveResume = resumeRepository.save(newResume)
         return saveResume
@@ -74,6 +81,8 @@ class ResumeService(
         resume.educationIds = resumeDto.educationIds
         resume.experienceIds = resumeDto.experienceIds
         resume.certificationIds = resumeDto.certificationIds
+        resume.resumePhotoIds = resumeDto.resumePhotoIds
+        resume.resumeAttachmentIds = resumeDto.resumeAttachmentIds
 
         val updateResume = resumeRepository.save(resume)
         return updateResume
@@ -94,7 +103,11 @@ class ResumeService(
               .map { EducationDto.fromEntity(it) }
         val certifications = certificationService.findCertificationsByIds(resume.certificationIds ?: listOf())
             .map { CertificationDto.fromEntity(it) }
+        val resumePhotos = resumePhotoRepository.findAllById(resume.resumePhotoIds ?: emptyList())
+            .map { ResumePhotoDto.fromEntity(it) }
+        val resumeAttachments = resumeAttachmentRepository.findAllById(resume.resumeAttachmentIds ?: emptyList())
+            .map { ResumeAttachmentDto.fromEntity(it) }
 
-        return ResumeDto.fromEntity(resume, educations, experiences, certifications)
+        return ResumeDto.fromEntity(resume, educations, experiences, certifications, resumePhotos, resumeAttachments)
     }
 }
