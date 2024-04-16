@@ -1,6 +1,7 @@
 package kr.getx.fitnessteachers.service
 
 import kr.getx.fitnessteachers.dto.ResumeAttachmentDto
+import kr.getx.fitnessteachers.entity.Certification
 import kr.getx.fitnessteachers.entity.ResumeAttachment
 import kr.getx.fitnessteachers.repository.ResumeAttachmentRepository
 import kr.getx.fitnessteachers.repository.UserRepository
@@ -13,37 +14,48 @@ class ResumeAttachmentService(
     private val userRepository: UserRepository,
 ) {
 
-        fun getAllResumeAttachments(): List<ResumeAttachment> = resumeAttachmentRepository.findAll()
+    fun getAllResumeAttachments(): List<ResumeAttachment> = resumeAttachmentRepository.findAll()
 
-        fun findResumeAttachmentById(resumeAttachmentId: Int): ResumeAttachment {
-            return resumeAttachmentRepository.findById(resumeAttachmentId).orElseThrow {
-                IllegalArgumentException("해당 첨부파일을 찾을수 없습니다 !! resumeAttachmentId : $resumeAttachmentId")
-            }
+    fun findResumeAttachmentByUserIds(userId: Int): List<ResumeAttachment> {
+        val user = userRepository.findById(userId).orElseThrow {
+            java.lang.IllegalArgumentException("해당 유저를 찾을수 없습니다 !! userId : $userId")
         }
+        return resumeAttachmentRepository.findByUser(user)
+    }
 
-        fun addResumeAttachment(resumeAttachmentDto: ResumeAttachmentDto): ResumeAttachment {
-            val user = userRepository.findById(resumeAttachmentDto.userId).orElseThrow {
-                IllegalArgumentException("해당 유저를 찾을수 없습니다 !! userId : ${resumeAttachmentDto.userId}")
+    fun addResumeAttachment(resumeAttachmentDto: List<ResumeAttachmentDto>): List<ResumeAttachment> {
+        return resumeAttachmentDto.map { dto ->
+            val user = userRepository.findById(dto.userId).orElseThrow {
+                IllegalArgumentException("해당 유저를 찾을수 없습니다 !! userId : ${dto.userId}")
             }
-            return resumeAttachmentRepository.save(
+            resumeAttachmentRepository.save(
                 ResumeAttachment(
-                    resumeAttachmentId = resumeAttachmentDto.resumeAttachmentId ?: 0,
+                    resumeAttachmentId = dto.resumeAttachmentId ?: 0,
                     user = user,
-                    attachmentUrl = resumeAttachmentDto.attachmentUrl,
-                    createdAt = resumeAttachmentDto.createdAt ?: LocalDateTime.now()
+                    attachmentUrl = dto.attachmentUrl,
+                    createdAt = dto.createdAt ?: LocalDateTime.now()
                 )
             )
         }
+    }
 
-        fun updateResumeAttachment(resumeAttachmentId: Int, resumeAttachmentDto: ResumeAttachmentDto): ResumeAttachment {
-            val resumeAttachment = resumeAttachmentRepository.findById(resumeAttachmentId).orElseThrow {
-                IllegalArgumentException("해당 첨부파일을 찾을수 없습니다 !! resumeAttachmentId : $resumeAttachmentId")
-            }
-            resumeAttachment.attachmentUrl = resumeAttachmentDto.attachmentUrl
-            return resumeAttachmentRepository.save(resumeAttachment)
-        }
+    fun updateResumeAttachment(resumeAttachmentDto: List<ResumeAttachmentDto>): List<ResumeAttachment> {
+        val resumeAttachmentIds = resumeAttachmentDto.mapNotNull { it.resumeAttachmentId }
+        val existingResumeAttachments = resumeAttachmentRepository.findByResumeAttachmentIdIn(resumeAttachmentIds)
+            .associateBy { it.resumeAttachmentId }
 
-        fun deleteResumeAttachment(resumeAttachmentId: Int) {
-            resumeAttachmentRepository.deleteById(resumeAttachmentId)
+        return resumeAttachmentDto.mapNotNull { dto ->
+            val resumeAttachment = existingResumeAttachments[dto.resumeAttachmentId]?.apply {
+                attachmentUrl = dto.attachmentUrl
+            } ?: return@mapNotNull null
+            resumeAttachmentRepository.save(resumeAttachment)
         }
+    }
+
+    fun deleteResumeAttachment(resumeAttachmentId: List<Int>) {
+        resumeAttachmentRepository.deleteAllById(resumeAttachmentId)
+    }
+
+    fun findResumeAttachmentById(resumeAttachmentIds: List<Int>): List<ResumeAttachment> =
+        resumeAttachmentRepository.findByResumeAttachmentIdIn(resumeAttachmentIds)
 }

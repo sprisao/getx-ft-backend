@@ -10,25 +10,25 @@ import org.springframework.http.ResponseEntity
 class ResumeAttachmentController (
     private val resumeAttachmentService: ResumeAttachmentService
 ){
-        @GetMapping("/all")
-        fun getAllResumeAttachments(): ResponseEntity<List<ResumeAttachmentDto>> =
-            ResponseEntity.ok(resumeAttachmentService.getAllResumeAttachments().map(ResumeAttachmentDto::fromEntity))
+    @GetMapping("/all")
+    fun getAllResumeAttachments(): ResponseEntity<List<ResumeAttachmentDto>> =
+        ResponseEntity.ok(resumeAttachmentService.getAllResumeAttachments().map(ResumeAttachmentDto::fromEntity))
 
-        @GetMapping("/{resumeAttachmentId}")
-        fun findResumeAttachmentById(@PathVariable resumeAttachmentId: Int): ResponseEntity<ResumeAttachmentDto> =
-            ResponseEntity.ok(ResumeAttachmentDto.fromEntity(resumeAttachmentService.findResumeAttachmentById(resumeAttachmentId)))
+    @GetMapping("/user/{userId}")
+    fun findResumeAttachmentByUserIds(@PathVariable userId: Int): ResponseEntity<List<ResumeAttachmentDto>> =
+        ResponseEntity.ok(resumeAttachmentService.findResumeAttachmentByUserIds(userId).map(ResumeAttachmentDto::fromEntity))
 
-        @PostMapping("/add")
-        fun addResumeAttachment(@RequestBody resumeAttachmentDto: ResumeAttachmentDto): ResponseEntity<ResumeAttachmentDto> =
-            ResponseEntity.ok(ResumeAttachmentDto.fromEntity(resumeAttachmentService.addResumeAttachment(resumeAttachmentDto)))
+    @PostMapping("/add")
+    fun addResumeAttachment(@RequestBody resumeAttachmentDto: List<ResumeAttachmentDto>): ResponseEntity<List<ResumeAttachmentDto>> =
+        ResponseEntity.ok(resumeAttachmentService.addResumeAttachment(resumeAttachmentDto).map(ResumeAttachmentDto::fromEntity))
 
-        @PutMapping("/update/{resumeAttachmentId}")
-        fun updateResumeAttachment(@PathVariable resumeAttachmentId: Int, @RequestBody resumeAttachmentDto: ResumeAttachmentDto): ResponseEntity<ResumeAttachmentDto> =
-            ResponseEntity.ok(ResumeAttachmentDto.fromEntity(resumeAttachmentService.updateResumeAttachment(resumeAttachmentId, resumeAttachmentDto)))
+    @PutMapping ("/update/{userId}")
+    fun updateResumeAttachment(@RequestBody resumeAttachmentDto: List<ResumeAttachmentDto>): ResponseEntity<List<ResumeAttachmentDto>> =
+        ResponseEntity.ok(resumeAttachmentService.updateResumeAttachment(resumeAttachmentDto).map(ResumeAttachmentDto::fromEntity))
 
-        @DeleteMapping("/delete/{resumeAttachmentId}")
-        fun deleteResumeAttachment(@PathVariable resumeAttachmentId: Int): ResponseEntity<Void> {
-            resumeAttachmentService.deleteResumeAttachment(resumeAttachmentId)
-            return ResponseEntity.noContent().build()
-        }
+    @DeleteMapping("/delete/{resumeAttachmentId}")
+    fun deleteResumeAttachment(@RequestBody resumeAttachmentId: List<Int>): ResponseEntity<Void> {
+        resumeAttachmentService.deleteResumeAttachment(resumeAttachmentId)
+        return ResponseEntity.noContent().build()
+    }
 }
