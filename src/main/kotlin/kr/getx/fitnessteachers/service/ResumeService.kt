@@ -41,9 +41,8 @@ class ResumeService(
         return resume.map { toDto(it) }
     }
 
-    fun updateResumeWithDetails(userId: Int, resumeDto: ResumeDto): Resume {
-        val user = userService.findUserById(userId) ?: throw UserNotFoundException(userId)
-        val resume = resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
+    fun updateResumeWithDetails(resumeDto: ResumeDto): Resume {
+        val resume = resumeRepository.findById(resumeDto.resumeId).orElseThrow { ResumeNotFoundException(resumeDto.resumeId) }
 
         resume.description = resumeDto.description
         resume.photos = StringConversionUtils.convertListToString(resumeDto.photos)

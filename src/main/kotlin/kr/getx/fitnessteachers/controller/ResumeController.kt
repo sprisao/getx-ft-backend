@@ -25,9 +25,9 @@ class ResumeController(
     fun getResumeByUserId(@PathVariable userId: Int): ResponseEntity<List<ResumeDto>> =
         ResponseEntity.ok(resumeService.getResumeDetailsByUserId(userId))
 
-    @PutMapping("/update/{userId}")
-    fun updateResumeByUserId(@PathVariable userId: Int, @RequestBody resumeDto: ResumeDto): ResponseEntity<ResumeDto> =
-        ResponseEntity.ok(resumeService.toDto(resumeService.updateResumeWithDetails(userId, resumeDto)))
+    @PutMapping("/update")
+    fun updateResumeByUserId(@RequestBody resumeDto: ResumeDto): ResponseEntity<ResumeDto> =
+        ResponseEntity.ok(resumeService.toDto(resumeService.updateResumeWithDetails(resumeDto)))
 
     @DeleteMapping("/delete/{resumeId}")
     fun deleteResume(@PathVariable resumeId: Int): ResponseEntity<String> {
