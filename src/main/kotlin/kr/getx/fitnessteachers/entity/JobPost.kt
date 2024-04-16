@@ -33,7 +33,7 @@ data class JobPost(
     @OneToMany(mappedBy = "jobPost", cascade = [CascadeType.ALL])
     var workDays: List<WorkDay> = emptyList(),
 
-    // 고용 형태 ( 정규직, 프리랜서, 직접입력 )
+    // 고용 형태 ( 정규직, 계약직 )
     var employmentType: String,
 
     // 입금 유형 ( 타임제, 연봉 )
