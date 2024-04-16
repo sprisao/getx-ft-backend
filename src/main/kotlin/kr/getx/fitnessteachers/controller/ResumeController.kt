@@ -21,6 +21,10 @@ class ResumeController(
         return ResponseEntity.ok(resumeService.toDto(savedResume))
     }
 
+    @GetMapping("/find/{resumeId}")
+    fun getResumeById(@PathVariable resumeId: Int): ResponseEntity<ResumeDto> =
+        ResponseEntity.ok(resumeService.findById(resumeId))
+
     @GetMapping("/{userId}")
     fun getResumeByUserId(@PathVariable userId: Int): ResponseEntity<List<ResumeDto>> =
         ResponseEntity.ok(resumeService.getResumeDetailsByUserId(userId))

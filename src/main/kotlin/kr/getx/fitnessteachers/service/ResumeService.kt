@@ -7,6 +7,9 @@ import kr.getx.fitnessteachers.repository.ResumeRepository
 import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.stereotype.Service
 import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
+import kr.getx.fitnessteachers.repository.CertificationRepository
+import kr.getx.fitnessteachers.repository.EducationRepository
+import kr.getx.fitnessteachers.repository.ExperienceRepository
 
 @Service
 @Transactional
@@ -16,11 +19,32 @@ class ResumeService(
     private val educationService: EducationService,
     private val experienceService: ExperienceService,
     private val certificationService: CertificationService,
+    private val educationRepository: EducationRepository,
+    private val experienceRepository: ExperienceRepository,
+    private val certificationRepository: CertificationRepository
 ) {
 
     fun getAllResumes(): List<Resume> = resumeRepository.findAll()
 
-    fun findById(resumeId: Int): Resume = resumeRepository.findById(resumeId).orElseThrow { ResumeNotFoundException(resumeId) }
+    fun findById(resumeId: Int): ResumeDto {
+        val resume = resumeRepository.findById(resumeId).orElseThrow { ResumeNotFoundException(resumeId) }
+
+        val educations = educationRepository.findAllById(resume.educationIds ?: emptyList())
+        val experience = experienceRepository.findAllById(resume.experienceIds ?: emptyList())
+        val certifications = certificationRepository.findAllById(resume.certificationIds ?: emptyList())
+
+        val educationDtos = educations.map { EducationDto.fromEntity(it) }
+        val experienceDtos = experience.map { ExperienceDto.fromEntity(it) }
+        val certificationDtos = certifications.map { CertificationDto.fromEntity(it) }
+
+        return ResumeDto.fromEntity(
+            resume,
+            educationDtos,
+            experienceDtos,
+            certificationDtos
+        )
+    }
+
 
     fun addResumeWithDetails(resumeDto: ResumeDto): Resume {
         val user = userService.findUserById(resumeDto.user.userId)
