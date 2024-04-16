@@ -17,9 +17,9 @@ class ExperienceController(private val experienceService: ExperienceService) {
     fun findExperiencesByIds(@PathVariable userId: Int): ResponseEntity<List<ExperienceDto>> =
         ResponseEntity.ok(experienceService.findExperiencesByUserIds(userId).map(ExperienceDto::fromEntity))
 
-    @PostMapping("/add")
-    fun addExperience(@RequestBody experienceDto: List<ExperienceDto>): ResponseEntity<List<ExperienceDto>> =
-        ResponseEntity.ok(experienceService.addExperiences(experienceDto).map(ExperienceDto::fromEntity))
+    @PostMapping("/sync")
+    fun syncExperiences(@RequestBody experienceDto: List<ExperienceDto>): ResponseEntity<List<ExperienceDto>> =
+        ResponseEntity.ok(experienceService.syncExperiences(experienceDto).map(ExperienceDto::fromEntity))
 
     @PutMapping("/update")
     fun updateExperiences(@RequestBody experienceDto: List<ExperienceDto>): ResponseEntity<List<ExperienceDto>> =
