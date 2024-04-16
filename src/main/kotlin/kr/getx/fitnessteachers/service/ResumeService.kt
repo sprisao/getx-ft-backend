@@ -21,7 +21,8 @@ class ResumeService(
     private val certificationRepository: CertificationRepository,
     private val resumePhotoRepository: ResumePhotoRepository,
     private val resumeAttachmentRepository: ResumeAttachmentRepository,
-    private val resumePhotoService: ResumePhotoService
+    private val resumePhotoService: ResumePhotoService,
+    private val resumeAttachmentService: ResumeAttachmentService
 ) {
 
     fun getAllResumes(): List<Resume> = resumeRepository.findAll()
@@ -104,9 +105,9 @@ class ResumeService(
               .map { EducationDto.fromEntity(it) }
         val certifications = certificationService.findCertificationsByIds(resume.certificationIds ?: listOf())
             .map { CertificationDto.fromEntity(it) }
-        val resumePhotos = resumePhotoService.findResumePhotosByIds(resume.resumePhotoIds ?: emptyList())
+        val resumePhotos = resumePhotoService.findResumePhotosByIds(resume.resumePhotoIds ?: listOf())
             .map { ResumePhotoDto.fromEntity(it) }
-        val resumeAttachments = resumeAttachmentRepository.findByResumeAttachmentIdIn(resume.resumeAttachmentIds ?: emptyList())
+        val resumeAttachments = resumeAttachmentService.findResumeAttachmentById(resume.resumeAttachmentIds ?: listOf())
             .map { ResumeAttachmentDto.fromEntity(it) }
 
         return ResumeDto.fromEntity(resume, educations, experiences, certifications, resumePhotos, resumeAttachments)

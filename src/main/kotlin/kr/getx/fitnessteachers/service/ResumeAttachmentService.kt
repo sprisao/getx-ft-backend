@@ -1,7 +1,6 @@
 package kr.getx.fitnessteachers.service
 
 import kr.getx.fitnessteachers.dto.ResumeAttachmentDto
-import kr.getx.fitnessteachers.entity.Certification
 import kr.getx.fitnessteachers.entity.ResumeAttachment
 import kr.getx.fitnessteachers.repository.ResumeAttachmentRepository
 import kr.getx.fitnessteachers.repository.UserRepository
