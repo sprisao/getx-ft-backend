@@ -27,7 +27,7 @@ class ResumePhotoService(
         val syncedResumePhotos = mutableListOf<ResumePhoto>()
 
         resumePhotoDtos.forEach { dto ->
-            if (dto.resumePhotoId == null) {
+            if (dto.resumePhotoId == 0) {
                 // 새로운 데이터 추가
                 val user = userRepository.findById(dto.userId).orElseThrow {
                     IllegalArgumentException("해당 유저를 찾을 수 없습니다 !! userId : ${dto.userId}")
@@ -42,13 +42,12 @@ class ResumePhotoService(
                 resumePhotoIdsToKeep.add(savedResumePhoto.resumePhotoId)
             } else {
                 // 기존 데이터 업데이트
-                existingResumePhotos[dto.resumePhotoId]?.let { resumePhoto ->
-                    resumePhoto.apply {
-                        photoUrl = dto.photoUrl
-                    }
-                    val updatedResumePhoto = resumePhotoRepsoitory.save(resumePhoto)
-                    syncedResumePhotos.add(updatedResumePhoto)
-                    resumePhotoIdsToKeep.add(updatedResumePhoto.resumePhotoId)
+                val resumePhoto = existingResumePhotos[dto.resumePhotoId]?.apply {
+                    photoUrl = dto.photoUrl
+                }
+                if(resumePhoto != null) {
+                    syncedResumePhotos.add(resumePhotoRepsoitory.save(resumePhoto))
+                    resumePhotoIdsToKeep.add(resumePhoto.resumePhotoId)
                 }
             }
         }
