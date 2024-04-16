@@ -9,7 +9,7 @@ data class ResumeDto(
         var user: UserDto,
         val photos: List<String>,
         val mainPhoto: String,
-        val attachment: String,
+        val attachment: String? = "",
         val description: String,
         val isDisplay: Boolean,
         val isEditing: Boolean,
