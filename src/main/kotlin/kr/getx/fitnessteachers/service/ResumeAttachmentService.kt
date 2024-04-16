@@ -22,20 +22,45 @@ class ResumeAttachmentService(
         return resumeAttachmentRepository.findByUser(user)
     }
 
-    fun addResumeAttachment(resumeAttachmentDto: List<ResumeAttachmentDto>): List<ResumeAttachment> {
-        return resumeAttachmentDto.map { dto ->
-            val user = userRepository.findById(dto.userId).orElseThrow {
-                IllegalArgumentException("해당 유저를 찾을수 없습니다 !! userId : ${dto.userId}")
-            }
-            resumeAttachmentRepository.save(
-                ResumeAttachment(
-                    resumeAttachmentId = dto.resumeAttachmentId ?: 0,
+    fun syncResumeAttachment(resumeAttachmentDto: List<ResumeAttachmentDto>): List<ResumeAttachment> {
+        val existingResumeAttachments = resumeAttachmentRepository.findAll().associateBy { it.resumeAttachmentId }
+        val resumeAttachmentIdsToKeep = mutableSetOf<Int>()
+        val syncedResumeAttachments = mutableListOf<ResumeAttachment>()
+
+        resumeAttachmentDto.forEach { dto ->
+            if (dto.resumeAttachmentId == null) {
+                // 새로운 데이터 추가
+                val user = userRepository.findById(dto.userId).orElseThrow {
+                    IllegalArgumentException("해당 유저를 찾을 수 없습니다 !! userId : ${dto.userId}")
+                }
+                val newResumeAttachment = ResumeAttachment(
                     user = user,
                     attachmentUrl = dto.attachmentUrl,
-                    createdAt = dto.createdAt ?: LocalDateTime.now()
+                    createdAt = LocalDateTime.now()
                 )
-            )
+                val savedResumeAttachment = resumeAttachmentRepository.save(newResumeAttachment)
+                syncedResumeAttachments.add(savedResumeAttachment)
+                resumeAttachmentIdsToKeep.add(savedResumeAttachment.resumeAttachmentId)
+            } else {
+                // 기존 데이터 업데이트
+                existingResumeAttachments[dto.resumeAttachmentId]?.let { resumeAttachment ->
+                    resumeAttachment.apply {
+                        attachmentUrl = dto.attachmentUrl
+                    }
+                    val updatedResumeAttachment = resumeAttachmentRepository.save(resumeAttachment)
+                    syncedResumeAttachments.add(updatedResumeAttachment)
+                    resumeAttachmentIdsToKeep.add(updatedResumeAttachment.resumeAttachmentId)
+                }
+            }
         }
+
+        // 요청에 포함되지 않은 데이터 삭제
+        val resumeAttachmentIdsToDelete = existingResumeAttachments.keys - resumeAttachmentIdsToKeep
+        if(resumeAttachmentIdsToDelete.isNotEmpty()) {
+            resumeAttachmentRepository.deleteAllById(resumeAttachmentIdsToDelete)
+        }
+
+        return syncedResumeAttachments
     }
 
     fun updateResumeAttachment(resumeAttachmentDto: List<ResumeAttachmentDto>): List<ResumeAttachment> {

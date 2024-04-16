@@ -21,22 +21,50 @@ class EducationService(
         }
         return educationRepository.findByUser(user)
     }
-    fun addEducations(educationDtos: List<EducationDto>): List<Education> {
-        return educationDtos.map { dto ->
-            val user = userRepository.findById(dto.userId).orElseThrow {
-                IllegalArgumentException("해당 유저를 찾을수 없습니다 !! userId : ${dto.userId}")
-            }
-            educationRepository.save(
-                Education(
-                    educationId = dto.educationId ?: 0,
+
+    fun syncEducations(educationDtos: List<EducationDto>): List<Education> {
+        val existingEducations = educationRepository.findAll().associateBy { it.educationId }
+        val educationIdsToKeep = mutableSetOf<Int>()
+        val syncedEducations = mutableListOf<Education>()
+
+        educationDtos.forEach { dto ->
+            if (dto.educationId == null) {
+                // 새로운 데이터 추가
+                val user = userRepository.findById(dto.userId).orElseThrow {
+                    IllegalArgumentException("해당 유저를 찾을 수 없습니다 !! userId : ${dto.userId}")
+                }
+                val newEducation = Education(
                     user = user,
                     courseName = dto.courseName,
                     institution = dto.institution,
                     completionDate = dto.completionDate,
-                    createdAt = dto.createdAt ?: LocalDateTime.now()
+                    createdAt = LocalDateTime.now()
                 )
-            )
+                val savedEducation = educationRepository.save(newEducation)
+                syncedEducations.add(savedEducation)
+                educationIdsToKeep.add(savedEducation.educationId)
+            } else {
+                // 기존 데이터 업데이트
+                existingEducations[dto.educationId]?.let { education ->
+                    education.apply {
+                        courseName = dto.courseName
+                        institution = dto.institution
+                        completionDate = dto.completionDate
+                    }
+                    val updatedEducation = educationRepository.save(education)
+                    syncedEducations.add(updatedEducation)
+                    educationIdsToKeep.add(updatedEducation.educationId)
+                }
+            }
         }
+
+        // 요청에 포함되지 않은 데이터 삭제
+        val educationIdsToDelete = existingEducations.keys - educationIdsToKeep
+        if(educationIdsToDelete.isNotEmpty()) {
+            educationRepository.deleteAllById(educationIdsToDelete)
+        }
+
+        return syncedEducations
     }
 
     fun updateEducations(educationDtos: List<EducationDto>): List<Education> {

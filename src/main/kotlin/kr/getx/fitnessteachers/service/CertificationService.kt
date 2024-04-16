@@ -22,23 +22,48 @@ class CertificationService(
         }
         return certificationRepository.findByUser(user)
     }
+    fun syncCertifications(certificationDtos: List<CertificationDto>): List<Certification> {
+        val existingCertifications = certificationRepository.findAll().associateBy { it.certificationId }
+        val certificationIdsToKeep = mutableSetOf<Int>()
+        val syncedCertifications = mutableListOf<Certification>()
 
-    fun addCertifications(certificationDtos: List<CertificationDto>): List<Certification> {
-        return certificationDtos.map { dto ->
-            val user = userRepository.findById(dto.userId).orElseThrow {
-                IllegalArgumentException("해당 유저를 찾을수 없습니다 !! userId : ${dto.userId}")
-            }
-            certificationRepository.save(
-                Certification(
-                    certificationId = dto.certificationId ?: 0,
+        certificationDtos.forEach { dto ->
+            if (dto.certificationId == null) {
+                // 새로운 데이터 추가
+                val user = userRepository.findById(dto.userId).orElseThrow {
+                    IllegalArgumentException("해당 유저를 찾을 수 없습니다 !! userId : ${dto.userId}")
+                }
+                val newCertification = Certification(
                     user = user,
                     name = dto.name,
                     issuedBy = dto.issuedBy,
                     issuedDate = dto.issuedDate,
-                    createdAt = dto.createdAt ?: LocalDateTime.now()
+                    createdAt = LocalDateTime.now()
                 )
-            )
+                val savedCertification = certificationRepository.save(newCertification)
+                syncedCertifications.add(savedCertification)
+                certificationIdsToKeep.add(savedCertification.certificationId)
+            } else {
+                // 기존 데이터 업데이트
+                val certification = existingCertifications[dto.certificationId]?.apply {
+                    name = dto.name
+                    issuedBy = dto.issuedBy
+                    issuedDate = dto.issuedDate
+                }
+                if (certification != null) {
+                    syncedCertifications.add(certificationRepository.save(certification))
+                    certificationIdsToKeep.add(certification.certificationId)
+                }
+            }
         }
+
+        // 요청에 포함되지 않은 데이터 삭제
+        val certificationIdsToDelete = existingCertifications.keys - certificationIdsToKeep
+        if (certificationIdsToDelete.isNotEmpty()) {
+            certificationRepository.deleteAllById(certificationIdsToDelete)
+        }
+
+        return syncedCertifications
     }
 
     fun updateCertifications(certificationDtos: List<CertificationDto>): List<Certification> {

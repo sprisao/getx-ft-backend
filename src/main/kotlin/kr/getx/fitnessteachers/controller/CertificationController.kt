@@ -17,9 +17,9 @@ class CertificationController(private val certificationService: CertificationSer
     fun findCertificationsByIds(@PathVariable userId: Int): ResponseEntity<List<CertificationDto>> =
         ResponseEntity.ok(certificationService.findCertificationsByUserIds(userId).map(CertificationDto::fromEntity))
 
-    @PostMapping("/add")
-    fun addCertification(@RequestBody certificationDto: List<CertificationDto>): ResponseEntity<List<CertificationDto>> =
-        ResponseEntity.ok(certificationService.addCertifications(certificationDto).map(CertificationDto::fromEntity))
+    @PostMapping("/sync")
+    fun syncCertifications(@RequestBody certificationDtos: List<CertificationDto>): ResponseEntity<List<CertificationDto>> =
+        ResponseEntity.ok(certificationService.syncCertifications(certificationDtos).map(CertificationDto::fromEntity))
 
     @PutMapping ("/update")
     fun updateCertifications(@RequestBody certificationDtos: List<CertificationDto>): ResponseEntity<List<CertificationDto>> =

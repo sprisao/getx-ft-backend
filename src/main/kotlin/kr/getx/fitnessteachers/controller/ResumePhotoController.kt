@@ -19,9 +19,9 @@ class ResumePhotoController(
     fun findResumePhotosByUserIds(@PathVariable userId: Int): ResponseEntity<List<ResumePhotoDto>> =
         ResponseEntity.ok(resumePhotoService.findResumePhotosByUserIds(userId).map(ResumePhotoDto::fromEntity))
 
-    @PostMapping("/add")
-    fun addResumePhotos(@RequestBody resumePhotoDto: List<ResumePhotoDto>): ResponseEntity<List<ResumePhotoDto>> =
-        ResponseEntity.ok(resumePhotoService.addResumePhotos(resumePhotoDto).map(ResumePhotoDto::fromEntity))
+    @PostMapping("/sync")
+    fun syncResumePhotos(@RequestBody resumePhotoDto: List<ResumePhotoDto>): ResponseEntity<List<ResumePhotoDto>> =
+        ResponseEntity.ok(resumePhotoService.syncResumePhotos(resumePhotoDto).map(ResumePhotoDto::fromEntity))
 
     @PutMapping("/update")
     fun updateResumePhotos(@RequestBody resumePhotoDtos: List<ResumePhotoDto>): ResponseEntity<List<ResumePhotoDto>> =

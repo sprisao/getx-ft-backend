@@ -17,9 +17,9 @@ class EducationController(private val educationService: EducationService) {
     fun findEducationsByIds(@PathVariable userId: Int): ResponseEntity<List<EducationDto>> =
         ResponseEntity.ok(educationService.findEducationsByUserIds(userId).map(EducationDto::fromEntity))
 
-    @PostMapping("/add")
-    fun addEducation(@RequestBody educationDto: List<EducationDto>): ResponseEntity<List<EducationDto>> =
-        ResponseEntity.ok(educationService.addEducations(educationDto).map(EducationDto::fromEntity))
+    @PostMapping("/sync")
+    fun syncEducation(@RequestBody educationDto: List<EducationDto>): ResponseEntity<List<EducationDto>> =
+        ResponseEntity.ok(educationService.syncEducations(educationDto).map(EducationDto::fromEntity))
 
     @PutMapping("/update")
     fun updateEducations(@RequestBody educationDtos: List<EducationDto>): ResponseEntity<List<EducationDto>> =

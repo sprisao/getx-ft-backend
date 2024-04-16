@@ -18,9 +18,9 @@ class ResumeAttachmentController (
     fun findResumeAttachmentByUserIds(@PathVariable userId: Int): ResponseEntity<List<ResumeAttachmentDto>> =
         ResponseEntity.ok(resumeAttachmentService.findResumeAttachmentByUserIds(userId).map(ResumeAttachmentDto::fromEntity))
 
-    @PostMapping("/add")
-    fun addResumeAttachment(@RequestBody resumeAttachmentDto: List<ResumeAttachmentDto>): ResponseEntity<List<ResumeAttachmentDto>> =
-        ResponseEntity.ok(resumeAttachmentService.addResumeAttachment(resumeAttachmentDto).map(ResumeAttachmentDto::fromEntity))
+    @PostMapping("/sync")
+    fun syncResumeAttachment(@RequestBody resumeAttachmentDto: List<ResumeAttachmentDto>): ResponseEntity<List<ResumeAttachmentDto>> =
+        ResponseEntity.ok(resumeAttachmentService.syncResumeAttachment(resumeAttachmentDto).map(ResumeAttachmentDto::fromEntity))
 
     @PutMapping ("/update")
     fun updateResumeAttachment(@RequestBody resumeAttachmentDto: List<ResumeAttachmentDto>): ResponseEntity<List<ResumeAttachmentDto>> =
