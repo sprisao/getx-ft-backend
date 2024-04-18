@@ -22,9 +22,9 @@ class JobPostApplicationController (
 
     // 강사 - > 구직 공고 지원 취소
     // 구직 공고 지원 취소
-    @DeleteMapping("/{jobPostId}/{userId}")
-    fun cancelApplication(@PathVariable jobPostId: Int, @PathVariable userId: Int): ResponseEntity<Void> {
-        jobPostApplicationService.cancelApplication(userId, jobPostId)
+    @DeleteMapping("/{jobPostId}/{resumeId}")
+    fun cancelApplication(@PathVariable jobPostId: Int, @PathVariable resumeId: Int): ResponseEntity<Void> {
+        jobPostApplicationService.cancelApplication(resumeId, jobPostId)
         return ResponseEntity.ok().build<Void>()
     }
 
