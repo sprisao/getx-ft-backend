@@ -8,16 +8,14 @@ import org.springframework.stereotype.Service
 class JobPostApplicationService (
     private val jobPostApplicationRepository: JobPostApplicationRepository,
     private val jobPostService: JobPostService,
-    private val userService: UserService,
     private val resumeService: ResumeService,
     ){
-    fun applyToJobPost(userId: Int, jobPostId: Int): JobPostApplication {
+    fun applyToJobPost(resumeId: Int, jobPostId: Int): JobPostApplication {
         val jobPost = jobPostService.findById(jobPostId)
             ?: throw IllegalArgumentException("해당 구직 공고가 존재하지 않습니다.")
-        val user = userService.findUserById(userId)
-            ?: throw IllegalArgumentException("해당 사용자가 존재하지 않습니다.")
+        val resume = resumeService.findById(resumeId)
 
-        return jobPostApplicationRepository.save(JobPostApplication(jobPost = jobPost, user = user))
+        return jobPostApplicationRepository.save(JobPostApplication(jobPost = jobPost, resume = resume))
     }
 
     fun cancelApplication(userId: Int, jobPostId: Int) {

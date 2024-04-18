@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 data class JobPostApplicationDto(
     val jobPostApplicationId: Int,
     val jobPostId: Int,
-    val userId: Int,
+    val resumeId: Int,
     val createdAt: LocalDateTime
 ) {
     companion object {
@@ -14,7 +14,7 @@ data class JobPostApplicationDto(
             return JobPostApplicationDto(
                 jobPostApplicationId = entity.jobPostApplicationId,
                 jobPostId = entity.jobPost.jobPostId,
-                userId = entity.user.userId,
+                resumeId = entity.resume.resumeId,
                 createdAt = entity.createdAt
             )
         }

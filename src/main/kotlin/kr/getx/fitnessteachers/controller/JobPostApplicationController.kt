@@ -14,9 +14,9 @@ class JobPostApplicationController (
 ) {
     // 강사 -> 구직 공고 지원
     // 구직 공고 지원 등록
-    @PostMapping("/{jobPostId}/{userId}")
-    fun applyToJobPost(@PathVariable jobPostId: Int, @PathVariable userId: Int): ResponseEntity<JobPostApplicationDto> {
-        val application = jobPostApplicationService.applyToJobPost(userId, jobPostId)
+    @PostMapping("/{jobPostId}/{resumeId}")
+    fun applyToJobPost(@PathVariable jobPostId: Int, @PathVariable resumeId: Int): ResponseEntity<JobPostApplicationDto> {
+        val application = jobPostApplicationService.applyToJobPost(resumeId, jobPostId)
         return ResponseEntity.ok(JobPostApplicationDto.fromEntity(application))
     }
 
