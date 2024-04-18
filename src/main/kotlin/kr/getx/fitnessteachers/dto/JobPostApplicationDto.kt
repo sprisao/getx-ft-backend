@@ -7,6 +7,7 @@ data class JobPostApplicationDto(
     val jobPostApplicationId: Int,
     val jobPostId: Int,
     val resumeId: Int,
+    val userId: Int,
     val createdAt: LocalDateTime
 ) {
     companion object {
@@ -15,6 +16,7 @@ data class JobPostApplicationDto(
                 jobPostApplicationId = entity.jobPostApplicationId,
                 jobPostId = entity.jobPost.jobPostId,
                 resumeId = entity.resume.resumeId,
+                userId = entity.resume.user.userId,
                 createdAt = entity.createdAt
             )
         }

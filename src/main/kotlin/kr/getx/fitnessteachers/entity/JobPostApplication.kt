@@ -19,6 +19,10 @@ data class JobPostApplication(
     @JoinColumn(name = "resumeId", referencedColumnName = "resumeId")
     val resume: Resume,
 
+    @ManyToOne
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    val user: User,
+
     @CreationTimestamp
     val createdAt: LocalDateTime = LocalDateTime.now()
 )
