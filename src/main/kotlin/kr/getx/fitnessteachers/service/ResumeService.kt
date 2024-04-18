@@ -27,6 +27,10 @@ class ResumeService(
 
     fun getAllResumes(): List<Resume> = resumeRepository.findAll()
 
+    fun getResumesByUserIds(userIds: List<Int>): List<Resume> {
+        return resumeRepository.findAllByUserUserIdIn(userIds)
+    }
+
     fun findById(resumeId: Int): ResumeDto {
         val resume = resumeRepository.findById(resumeId).orElseThrow { ResumeNotFoundException(resumeId) }
 

@@ -32,12 +32,16 @@ class JobPostApplicationService(
     fun getApplicantCount(jobPostId: Int): Int =
         jobPostApplicationRepository.countByJobPostJobPostId(jobPostId)
 
-    fun getApplicantResumes(jobPostId: Int): List<ResumeDto> =
-        jobPostApplicationRepository.findByJobPostJobPostId(jobPostId).mapNotNull {
-            val userId = it.user.userId
-            val resume = resumeService.getResumeByUserId(userId)
-            resumeService.toDto(resume).copy(createdAt = it.createdAt)
+    fun getApplicantResumes(jobPostId: Int): List<ResumeDto> {
+        val jobPostApplications = jobPostApplicationRepository.findByJobPostJobPostId(jobPostId)
+        val userIds = jobPostApplications.map { it.user.userId }
+        val resumes = resumeService.getResumesByUserIds(userIds)
+        return resumes.map { resume ->
+            val createAt = jobPostApplications.find { it.user.userId == resume.user.userId }!!.createdAt
+            resumeService.toDto(resume).copy(createdAt = createAt)
         }
+    }
+
     fun getAppliedJobPosts(userId: Int): List<JobPostDto> =
         jobPostApplicationRepository.findByUserUserId(userId).map {
             JobPostDto.fromEntity(it.jobPost)
