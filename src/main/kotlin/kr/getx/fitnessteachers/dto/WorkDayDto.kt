@@ -5,7 +5,7 @@ import kr.getx.fitnessteachers.entity.WorkDay
 
 data class WorkDayDto(
     val workDayId: Int = 0,
-    val jobPost: JobPostDto,
+    var jobPostId: Int,
     val day: String,
     val startTime: String,
     val endTime: String
@@ -13,7 +13,7 @@ data class WorkDayDto(
     companion object {
         fun fromEntity(workDay: WorkDay): WorkDayDto = WorkDayDto(
             workDayId = workDay.workDayId,
-            jobPost = workDay.jobPost.let { JobPostDto.fromEntity(it) },
+            jobPostId = workDay.jobPost.jobPostId,
             day = workDay.day,
             startTime = workDay.startTime,
             endTime = workDay.endTime,

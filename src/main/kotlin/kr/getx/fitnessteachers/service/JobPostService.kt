@@ -23,11 +23,13 @@ class JobPostService(
 
     fun findById(id: Int): JobPost? = jobPostRepository.findById(id).orElse(null)
 
-    fun createJobPost(jobPostDto: JobPostDto, center:Center, user: User): JobPost {
+    fun createJobPost(jobPostDto: JobPostDto, center:Center): JobPost {
         val jobPost = jobPostDto.toEntity(center)
         val savedJobPost = jobPostRepository.save(jobPost)
 
-        val workDays = jobPostDto.workDays.map { it.toEntity(savedJobPost) }
+        val workDays = jobPostDto.workDays.map { workDayDto ->
+            workDayDto.jobPostId = savedJobPost.jobPostId
+            workDayDto.toEntity(savedJobPost) }
         savedJobPost.workDays = workDays
 
         return savedJobPost

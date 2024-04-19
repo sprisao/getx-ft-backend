@@ -28,8 +28,7 @@ class JobPostController(
     @PostMapping("/add")
     fun createJobPost(@RequestBody jobPostDto: JobPostDto): ResponseEntity<JobPostDto> {
         val center = centerService.findById(jobPostDto.center.centerId) ?: throw CenterNotFoundException(jobPostDto.center.centerId)
-        val user = userService.findUserById(center.user.userId) ?: throw UserNotFoundException(center.user.userId)
-        val createdJobPost = jobPostService.createJobPost(jobPostDto, center, user)
+        val createdJobPost = jobPostService.createJobPost(jobPostDto, center)
         return ResponseEntity.ok(JobPostDto.fromEntity(createdJobPost))
     }
 
