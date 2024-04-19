@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 @Repository
 interface WorkDayRepository : JpaRepository<WorkDay, Int>{
+
+    fun deleteByJobPostJobPostId(jobPostId: Int)
 }

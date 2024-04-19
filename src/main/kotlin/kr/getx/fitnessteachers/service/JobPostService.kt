@@ -1,14 +1,17 @@
 package kr.getx.fitnessteachers.service
 
+import jakarta.transaction.Transactional
 import kr.getx.fitnessteachers.dto.JobPostDto
 import kr.getx.fitnessteachers.entity.Center
 import kr.getx.fitnessteachers.entity.JobPost
 import kr.getx.fitnessteachers.entity.User
+import kr.getx.fitnessteachers.entity.WorkDay
 import kr.getx.fitnessteachers.repository.JobPostRepository
 import org.springframework.stereotype.Service
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
+import kr.getx.fitnessteachers.repository.WorkDayRepository
 import java.util.Base64
 import kotlin.math.ln
 import kotlin.math.sqrt
@@ -17,8 +20,8 @@ import kotlin.math.sqrt
 class JobPostService(
     private val jobPostRepository: JobPostRepository,
     private val centerService: CenterService,
+    private val workDayService: WorkDayService,
 ) {
-
     fun findAll(): List<JobPost> = jobPostRepository.findAll()
 
     fun findById(id: Int): JobPost? = jobPostRepository.findById(id).orElse(null)
@@ -37,8 +40,11 @@ class JobPostService(
 
     fun deleteById(id: Int) = jobPostRepository.deleteById(id)
 
+    @Transactional
     fun updateJobPost(jobPostId: Int, jobPostDto: JobPostDto, user:User): JobPost {
         val jobPost = findById(jobPostId) ?: throw JobPostNotFoundException(jobPostId)
+
+        workDayService.deleteByJobPostJobPostId(jobPostId)
 
         // DTO의 데이터로 JobPost 엔티티 업데이트
         jobPost.apply {
@@ -46,7 +52,14 @@ class JobPostService(
             isRecruitmentOpen = jobPostDto.isRecruitmentOpen
             jobCategories = jobPostDto.jobCategories
             workLocation = jobPostDto.workLocation
-            workDays = jobPostDto.workDays.map { it.toEntity(this) }
+            workDays = jobPostDto.workDays.map { workDayDto ->
+                WorkDay(
+                    jobPost = this,
+                    day = workDayDto.day,
+                    startTime = workDayDto.startTime,
+                    endTime = workDayDto.endTime
+                )
+            }
             employmentType = jobPostDto.employmentType
             salaryType = jobPostDto.salaryType
             additionalSalary = jobPostDto.additionalSalary
