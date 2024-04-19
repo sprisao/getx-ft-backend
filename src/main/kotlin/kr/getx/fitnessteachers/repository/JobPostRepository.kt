@@ -13,7 +13,6 @@ interface JobPostRepository : JpaRepository<JobPost, Int> {
     fun findByCenterCenterId(centerId: Int): List<JobPost>
 
     @Query("SELECT j FROM JobPost j WHERE " +
-            "(:isRecruitmentOpen IS NULL OR j.isRecruitmentOpen = :isRecruitmentOpen) AND " +
             "(:jobCategories IS NULL OR :jobCategories = '' OR CONCAT(',', j.jobCategories, ',') LIKE CONCAT('%,', REPLACE(:jobCategories, ',', ',%'), ',%')) AND " +
             "(:employmentType IS NULL OR j.employmentType = :employmentType) AND " +
             "(:salaryType IS NULL OR j.salaryType = :salaryType) AND " +
@@ -24,7 +23,6 @@ interface JobPostRepository : JpaRepository<JobPost, Int> {
             "(:startTime IS NULL OR EXISTS (SELECT 1 FROM j.workDays wd WHERE wd.startTime >= :startTime)) AND " +
             "(:endTime IS NULL OR EXISTS (SELECT 1 FROM j.workDays wd WHERE wd.endTime <= :endTime))")
     fun search(
-        @Param("isRecruitmentOpen") isRecruitmentOpen: Boolean?,
         @Param("jobCategories") jobCategories: String?,
         @Param("employmentType") employmentType: String?,
         @Param("salaryType") salaryType: String?,

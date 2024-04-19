@@ -64,7 +64,6 @@ class JobPostController(
 
     @GetMapping("/search")
     fun searchJobPosts(
-        @RequestParam(required = false) isRecruitmentOpen: Boolean?, // 채용 상태
         @RequestParam(required = false) jobCategories: String?, // 직업 카테고리
         @RequestParam(required = false) employmentType: String?, // 정규직, 계약직
         @RequestParam(required = false) salaryType: String?, // 타임, 월급
@@ -78,7 +77,6 @@ class JobPostController(
     ): ResponseEntity<Page<JobPostDto>> {
         val decodedJobCategories = jobCategories?.let { URLDecoder.decode(it, StandardCharsets.UTF_8.name()) }
         val page = jobPostService.searchJobPosts(
-            isRecruitmentOpen,
             decodedJobCategories,
             employmentType,
             salaryType,

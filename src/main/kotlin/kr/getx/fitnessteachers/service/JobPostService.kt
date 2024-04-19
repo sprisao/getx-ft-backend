@@ -68,7 +68,6 @@ class JobPostService(
 
     // 검색 기능 추가
     fun searchJobPosts(
-        isRecruitmentOpen: Boolean?,
         jobCategories: String?,
         employmentType: String?,
         salaryType: String?,
@@ -81,7 +80,6 @@ class JobPostService(
         pageable: Pageable
     ): Page<JobPost> {
         return jobPostRepository.search(
-            isRecruitmentOpen = isRecruitmentOpen,
             jobCategories = jobCategories,
             employmentType = employmentType,
             salaryType = salaryType,
