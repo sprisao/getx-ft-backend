@@ -94,9 +94,6 @@ class ResumeService(
         return updateResume
     }
 
-    fun getResumeByUserId(userId: Int): Resume =
-        resumeRepository.findByUserUserId(userId) ?: throw ResumeNotFoundException(userId)
-
     fun deleteResume(resumeId: Int) {
         val resume = resumeRepository.findById(resumeId).orElseThrow { ResumeNotFoundException(resumeId) }
         resumeRepository.delete(resume)
