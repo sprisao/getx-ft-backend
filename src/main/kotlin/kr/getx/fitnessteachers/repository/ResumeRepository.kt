@@ -12,5 +12,5 @@ interface ResumeRepository : JpaRepository<Resume, Int> {
 
     fun findByResumeId(resumeId: Int): Resume?
 
-    fun findAllByUserUserIdIn(userIds: List<Int>): List<Resume>
+    fun findAllByResumeIdIn(resumeIds: List<Int>): List<Resume>
 }

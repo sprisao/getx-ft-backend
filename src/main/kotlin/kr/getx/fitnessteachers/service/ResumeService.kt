@@ -27,8 +27,8 @@ class ResumeService(
 
     fun getAllResumes(): List<Resume> = resumeRepository.findAll()
 
-    fun getResumesByUserIds(userIds: List<Int>): List<Resume> {
-        return resumeRepository.findAllByUserUserIdIn(userIds)
+    fun getResumesByResumeIds(resumeIds: List<Int>): List<Resume> {
+        return resumeRepository.findAllByResumeIdIn(resumeIds)
     }
 
     fun findById(resumeId: Int): ResumeDto {

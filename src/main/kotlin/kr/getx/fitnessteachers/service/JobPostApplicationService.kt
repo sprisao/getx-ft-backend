@@ -34,8 +34,8 @@ class JobPostApplicationService(
 
     fun getApplicantResumes(jobPostId: Int): List<ResumeDto> {
         val jobPostApplications = jobPostApplicationRepository.findByJobPostJobPostId(jobPostId)
-        val userIds = jobPostApplications.map { it.user.userId }
-        val resumes = resumeService.getResumesByUserIds(userIds)
+        val resumeIds = jobPostApplications.map { it.resume.resumeId }
+        val resumes = resumeService.getResumesByResumeIds(resumeIds)
         return resumes.map { resume ->
             val createAt = jobPostApplications.find { it.user.userId == resume.user.userId }!!.createdAt
             resumeService.toDto(resume).copy(createdAt = createAt)

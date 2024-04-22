@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
-import kr.getx.fitnessteachers.repository.WorkDayRepository
 import java.util.Base64
 import kotlin.math.ln
 import kotlin.math.sqrt
