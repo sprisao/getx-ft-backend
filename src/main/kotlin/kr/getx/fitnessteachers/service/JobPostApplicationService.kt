@@ -23,8 +23,8 @@ class JobPostApplicationService(
         return jobPostApplicationRepository.save(JobPostApplication(jobPost = jobPost, resume = resume, user = user))
     }
 
-    fun cancelApplication(resumeId: Int, jobPostId: Int) {
-        val application = jobPostApplicationRepository.findByResumeResumeIdAndJobPostJobPostId(resumeId, jobPostId)
+    fun cancelApplication(userId: Int, jobPostId: Int) {
+        val application = jobPostApplicationRepository.findByUserUserIdAndJobPostJobPostId(userId, jobPostId)
             ?: throw IllegalArgumentException("해당 사용자가 해당 구직 공고에 지원한 내역이 존재하지 않습니다.")
         jobPostApplicationRepository.delete(application)
     }
