@@ -29,11 +29,12 @@ class CenterService(
             sigungu = centerDto.sigungu ?: sigungu
             sigunguEnglish = centerDto.sigunguEnglish ?: sigunguEnglish
             description = centerDto.description ?: description
-        }.let (centerRepository::save)
+        }.let(centerRepository::save)
 
     fun deleteCenter(centerId: Int) {
-        val center = centerRepository.findById(centerId) ?: throw CenterNotFoundException(centerId)
-        centerRepository.delete(center.get())
+        val center = centerRepository.findByCenterIdAndIsDeletedFalse(centerId).orElseThrow { CenterNotFoundException(centerId) }
+        center.isDeleted = true
+        centerRepository.save(center)
     }
 
     fun getCenterByUserId(userId: Int): List<Center> = centerRepository.findByUser_UserId(userId)

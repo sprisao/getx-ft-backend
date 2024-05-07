@@ -15,6 +15,7 @@ data class CenterDto(
         var sigungu: String? = null,
         var sigunguEnglish: String? = null,
         var description: String? = null,
+        var isDeleted: Boolean = false,
         var userId: Int
 ) {
         companion object {
@@ -29,6 +30,7 @@ data class CenterDto(
                                 sigungu = center.sigungu,
                                 sigunguEnglish = center.sigunguEnglish,
                                 description = center.description,
+                                isDeleted = center.isDeleted,
                                 userId = center.user.userId
                         )
                 }
@@ -44,6 +46,7 @@ data class CenterDto(
                         sigungu = this.sigungu ?: "",
                         sigunguEnglish = this.sigunguEnglish ?: "",
                         description = this.description ?: "",
+                        isDeleted = this.isDeleted,
                         user = user
                 )
         }
