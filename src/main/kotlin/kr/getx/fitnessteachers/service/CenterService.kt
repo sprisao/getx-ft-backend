@@ -32,7 +32,7 @@ class CenterService(
         }.let(centerRepository::save)
 
     fun deleteCenter(centerId: Int) {
-        val center = centerRepository.findByCenterIdAndIsDeletedFalse(centerId).orElseThrow { CenterNotFoundException(centerId) }
+        val center = centerRepository.findByCenterIdAndDeletedFalse(centerId).orElseThrow { CenterNotFoundException(centerId) }
         center.isDeleted = true
         centerRepository.save(center)
     }
