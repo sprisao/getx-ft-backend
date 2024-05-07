@@ -77,7 +77,8 @@ class ResumeService(
     }
 
     fun updateResumeWithDetails(resumeDto: ResumeDto): Resume {
-        val resume = resumeRepository.findById(resumeDto.resumeId).orElseThrow { ResumeNotFoundException(resumeDto.resumeId) }
+        val resume =
+            resumeRepository.findById(resumeDto.resumeId).orElseThrow { ResumeNotFoundException(resumeDto.resumeId) }
 
         resume.description = resumeDto.description
         resume.photos = StringConversionUtils.convertListToString(resumeDto.photos)
@@ -89,21 +90,24 @@ class ResumeService(
         resume.certificationIds = resumeDto.certificationIds
         resume.resumePhotoIds = resumeDto.resumePhotoIds
         resume.resumeAttachmentIds = resumeDto.resumeAttachmentIds
+        resume.isDeleted = resumeDto.isDeleted
 
         val updateResume = resumeRepository.save(resume)
         return updateResume
     }
 
     fun deleteResume(resumeId: Int) {
-        val resume = resumeRepository.findById(resumeId).orElseThrow { ResumeNotFoundException(resumeId) }
-        resumeRepository.delete(resume)
+        val resume =
+            resumeRepository.findByResumeIdAndIsDeletedFalse(resumeId).orElseThrow { ResumeNotFoundException(resumeId) }
+        resume.isDeleted = true
+        resumeRepository.save(resume)
     }
 
     fun toDto(resume: Resume): ResumeDto {
         val experiences = experienceService.findExperiencesByIds(resume.experienceIds ?: listOf())
             .map { ExperienceDto.fromEntity(it) }
         val educations = educationService.findEducationsByIds(resume.educationIds ?: listOf())
-              .map { EducationDto.fromEntity(it) }
+            .map { EducationDto.fromEntity(it) }
         val certifications = certificationService.findCertificationsByIds(resume.certificationIds ?: listOf())
             .map { CertificationDto.fromEntity(it) }
         val resumePhotos = resumePhotoService.findResumePhotosByIds(resume.resumePhotoIds ?: listOf())

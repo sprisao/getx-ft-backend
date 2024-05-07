@@ -36,6 +36,6 @@ class ResumeController(
     @DeleteMapping("/delete/{resumeId}")
     fun deleteResume(@PathVariable resumeId: Int): ResponseEntity<String> {
         resumeService.deleteResume(resumeId)
-        return ResponseEntity.ok("이력서를 성공적으로 삭제하였습니다. 해당 resume ID : $resumeId")
+        return ResponseEntity.ok("이력서를 삭제하였습니다. 해당 resume ID : $resumeId")
     }
 }

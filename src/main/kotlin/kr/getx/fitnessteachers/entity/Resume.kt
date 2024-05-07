@@ -58,6 +58,9 @@ data class Resume(
     @Column(name = "resumeAttachment_id")
     var resumeAttachmentIds: List<Int>? = null,
 
+    // isDeleted , SoftDelete
+    var isDeleted: Boolean = false,
+
     @CreationTimestamp
     val createdAt: LocalDateTime
 )
