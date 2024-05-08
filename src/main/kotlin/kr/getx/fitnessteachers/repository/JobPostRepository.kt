@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
+import java.util.*
 
 @Repository
 interface JobPostRepository : JpaRepository<JobPost, Int> {
@@ -34,4 +35,7 @@ interface JobPostRepository : JpaRepository<JobPost, Int> {
         @Param("endTime") endTime: String?,
         pageable: Pageable
     ): Page<JobPost>
+
+    // SoftDeleted 처리
+    fun findByJobPostIdAndDeletedFalse(jobPostId: Int): Optional<JobPost>
 }

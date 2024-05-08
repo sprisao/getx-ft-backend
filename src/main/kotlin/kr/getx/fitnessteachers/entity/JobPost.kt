@@ -69,6 +69,9 @@ data class JobPost(
     // 근무 시작일
     var workStartDate: LocalDate?,
 
+    // isDeleted , SoftDelete
+    var isDeleted: Boolean = false,
+
     @CreationTimestamp
     val postedDate: LocalDateTime = LocalDateTime.now()
 )

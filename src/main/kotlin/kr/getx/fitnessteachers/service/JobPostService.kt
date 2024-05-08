@@ -25,22 +25,29 @@ class JobPostService(
 
     fun findById(id: Int): JobPost? = jobPostRepository.findById(id).orElse(null)
 
-    fun createJobPost(jobPostDto: JobPostDto, center:Center): JobPost {
+    fun createJobPost(jobPostDto: JobPostDto, center: Center): JobPost {
         val jobPost = jobPostDto.toEntity(center)
         val savedJobPost = jobPostRepository.save(jobPost)
 
         val workDays = jobPostDto.workDays.map { workDayDto ->
             workDayDto.jobPostId = savedJobPost.jobPostId
-            workDayDto.toEntity(savedJobPost) }
+            workDayDto.toEntity(savedJobPost)
+        }
         savedJobPost.workDays = workDays
 
         return savedJobPost
     }
 
-    fun deleteById(id: Int) = jobPostRepository.deleteById(id)
+    fun deleteById(jobPostId: Int) {
+        val jobPost = jobPostRepository.findByJobPostIdAndDeletedFalse(jobPostId).orElseThrow {
+            JobPostNotFoundException(jobPostId)
+        }
+        jobPost.isDeleted = true
+        jobPostRepository.save(jobPost)
+    }
 
     @Transactional
-    fun updateJobPost(jobPostId: Int, jobPostDto: JobPostDto, user:User): JobPost {
+    fun updateJobPost(jobPostId: Int, jobPostDto: JobPostDto, user: User): JobPost {
         val jobPost = findById(jobPostId) ?: throw JobPostNotFoundException(jobPostId)
 
         workDayService.deleteByJobPostJobPostId(jobPostId)
@@ -78,7 +85,8 @@ class JobPostService(
     }
 
     fun findJobPostsByUserId(userId: Int): List<JobPost> =
-        centerService.getCenterByUserId(userId).flatMap { jobPostRepository.findByCenterCenterId(centerId = it.centerId) }
+        centerService.getCenterByUserId(userId)
+            .flatMap { jobPostRepository.findByCenterCenterId(centerId = it.centerId) }
 
     // 검색 기능 추가
     fun searchJobPosts(

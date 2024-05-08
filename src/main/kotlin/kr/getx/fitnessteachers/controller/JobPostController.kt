@@ -46,9 +46,9 @@ class JobPostController(
     }
 
     @DeleteMapping("/delete/{jobPostId}")
-    fun deleteJobPost(@PathVariable jobPostId: Int): ResponseEntity<Void> {
+    fun deleteJobPost(@PathVariable jobPostId: Int): ResponseEntity<String> {
         jobPostService.deleteById(jobPostId)
-        return ResponseEntity.ok().build()
+        return ResponseEntity.ok("구인게시글을 삭제하였습니다. 해당 jobPost ID : $jobPostId")
     }
 
     @GetMapping("/{jobPostId}")
