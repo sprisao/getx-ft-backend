@@ -14,5 +14,5 @@ interface ResumeRepository : JpaRepository<Resume, Int> {
     fun findAllByResumeIdIn(resumeIds: List<Int>): List<Resume>
 
     // SoftDelete
-    fun findByResumeIdAndDeletedFalse(resumeId: Int): Optional<Resume>
+    fun findByResumeIdAndIsDeletedFalse(resumeId: Int): Optional<Resume>
 }

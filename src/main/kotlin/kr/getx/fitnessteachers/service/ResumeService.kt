@@ -98,7 +98,7 @@ class ResumeService(
 
     fun deleteResume(resumeId: Int) {
         val resume =
-            resumeRepository.findByResumeIdAndDeletedFalse(resumeId).orElseThrow { ResumeNotFoundException(resumeId) }
+            resumeRepository.findByResumeIdAndIsDeletedFalse(resumeId).orElseThrow { ResumeNotFoundException(resumeId) }
         resume.isDeleted = true
         resumeRepository.save(resume)
     }

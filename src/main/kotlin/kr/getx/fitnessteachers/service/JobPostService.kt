@@ -39,7 +39,7 @@ class JobPostService(
     }
 
     fun deleteById(jobPostId: Int) {
-        val jobPost = jobPostRepository.findByJobPostIdAndDeletedFalse(jobPostId).orElseThrow {
+        val jobPost = jobPostRepository.findByJobPostIdAndIsDeletedFalse(jobPostId).orElseThrow {
             JobPostNotFoundException(jobPostId)
         }
         jobPost.isDeleted = true

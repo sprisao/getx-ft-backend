@@ -37,5 +37,5 @@ interface JobPostRepository : JpaRepository<JobPost, Int> {
     ): Page<JobPost>
 
     // SoftDeleted 처리
-    fun findByJobPostIdAndDeletedFalse(jobPostId: Int): Optional<JobPost>
+    fun findByJobPostIdAndIsDeletedFalse(jobPostId: Int): Optional<JobPost>
 }

@@ -10,5 +10,5 @@ interface CenterRepository : JpaRepository<Center, Int> {
     fun findByUser_UserId(userId: Int): List<Center>
 
     // SoftDelete
-    fun findByCenterIdAndDeletedFalse(centerId: Int): Optional<Center>
+    fun findByCenterIdAndIsDeletedFalse(centerId: Int): Optional<Center>
 }
