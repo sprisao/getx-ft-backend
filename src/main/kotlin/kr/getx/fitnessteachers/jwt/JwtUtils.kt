@@ -18,7 +18,13 @@ class JwtUtils {
     fun validateToken(authToken: String): Boolean {
         try {
             Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor("s3BTt6uIdU6/99xZQYfOQoh4cRrJyZIXSbrmq+4nDog".toByteArray(StandardCharset.UTF_8)))
+                .setSigningKey(
+                    Keys.hmacShaKeyFor(
+                        "s3BTt6uIdU6/99xZQYfOQoh4cRrJyZIXSbrmq+4nDog".toByteArray(
+                            StandardCharset.UTF_8
+                        )
+                    )
+                )
                 .build()
                 .parseClaimsJws(authToken)
             return true
@@ -59,7 +65,22 @@ class JwtUtils {
         val socialType = claims["socialType"] as String
 
         return if (email != null && name != null) {
-            UserDto(0, name, "", email, socialType, false, "", false, TeacherType.FITNESS, false, false, false)
+            UserDto(
+                0,
+                name,
+                "",
+                email,
+                socialType,
+                false,
+                "",
+                false,
+                TeacherType.FITNESS,
+                false,
+                false,
+                false,
+                false,
+                null
+            )
         } else {
             throw Exception("Invalid Token")
         }
