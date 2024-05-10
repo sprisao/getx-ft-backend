@@ -2,6 +2,7 @@ package kr.getx.fitnessteachers.dto
 
 import kr.getx.fitnessteachers.entity.TeacherType
 import kr.getx.fitnessteachers.entity.User
+import java.time.LocalDateTime
 
 data class UserDto(
     val userId: Int,
@@ -17,6 +18,7 @@ data class UserDto(
     var resumeExists: Boolean = false,
     var centerExists: Boolean = false,
     var isDeleted: Boolean,
+    var isDeletedAt: LocalDateTime? = null,
 ) {
     companion object {
         fun fromEntity(user: User): UserDto {
@@ -33,7 +35,8 @@ data class UserDto(
                 resumeExists = user.resumeExists,
                 centerExists = user.centerExists,
                 userTypeStatus = user.userTypeStatus,
-                isDeleted = user.isDeleted
+                isDeleted = user.isDeleted,
+                isDeletedAt = user.isDeletedAt
             )
         }
     }

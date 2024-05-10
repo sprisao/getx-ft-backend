@@ -8,6 +8,7 @@ import kr.getx.fitnessteachers.exceptions.UserLoginFailedException
 import kr.getx.fitnessteachers.exceptions.UserNotFoundExceptionByEmail
 import kr.getx.fitnessteachers.repository.UserRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class UserService(
@@ -24,6 +25,7 @@ class UserService(
         val user =
             userRepository.findByEmailAndIsDeletedFalse(email).orElseThrow() { UserNotFoundExceptionByEmail(email) }
         user.isDeleted = true
+        user.isDeletedAt = LocalDateTime.now()
         userRepository.save(user)
     }
 
