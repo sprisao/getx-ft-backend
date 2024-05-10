@@ -7,6 +7,7 @@ import kr.getx.fitnessteachers.exceptions.CenterOwnershipException
 import kr.getx.fitnessteachers.repository.CenterRepository
 import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class CenterService(
@@ -34,6 +35,7 @@ class CenterService(
     fun deleteCenter(centerId: Int) {
         val center = centerRepository.findByCenterIdAndIsDeletedFalse(centerId).orElseThrow { CenterNotFoundException(centerId) }
         center.isDeleted = true
+        center.isDeletedAt = LocalDateTime.now()
         centerRepository.save(center)
     }
 

@@ -3,6 +3,7 @@ package kr.getx.fitnessteachers.dto
 import kr.getx.fitnessteachers.entity.Center
 import kr.getx.fitnessteachers.entity.User
 import kr.getx.fitnessteachers.utils.StringConversionUtils
+import java.time.LocalDateTime
 
 
 data class CenterDto(
@@ -16,6 +17,7 @@ data class CenterDto(
         var sigunguEnglish: String? = null,
         var description: String? = null,
         var isDeleted: Boolean = false,
+        var isDeletedAt: LocalDateTime?,
         var userId: Int
 ) {
         companion object {
@@ -31,6 +33,7 @@ data class CenterDto(
                                 sigunguEnglish = center.sigunguEnglish,
                                 description = center.description,
                                 isDeleted = center.isDeleted,
+                                isDeletedAt = center.isDeletedAt,
                                 userId = center.user.userId
                         )
                 }
@@ -47,6 +50,7 @@ data class CenterDto(
                         sigunguEnglish = this.sigunguEnglish ?: "",
                         description = this.description ?: "",
                         isDeleted = this.isDeleted,
+                        isDeletedAt = this.isDeletedAt,
                         user = user
                 )
         }
