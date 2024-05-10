@@ -40,6 +40,8 @@ data class User(
 
     var userTypeStatus: Boolean,
 
+    var isDeleted: Boolean = false,
+
     @CreationTimestamp
     val createdAt: LocalDateTime = LocalDateTime.now()
 )

@@ -15,7 +15,8 @@ data class UserDto(
     var teacherType: TeacherType,
     var userTypeStatus: Boolean = false,
     var resumeExists: Boolean = false,
-    var centerExists: Boolean = false
+    var centerExists: Boolean = false,
+    var isDeleted: Boolean,
 ) {
     companion object {
         fun fromEntity(user: User): UserDto {
@@ -31,7 +32,8 @@ data class UserDto(
                 teacherType = user.teacherType,
                 resumeExists = user.resumeExists,
                 centerExists = user.centerExists,
-                userTypeStatus = user.userTypeStatus
+                userTypeStatus = user.userTypeStatus,
+                isDeleted = user.isDeleted
             )
         }
     }
