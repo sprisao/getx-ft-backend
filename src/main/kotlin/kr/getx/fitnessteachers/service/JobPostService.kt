@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import kr.getx.fitnessteachers.exceptions.JobPostNotFoundException
+import java.time.LocalDateTime
 import java.util.Base64
 import kotlin.math.ln
 import kotlin.math.sqrt
@@ -43,6 +44,7 @@ class JobPostService(
             JobPostNotFoundException(jobPostId)
         }
         jobPost.isDeleted = true
+        jobPost.isDeletedAt = LocalDateTime.now()
         jobPostRepository.save(jobPost)
     }
 

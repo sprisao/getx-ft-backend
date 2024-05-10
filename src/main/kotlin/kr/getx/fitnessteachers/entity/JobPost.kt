@@ -72,6 +72,8 @@ data class JobPost(
     // isDeleted , SoftDelete
     var isDeleted: Boolean = false,
 
+    var isDeletedAt: LocalDateTime? = null,
+
     @CreationTimestamp
     val postedDate: LocalDateTime = LocalDateTime.now()
 )
