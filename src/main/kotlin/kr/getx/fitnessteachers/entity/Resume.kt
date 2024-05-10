@@ -61,6 +61,8 @@ data class Resume(
     // isDeleted , SoftDelete
     var isDeleted: Boolean = false,
 
+    var isDeletedAt: LocalDateTime? = null,
+
     @CreationTimestamp
     val createdAt: LocalDateTime
 )

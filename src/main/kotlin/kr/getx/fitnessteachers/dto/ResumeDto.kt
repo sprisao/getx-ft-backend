@@ -23,6 +23,7 @@ data class ResumeDto(
         val resumePhotos : List<ResumePhotoDto> = listOf(),
         val resumeAttachments : List<ResumeAttachmentDto> = listOf(),
         val isDeleted: Boolean,
+        val isDeletedAt: LocalDateTime?,
         val createdAt : LocalDateTime?
 ) {
         fun toEntity(user: User): Resume {
@@ -40,6 +41,7 @@ data class ResumeDto(
                         resumePhotoIds = this.resumePhotoIds,
                         resumeAttachmentIds = this.resumeAttachmentIds,
                         isDeleted = this.isDeleted,
+                        isDeletedAt = this.isDeletedAt,
                         createdAt = this.createdAt ?: LocalDateTime.now()
                 )
         }
@@ -72,6 +74,7 @@ data class ResumeDto(
                                 resumePhotos = resumePhotos,
                                 resumeAttachments = resumeAttachments,
                                 isDeleted = resume.isDeleted,
+                                isDeletedAt = resume.isDeletedAt,
                                 createdAt = resume.createdAt
                         )
                 }

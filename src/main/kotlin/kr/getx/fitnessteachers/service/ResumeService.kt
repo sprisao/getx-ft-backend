@@ -7,6 +7,7 @@ import kr.getx.fitnessteachers.utils.StringConversionUtils
 import org.springframework.stereotype.Service
 import kr.getx.fitnessteachers.exceptions.ResumeNotFoundException
 import kr.getx.fitnessteachers.repository.*
+import java.time.LocalDateTime
 
 @Service
 @Transactional
@@ -100,6 +101,7 @@ class ResumeService(
         val resume =
             resumeRepository.findByResumeIdAndIsDeletedFalse(resumeId).orElseThrow { ResumeNotFoundException(resumeId) }
         resume.isDeleted = true
+        resume.isDeletedAt = LocalDateTime.now()
         resumeRepository.save(resume)
     }
 
