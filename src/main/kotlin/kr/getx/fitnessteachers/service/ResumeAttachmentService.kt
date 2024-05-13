@@ -76,7 +76,12 @@ class ResumeAttachmentService(
     }
 
     fun deleteResumeAttachment(resumeAttachmentId: List<Int>) {
-        resumeAttachmentRepository.deleteAllById(resumeAttachmentId)
+        val resumeAttachments = resumeAttachmentRepository.findAllByResumeAttachmentIdAndIsDeletedFalse(resumeAttachmentId).orElseThrow()
+        resumeAttachments.forEach {
+            it.isDeleted = true
+            it.isDeletedAt = LocalDateTime.now()
+        }
+        resumeAttachmentRepository.saveAll(resumeAttachments)
     }
 
     fun findResumeAttachmentById(resumeAttachmentIds: List<Int>): List<ResumeAttachment> =

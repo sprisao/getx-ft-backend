@@ -7,7 +7,9 @@ data class ResumeAttachmentDto(
     val resumeAttachmentId: Int? = 0,
     val userId: Int,
     val attachmentUrl: String,
-    val createdAt: LocalDateTime? = null
+    val createdAt: LocalDateTime? = null,
+    val isDeleted: Boolean = false,
+    val isDeletedAt: LocalDateTime? = null
 )
 {
     companion object {
@@ -15,7 +17,9 @@ data class ResumeAttachmentDto(
             resumeAttachmentId = resumeAttachment.resumeAttachmentId,
             userId = resumeAttachment.user.userId,
             attachmentUrl = resumeAttachment.attachmentUrl,
-            createdAt = resumeAttachment.createdAt
+            createdAt = resumeAttachment.createdAt,
+            isDeleted = resumeAttachment.isDeleted,
+            isDeletedAt = resumeAttachment.isDeletedAt
         )
     }
 }

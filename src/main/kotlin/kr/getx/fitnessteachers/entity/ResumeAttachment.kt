@@ -17,6 +17,10 @@ data class ResumeAttachment(
 
     var attachmentUrl: String,
 
+    var isDeleted: Boolean = false,
+
+    var isDeletedAt: LocalDateTime? = null,
+
     @CreationTimestamp
     val createdAt: LocalDateTime = LocalDateTime.now()
 )
