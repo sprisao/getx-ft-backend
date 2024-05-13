@@ -81,7 +81,12 @@ class ExperienceService(
     }
 
     fun deleteExperiences(experienceIds: List<Int>) {
-        experienceRepository.deleteAllById(experienceIds)
+        val experiences = experienceRepository.findAllByExperienceIdAndIsDeletedFalse(experienceIds).orElseThrow()
+        experiences.forEach {
+            it.isDeleted = true
+            it.isDeletedAt = LocalDateTime.now()
+        }
+        experienceRepository.saveAll(experiences)
     }
 
     fun findExperiencesByIds(experienceIds: List<Int>): List<Experience> = experienceRepository.findByExperienceIdIn(experienceIds)

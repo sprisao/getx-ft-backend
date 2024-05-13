@@ -22,6 +22,10 @@ data class Experience(
 
     var endDate: LocalDate,
 
+    var isDeleted: Boolean = false,
+
+    var isDeletedAt: LocalDateTime? = null,
+
     @CreationTimestamp
     val createdAt: LocalDateTime = LocalDateTime.now()
 )

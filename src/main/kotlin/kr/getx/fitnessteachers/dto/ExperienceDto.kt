@@ -10,7 +10,9 @@ data class ExperienceDto(
     val description: String,
     val startDate: LocalDate,
     val endDate: LocalDate,
-    val createdAt: LocalDateTime? = null
+    val createdAt: LocalDateTime? = null,
+    val isDeleted: Boolean = false,
+    val isDeletedAt: LocalDateTime? = null
 )
 {
     companion object {
@@ -20,7 +22,9 @@ data class ExperienceDto(
             description = experience.description,
             startDate = experience.startDate,
             endDate = experience.endDate,
-            createdAt = experience.createdAt
+            createdAt = experience.createdAt,
+            isDeleted = experience.isDeleted,
+            isDeletedAt = experience.isDeletedAt
         )
     }
 }
