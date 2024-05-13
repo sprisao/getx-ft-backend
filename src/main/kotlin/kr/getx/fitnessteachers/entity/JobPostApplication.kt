@@ -23,6 +23,10 @@ data class JobPostApplication(
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     val user: User,
 
+    var isDeleted: Boolean = false,
+
+    var isDeletedAt: LocalDateTime? = null,
+
     @CreationTimestamp
     val createdAt: LocalDateTime = LocalDateTime.now()
 )

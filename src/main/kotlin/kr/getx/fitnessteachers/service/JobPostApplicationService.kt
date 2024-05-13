@@ -5,6 +5,8 @@ import kr.getx.fitnessteachers.entity.JobPostApplication
 import kr.getx.fitnessteachers.repository.JobPostApplicationRepository
 import kr.getx.fitnessteachers.repository.ResumeRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
+
 @Service
 class JobPostApplicationService(
     private val jobPostApplicationRepository: JobPostApplicationRepository,
@@ -24,9 +26,10 @@ class JobPostApplicationService(
     }
 
     fun cancelApplication(userId: Int, jobPostId: Int) {
-        val application = jobPostApplicationRepository.findByUserUserIdAndJobPostJobPostId(userId, jobPostId)
-            ?: throw IllegalArgumentException("해당 사용자가 해당 구직 공고에 지원한 내역이 존재하지 않습니다.")
-        jobPostApplicationRepository.delete(application)
+        val jobPostApplication = jobPostApplicationRepository.findByUserUserIdAndJobPostJobPostIdAndIsDeletedFalse(userId, jobPostId).orElseThrow()
+        jobPostApplication.isDeleted = true
+        jobPostApplication.isDeletedAt = LocalDateTime.now()
+        jobPostApplicationRepository.save(jobPostApplication)
     }
 
     fun getApplicantCount(jobPostId: Int): Int =
