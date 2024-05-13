@@ -81,7 +81,12 @@ class CertificationService(
     }
 
     fun deleteCertifications(certificationIds: List<Int>) {
-        certificationRepository.deleteAllById(certificationIds)
+        val certifications = certificationRepository.findAllByCertificationIdAndIsDeletedFalse(certificationIds).orElseThrow()
+        certifications.forEach {
+            it.isDeleted = true
+            it.isDeletedAt = LocalDateTime.now()
+        }
+        certificationRepository.saveAll(certifications)
     }
 
     fun findCertificationsByIds(certificationIds: List<Int>): List<Certification> = certificationRepository.findByCertificationIdIn(certificationIds)

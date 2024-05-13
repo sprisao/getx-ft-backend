@@ -22,6 +22,10 @@ data class Certification(
 
     var issuedDate: LocalDate,
 
+    var isDeleted: Boolean = false,
+
+    var isDeletedAt: LocalDateTime? = null,
+
     @CreationTimestamp
     val createdAt: LocalDateTime = LocalDateTime.now()
 )

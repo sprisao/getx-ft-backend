@@ -11,7 +11,9 @@ data class CertificationDto(
     val name: String,
     val issuedBy: String,
     val issuedDate: LocalDate,
-    val createdAt: LocalDateTime? = null
+    val createdAt: LocalDateTime? = null,
+    val isDeleted: Boolean = false,
+    val isDeletedAt: LocalDateTime? = null
 )
 {
     companion object {
@@ -21,7 +23,9 @@ data class CertificationDto(
             name = certification.name,
             issuedBy = certification.issuedBy,
             issuedDate = certification.issuedDate,
-            createdAt = certification.createdAt
+            createdAt = certification.createdAt,
+            isDeleted = certification.isDeleted,
+            isDeletedAt = certification.isDeletedAt
         )
     }
 }
