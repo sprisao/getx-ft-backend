@@ -60,7 +60,7 @@ class EducationService(
 
         // 요청에 포함되지 않은 데이터 삭제
         val educationIdsToDelete = existingEducations.keys - educationIdsToKeep
-        if(educationIdsToDelete.isNotEmpty()) {
+        if (educationIdsToDelete.isNotEmpty()) {
             educationRepository.deleteAllById(educationIdsToDelete)
         }
 
@@ -82,9 +82,15 @@ class EducationService(
     }
 
     fun deleteEducations(educationIds: List<Int>) {
-        educationRepository.deleteAllById(educationIds)
+        val educations = educationRepository.findByAllEducationIdAndisDeletedFalse(educationIds).orElseThrow()
+        educations.forEach {
+            it.isDeleted = true
+            it.isDeletedAt = LocalDateTime.now()
+        }
+        educationRepository.saveAll(educations)
     }
 
-    fun findEducationsByIds(educationIds: List<Int>): List<Education> = educationRepository.findByEducationIdIn(educationIds)
+    fun findEducationsByIds(educationIds: List<Int>): List<Education> =
+        educationRepository.findByEducationIdIn(educationIds)
 }
 

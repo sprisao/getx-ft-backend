@@ -22,6 +22,10 @@ data class Education(
 
     var completionDate: LocalDate,
 
+    var isDeleted: Boolean = false,
+
+    var isDeletedAt: LocalDateTime? = null,
+
     @CreationTimestamp
     val createdAt: LocalDateTime = LocalDateTime.now()
 )

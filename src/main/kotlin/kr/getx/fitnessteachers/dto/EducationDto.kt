@@ -10,7 +10,9 @@ data class EducationDto(
     val courseName: String,
     val institution: String,
     val completionDate: LocalDate,
-    val createdAt: LocalDateTime? = null
+    val createdAt: LocalDateTime? = null,
+    val isDeleted: Boolean = false,
+    val isDeletedAt: LocalDateTime? = null
 )
 {
     companion object {
@@ -20,7 +22,9 @@ data class EducationDto(
             courseName = education.courseName,
             institution = education.institution,
             completionDate = education.completionDate,
-            createdAt = education.createdAt
+            createdAt = education.createdAt,
+            isDeleted = education.isDeleted,
+            isDeletedAt = education.isDeletedAt
         )
     }
 }
