@@ -7,7 +7,9 @@ data class ResumePhotoDto(
     val resumePhotoId: Int? = 0,
     val userId: Int,
     val photoUrl: String,
-    val createdAt: LocalDateTime? = null
+    val createdAt: LocalDateTime? = null,
+    val isDeleted: Boolean,
+    val isDeletedAt: LocalDateTime?
 )
 {
     companion object {
@@ -15,7 +17,9 @@ data class ResumePhotoDto(
             resumePhotoId = resumePhoto.resumePhotoId,
             userId = resumePhoto.user.userId,
             photoUrl = resumePhoto.photoUrl,
-            createdAt = resumePhoto.createdAt
+            createdAt = resumePhoto.createdAt,
+            isDeleted = resumePhoto.isDeleted,
+            isDeletedAt = resumePhoto.isDeletedAt
         )
     }
 }

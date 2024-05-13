@@ -74,7 +74,12 @@ class ResumePhotoService(
     }
 
     fun deleteResumePhotos(resumePhotoIds: List<Int>) {
-        resumePhotoRepsoitory.deleteAllById(resumePhotoIds)
+        val resumePhotos = resumePhotoRepsoitory.findAllByResumePhotoIdAndIsDeletedFalse(resumePhotoIds).orElseThrow()
+        resumePhotos.forEach {
+            it.isDeleted = true
+            it.isDeletedAt = LocalDateTime.now()
+        }
+        resumePhotoRepsoitory.saveAll(resumePhotos)
     }
 
     fun findResumePhotosByIds(resumePhotoIds: List<Int>): List<ResumePhoto> = resumePhotoRepsoitory.findByResumePhotoIdIn(resumePhotoIds)
