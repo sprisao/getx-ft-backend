@@ -73,7 +73,8 @@ class UserService(
             photoIsDisplay = userDto.photoIsDisplay,
             resumeExists = userDto.resumeExists,
             centerExists = userDto.centerExists,
-            userTypeStatus = userDto.userTypeStatus
+            userTypeStatus = userDto.userTypeStatus,
+            isDeleted = false,
         ).also {
             userRepository.save(it)
         }

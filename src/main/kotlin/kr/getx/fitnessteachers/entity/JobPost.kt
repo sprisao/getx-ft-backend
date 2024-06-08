@@ -73,7 +73,7 @@ data class JobPost(
     var isDeleted: Boolean = false,
 
     var isDeletedAt: LocalDateTime? = null,
-
+    
     @CreationTimestamp
     val postedDate: LocalDateTime = LocalDateTime.now()
 )

@@ -38,6 +38,7 @@ class CertificationService(
                     name = dto.name,
                     issuedBy = dto.issuedBy,
                     issuedDate = dto.issuedDate,
+                    isDeleted = false,
                     createdAt = LocalDateTime.now()
                 )
                 val savedCertification = certificationRepository.save(newCertification)
@@ -81,12 +82,15 @@ class CertificationService(
     }
 
     fun deleteCertifications(certificationIds: List<Int>) {
-        val certifications = certificationRepository.findAllByCertificationIdAndIsDeletedFalse(certificationIds).orElseThrow()
-        certifications.forEach {
-            it.isDeleted = true
-            it.isDeletedAt = LocalDateTime.now()
-        }
-        certificationRepository.saveAll(certifications)
+        val certifications = certificationRepository.findAllByCertificationIdInAndIsDeletedFalse(certificationIds)
+    if (certifications.isEmpty()) {
+        throw IllegalArgumentException("No certifications found for the given IDs")
+    }
+    certifications.forEach { certification ->
+        certification.isDeleted = true
+        certification.isDeletedAt = LocalDateTime.now()
+    }
+    certificationRepository.saveAll(certifications)
     }
 
     fun findCertificationsByIds(certificationIds: List<Int>): List<Certification> = certificationRepository.findByCertificationIdIn(certificationIds)

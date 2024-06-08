@@ -67,6 +67,7 @@ class ResumeService(
         newResume.certificationIds = resumeDto.certificationIds
         newResume.resumePhotoIds = resumeDto.resumePhotoIds
         newResume.resumeAttachmentIds = resumeDto.resumeAttachmentIds
+        newResume.isDeleted = false
 
         val saveResume = resumeRepository.save(newResume)
         return saveResume

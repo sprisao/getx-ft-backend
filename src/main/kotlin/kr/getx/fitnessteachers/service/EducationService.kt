@@ -1,24 +1,25 @@
 package kr.getx.fitnessteachers.service
 
+import java.time.LocalDateTime
 import kr.getx.fitnessteachers.dto.EducationDto
 import kr.getx.fitnessteachers.entity.Education
 import kr.getx.fitnessteachers.repository.EducationRepository
 import kr.getx.fitnessteachers.repository.UserRepository
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class EducationService(
-    private val educationRepository: EducationRepository,
-    private val userRepository: UserRepository,
+        private val educationRepository: EducationRepository,
+        private val userRepository: UserRepository,
 ) {
 
     fun getAllEducations(): List<Education> = educationRepository.findAll()
 
     fun findEducationsByUserIds(userId: Int): List<Education> {
-        val user = userRepository.findById(userId).orElseThrow {
-            IllegalArgumentException("해당 유저를 찾을수 없습니다 !! userId : $userId")
-        }
+        val user =
+                userRepository.findById(userId).orElseThrow {
+                    IllegalArgumentException("해당 유저를 찾을수 없습니다 !! userId : $userId")
+                }
         return educationRepository.findByUser(user)
     }
 
@@ -30,16 +31,19 @@ class EducationService(
         educationDtos.forEach { dto ->
             if (dto.educationId == null) {
                 // 새로운 데이터 추가
-                val user = userRepository.findById(dto.userId).orElseThrow {
-                    IllegalArgumentException("해당 유저를 찾을 수 없습니다 !! userId : ${dto.userId}")
-                }
-                val newEducation = Education(
-                    user = user,
-                    courseName = dto.courseName,
-                    institution = dto.institution,
-                    completionDate = dto.completionDate,
-                    createdAt = LocalDateTime.now()
-                )
+                val user =
+                        userRepository.findById(dto.userId).orElseThrow {
+                            IllegalArgumentException("해당 유저를 찾을 수 없습니다 !! userId : ${dto.userId}")
+                        }
+                val newEducation =
+                        Education(
+                                user = user,
+                                courseName = dto.courseName,
+                                institution = dto.institution,
+                                completionDate = dto.completionDate,
+                                isDeleted = false,
+                                createdAt = LocalDateTime.now()
+                        )
                 val savedEducation = educationRepository.save(newEducation)
                 syncedEducations.add(savedEducation)
                 educationIdsToKeep.add(savedEducation.educationId)
@@ -69,28 +73,33 @@ class EducationService(
 
     fun updateEducations(educationDtos: List<EducationDto>): List<Education> {
         val educationIds = educationDtos.mapNotNull { it.educationId }
-        val existingEducations = educationRepository.findByEducationIdIn(educationIds).associateBy { it.educationId }
+        val existingEducations =
+                educationRepository.findByEducationIdIn(educationIds).associateBy { it.educationId }
 
         return educationDtos.mapNotNull { dto ->
-            val education = existingEducations[dto.educationId]?.apply {
-                courseName = dto.courseName
-                institution = dto.institution
-                completionDate = dto.completionDate
-            } ?: return@mapNotNull null
+            val education =
+                    existingEducations[dto.educationId]?.apply {
+                        courseName = dto.courseName
+                        institution = dto.institution
+                        completionDate = dto.completionDate
+                    }
+                            ?: return@mapNotNull null
             educationRepository.save(education)
         }
     }
 
     fun deleteEducations(educationIds: List<Int>) {
-        val educations = educationRepository.findByAllEducationIdAndisDeletedFalse(educationIds).orElseThrow()
-        educations.forEach {
-            it.isDeleted = true
-            it.isDeletedAt = LocalDateTime.now()
+        val educations = educationRepository.findAllByEducationIdInAndIsDeletedFalse(educationIds)
+        if (educations.isEmpty()) {
+            throw IllegalArgumentException("No educations found for the given IDs")
+        }
+        educations.forEach { education ->
+            education.isDeleted = true
+            education.isDeletedAt = LocalDateTime.now()
         }
         educationRepository.saveAll(educations)
     }
 
     fun findEducationsByIds(educationIds: List<Int>): List<Education> =
-        educationRepository.findByEducationIdIn(educationIds)
+            educationRepository.findByEducationIdIn(educationIds)
 }
-
