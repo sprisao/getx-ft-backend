@@ -13,6 +13,6 @@ interface CertificationRepository : JpaRepository<Certification, Int> {
     fun findByUser(user: User): List<Certification>
 
     // Soft Delete
-    fun findAllByCertificationIdAndIsDeletedFalse(certificationIds: List<Int>): Optional<List<Certification>>
+    fun findAllByCertificationIdInAndIsDeletedFalse(certificationIds: List<Int>): List<Certification>
 
 }
