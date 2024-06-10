@@ -27,6 +27,9 @@ data class JobPostDto(
     val workStartDate: LocalDate?,
     val isDeleted: Boolean,
     val isDeletedAt: LocalDateTime? = null,
+    val title: String,
+    val link: String,
+    var createdAt: LocalDateTime = LocalDateTime.now(),
     val postedDate: LocalDateTime = LocalDateTime.now()
 ) {
     fun toEntity(center: Center): JobPost {
@@ -51,6 +54,9 @@ data class JobPostDto(
             workStartDate = workStartDate,
             isDeleted = isDeleted,
             isDeletedAt = isDeletedAt,
+            title = title,
+            link = link,
+            createdAt = createdAt,
             postedDate = postedDate
         )
 
@@ -82,6 +88,9 @@ data class JobPostDto(
             workStartDate = jobPost.workStartDate,
             isDeleted = jobPost.isDeleted,
             isDeletedAt = jobPost.isDeletedAt,
+            title = jobPost.title,
+            link = jobPost.link,
+            createdAt = jobPost.createdAt,
             postedDate = jobPost.postedDate
         )
     }
