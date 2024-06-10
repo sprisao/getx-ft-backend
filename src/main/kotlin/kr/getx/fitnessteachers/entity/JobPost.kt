@@ -73,7 +73,17 @@ data class JobPost(
     var isDeleted: Boolean = false,
 
     var isDeletedAt: LocalDateTime? = null,
-    
+
+    // 제목
+    var title: String,
+
+    // 링크
+    var link: String,
+
+    // 생성시간
+    @CreationTimestamp
+    var createdAt: LocalDateTime = LocalDateTime.now(),
+
     @CreationTimestamp
     val postedDate: LocalDateTime = LocalDateTime.now()
 )
