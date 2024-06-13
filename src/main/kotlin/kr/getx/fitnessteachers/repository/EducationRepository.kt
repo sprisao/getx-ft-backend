@@ -5,6 +5,7 @@ import kr.getx.fitnessteachers.entity.Education
 import kr.getx.fitnessteachers.entity.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 
 @Repository
 interface EducationRepository : JpaRepository<Education, Int> {
@@ -14,4 +15,6 @@ interface EducationRepository : JpaRepository<Education, Int> {
 
     // Soft Delete
     fun findAllByEducationIdInAndIsDeletedFalse(educationIds: List<Int>): List<Education>
+
+    fun findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime: LocalDateTime): List<Education>
 }

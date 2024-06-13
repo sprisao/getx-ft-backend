@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
+import java.time.LocalDateTime
 import java.util.*
 
 @Repository
@@ -38,4 +39,7 @@ interface JobPostRepository : JpaRepository<JobPost, Int> {
 
     // SoftDeleted 처리
     fun findByJobPostIdAndIsDeletedFalse(jobPostId: Int): Optional<JobPost>
+
+    // HardDeleted 처리
+    fun findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime: LocalDateTime): List<JobPost>
 }
