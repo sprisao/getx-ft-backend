@@ -1,6 +1,5 @@
 package kr.getx.fitnessteachers.repository
 
-import java.util.*
 import kr.getx.fitnessteachers.entity.Experience
 import kr.getx.fitnessteachers.entity.User
 import org.springframework.data.jpa.repository.JpaRepository
@@ -16,5 +15,6 @@ interface ExperienceRepository : JpaRepository<Experience, Int> {
     // Soft Delete
     fun findAllByExperienceIdInAndIsDeletedFalse(experienceIds: List<Int>): List<Experience>
 
+    // Hard Delete
     fun findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime: LocalDateTime): List<Experience>
 }
