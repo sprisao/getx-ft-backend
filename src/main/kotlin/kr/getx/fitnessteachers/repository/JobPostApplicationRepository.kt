@@ -16,5 +16,5 @@ interface JobPostApplicationRepository : JpaRepository<JobPostApplication, Int> 
             jobPostId: Int
     ): JobPostApplication?
 
-    fun findByIsDeletedTrueAndDeletedAtBefore(expiredDateTimhe: LocalDateTime): List<JobPostApplication>
+    fun findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTimhe: LocalDateTime): List<JobPostApplication>
 }

@@ -18,5 +18,5 @@ interface ResumeAttachmentRepository : JpaRepository<ResumeAttachment, Int> {
     ): List<ResumeAttachment>
 
     // Hard Delete
-    fun findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime: LocalDateTime): List<ResumeAttachment>
+    fun findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime: LocalDateTime): List<ResumeAttachment>
 }

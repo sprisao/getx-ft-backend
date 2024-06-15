@@ -13,5 +13,5 @@ interface CenterRepository : JpaRepository<Center, Int> {
     // SoftDelete
     fun findByCenterIdAndIsDeletedFalse(centerId: Int): Optional<Center>
 
-    fun findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime: LocalDateTime): List<Center>
+    fun findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime: LocalDateTime): List<Center>
 }

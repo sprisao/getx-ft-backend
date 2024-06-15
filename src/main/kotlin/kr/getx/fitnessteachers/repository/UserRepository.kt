@@ -13,5 +13,5 @@ interface UserRepository : JpaRepository<User, Int>{
     fun findByEmailAndIsDeletedFalse(email: String): Optional<User>
 
     // hard delete
-    fun findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime: LocalDateTime): List<User>
+    fun findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime: LocalDateTime): List<User>
 }

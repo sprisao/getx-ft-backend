@@ -18,5 +18,5 @@ interface ResumeRepository : JpaRepository<Resume, Int> {
     fun findByResumeIdAndIsDeletedFalse(resumeId: Int): Optional<Resume>
 
     // hard Delete
-    fun findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime: LocalDateTime): List<Resume>
+    fun findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime: LocalDateTime): List<Resume>
 }

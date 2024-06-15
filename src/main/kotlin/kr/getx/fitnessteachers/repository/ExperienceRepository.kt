@@ -16,5 +16,5 @@ interface ExperienceRepository : JpaRepository<Experience, Int> {
     fun findAllByExperienceIdInAndIsDeletedFalse(experienceIds: List<Int>): List<Experience>
 
     // Hard Delete
-    fun findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime: LocalDateTime): List<Experience>
+    fun findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime: LocalDateTime): List<Experience>
 }

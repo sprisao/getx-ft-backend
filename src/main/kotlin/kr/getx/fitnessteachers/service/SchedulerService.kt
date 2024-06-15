@@ -24,50 +24,50 @@ class SchedulerService(
         val expiredDateTime = LocalDateTime.now().minusDays(90)
 
         // Center 엔티티의 삭제된 레코드 삭제
-        val expiredCenters = centerRepository.findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime)
+        val expiredCenters = centerRepository.findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime)
         centerRepository.deleteAll(expiredCenters)
 
         // Certification 엔티티의 삭제된 레코드 삭제
         val expiredCertifications =
-            certificationRepository.findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime)
+            certificationRepository.findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime)
         certificationRepository.deleteAll(expiredCertifications)
 
         // Education 엔티티의 삭제된 레코드 삭제
         val expiredEducations =
-            educationRepository.findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime)
+            educationRepository.findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime)
         educationRepository.deleteAll(expiredEducations)
 
         // Experience 엔티티의 삭제된 레코드 삭제
         val expiredExperiences =
-            experienceRepository.findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime)
+            experienceRepository.findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime)
         experienceRepository.deleteAll(expiredExperiences)
 
         // JobPostApplication 엔티티의 삭제된 레코드 삭제
         val expiredJobPostApplications =
-            jobPostApplicationRepository.findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime)
+            jobPostApplicationRepository.findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime)
         jobPostApplicationRepository.deleteAll(expiredJobPostApplications)
 
         // JobPost 엔티티의 삭제된 레코드 삭제
         val expiredJobPosts =
-            jobPostRepository.findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime)
+            jobPostRepository.findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime)
         jobPostRepository.deleteAll(expiredJobPosts)
 
         // ResumeAttachment 엔티티의 삭제된 레코드 삭제
         val expiredResumeAttachments =
-            resumeAttachmentRepository.findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime)
+            resumeAttachmentRepository.findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime)
         resumeAttachmentRepository.deleteAll(expiredResumeAttachments)
 
         // ResumePhoto 엔티티의 삭제된 레코드 삭제
         val expiredResumePhotos =
-            resumePhotoRepository.findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime)
+            resumePhotoRepository.findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime)
         resumePhotoRepository.deleteAll(expiredResumePhotos)
 
         // Resume 엔티티의 삭제된 레코드 삭제
-        val expiredResumes = resumeRepository.findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime)
+        val expiredResumes = resumeRepository.findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime)
         resumeRepository.deleteAll(expiredResumes)
 
         // User 엔티티의 삭제된 레코드 삭제
-        val expiredUsers = userRepository.findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime)
+        val expiredUsers = userRepository.findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime)
         userRepository.deleteAll(expiredUsers)
     }
 }

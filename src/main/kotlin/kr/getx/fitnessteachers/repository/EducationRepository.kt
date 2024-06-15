@@ -16,5 +16,5 @@ interface EducationRepository : JpaRepository<Education, Int> {
     // Soft Delete
     fun findAllByEducationIdInAndIsDeletedFalse(educationIds: List<Int>): List<Education>
 
-    fun findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime: LocalDateTime): List<Education>
+    fun findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime: LocalDateTime): List<Education>
 }

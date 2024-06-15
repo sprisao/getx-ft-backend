@@ -41,5 +41,5 @@ interface JobPostRepository : JpaRepository<JobPost, Int> {
     fun findByJobPostIdAndIsDeletedFalse(jobPostId: Int): Optional<JobPost>
 
     // HardDeleted 처리
-    fun findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime: LocalDateTime): List<JobPost>
+    fun findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime: LocalDateTime): List<JobPost>
 }

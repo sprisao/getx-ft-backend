@@ -17,5 +17,5 @@ interface ResumePhotoRepository : JpaRepository<ResumePhoto, Int> {
     fun findAllByResumePhotoIdInAndIsDeletedFalse(resumePhotoIds: List<Int>): List<ResumePhoto>
 
     // hard deleted
-    fun findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime: LocalDateTime): List<ResumePhoto>
+    fun findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime: LocalDateTime): List<ResumePhoto>
 }

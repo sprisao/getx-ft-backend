@@ -16,5 +16,5 @@ interface CertificationRepository : JpaRepository<Certification, Int> {
     // Soft Delete
     fun findAllByCertificationIdInAndIsDeletedFalse(certificationIds: List<Int>): List<Certification>
 
-    fun findByIsDeletedTrueAndDeletedAtBefore(expiredDateTime: LocalDateTime): List<Certification>
+    fun findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime: LocalDateTime): List<Certification>
 }
