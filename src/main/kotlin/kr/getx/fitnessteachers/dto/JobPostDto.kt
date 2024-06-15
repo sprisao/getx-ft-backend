@@ -90,7 +90,7 @@ data class JobPostDto(
             isDeletedAt = jobPost.isDeletedAt,
             title = jobPost.title ?: "",
             link = jobPost.link ?: "",
-            createdAt = jobPost.createdAt,
+            createdAt = jobPost.createdAt ?: LocalDateTime.now(),
             postedDate = jobPost.postedDate
         )
     }
