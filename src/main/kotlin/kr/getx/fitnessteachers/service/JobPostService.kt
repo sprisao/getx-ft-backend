@@ -61,12 +61,7 @@ class JobPostService(
             jobCategories = jobPostDto.jobCategories
             workLocation = jobPostDto.workLocation
             workDays = jobPostDto.workDays.map { workDayDto ->
-                WorkDay(
-                    jobPost = this,
-                    day = workDayDto.day,
-                    startTime = workDayDto.startTime,
-                    endTime = workDayDto.endTime
-                )
+                workDayDto.toEntity(this)
             }
             employmentType = jobPostDto.employmentType
             salaryType = jobPostDto.salaryType
