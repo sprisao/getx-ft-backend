@@ -17,7 +17,6 @@ data class Center(
 
     var centerName: String? = null,
 
-    @Lob
     var photos: String? = null,
 
     var roadAddress: String? = null,
