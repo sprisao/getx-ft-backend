@@ -88,8 +88,8 @@ data class JobPostDto(
             workStartDate = jobPost.workStartDate,
             isDeleted = jobPost.isDeleted,
             isDeletedAt = jobPost.isDeletedAt,
-            title = jobPost.title,
-            link = jobPost.link,
+            title = jobPost.title ?: "",
+            link = jobPost.link ?: "",
             createdAt = jobPost.createdAt,
             postedDate = jobPost.postedDate
         )
