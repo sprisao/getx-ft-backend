@@ -17,9 +17,6 @@ data class Resume(
 
     var description: String?,
 
-    @Lob
-    var photos: String?,
-
     var mainPhoto: String?,
 
     // 이력서 공개 여부
