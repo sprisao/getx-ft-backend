@@ -29,9 +29,6 @@ data class User(
 
     var userType: Boolean?,
 
-    @Enumerated(EnumType.STRING)
-    var teacherType: TeacherType,
-
     var photoIsDisplay: Boolean,
 
     var resumeExists: Boolean,
@@ -47,9 +44,3 @@ data class User(
     @CreationTimestamp
     val createdAt: LocalDateTime = LocalDateTime.now()
 )
-
-enum class TeacherType {
-    YOGA,
-    PILATES,
-    FITNESS
-}

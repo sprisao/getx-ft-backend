@@ -83,10 +83,10 @@ class ResumeService(
             resumeRepository.findById(resumeDto.resumeId).orElseThrow { ResumeNotFoundException(resumeDto.resumeId) }
 
         resume.description = resumeDto.description
-        resume.photos = StringConversionUtils.convertListToString(resumeDto.photos)
         resume.mainPhoto = resumeDto.mainPhoto
         resume.isDisplay = resumeDto.isDisplay
         resume.isEditing = resumeDto.isEditing
+        resume.teacherType = resumeDto.teacherType
         resume.educationIds = resumeDto.educationIds
         resume.experienceIds = resumeDto.experienceIds
         resume.certificationIds = resumeDto.certificationIds

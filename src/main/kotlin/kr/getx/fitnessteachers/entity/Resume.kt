@@ -3,7 +3,6 @@ package kr.getx.fitnessteachers.entity
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
-
 @Entity
 @Table(name = "resumes")
 data class Resume(
@@ -19,11 +18,12 @@ data class Resume(
 
     var mainPhoto: String?,
 
-    // 이력서 공개 여부
     var isDisplay: Boolean?,
 
-    // 이력서 수정 상태
     var isEditing: Boolean?,
+
+    @Enumerated(EnumType.STRING)
+    var teacherType: TeacherType,
 
     // 교육 번호 적어놓기
     @ElementCollection
@@ -63,3 +63,9 @@ data class Resume(
     @CreationTimestamp
     val createdAt: LocalDateTime
 )
+
+enum class TeacherType {
+    YOGA,
+    PILATES,
+    FITNESS
+}

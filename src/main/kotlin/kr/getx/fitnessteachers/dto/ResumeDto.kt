@@ -1,17 +1,16 @@
 package kr.getx.fitnessteachers.dto
 
 import kr.getx.fitnessteachers.entity.*
-import kr.getx.fitnessteachers.utils.StringConversionUtils
 import java.time.LocalDateTime
 
 data class ResumeDto(
         var resumeId : Int,
         var user: UserDto,
-        val photos: List<String>,
         val mainPhoto: String,
         val description: String,
         val isDisplay: Boolean,
         val isEditing: Boolean,
+        val teacherType: TeacherType,
         val educationIds: List<Int> = listOf(),
         val experienceIds: List<Int> = listOf(),
         val certificationIds: List<Int> = listOf(),
@@ -33,7 +32,7 @@ data class ResumeDto(
                         description = this.description,
                         isDisplay = this.isDisplay,
                         isEditing = this.isEditing,
-                        photos = StringConversionUtils.convertListToString(this.photos),
+                        teacherType = this.teacherType,
                         mainPhoto = this.mainPhoto,
                         educationIds = this.educationIds,
                         experienceIds = this.experienceIds,
@@ -58,10 +57,10 @@ data class ResumeDto(
                         return ResumeDto(
                                 resumeId = resume.resumeId,
                                 user = UserDto.fromEntity(resume.user),
-                                photos = StringConversionUtils.convertStringToList(resume.photos ?: " "),
                                 mainPhoto = resume.mainPhoto ?: "",
                                 isDisplay = resume.isDisplay ?: true,
                                 isEditing = resume.isEditing ?: false,
+                                teacherType = resume.teacherType ?: TeacherType.FITNESS,
                                 description = resume.description ?: " ",
                                 educationIds = resume.educationIds ?: listOf(),
                                 experienceIds = resume.experienceIds ?: listOf(),

@@ -69,7 +69,6 @@ class UserService(
             nickname = nickname,
             photo = userDto.photo,
             userType = userDto.userType,
-            teacherType = userDto.teacherType ?: TeacherType.FITNESS,
             photoIsDisplay = userDto.photoIsDisplay,
             resumeExists = userDto.resumeExists,
             centerExists = userDto.centerExists,
@@ -89,7 +88,6 @@ class UserService(
             resumeExists = userDto.resumeExists
             centerExists = userDto.centerExists
             userTypeStatus = userDto.userTypeStatus
-            teacherType = userDto.teacherType
         }
         return userRepository.save(user)
     }
