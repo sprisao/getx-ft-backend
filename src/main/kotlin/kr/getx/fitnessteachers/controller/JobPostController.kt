@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
-import java.time.LocalDate
 
 @RestController
 @RequestMapping("/api/jobPosts")
