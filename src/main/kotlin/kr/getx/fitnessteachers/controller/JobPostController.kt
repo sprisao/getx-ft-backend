@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
+import java.time.LocalDate
 
 @RestController
 @RequestMapping("/api/jobPosts")
@@ -38,9 +39,13 @@ class JobPostController(
     }
 
     @PutMapping("/update/{jobPostId}")
-    fun updateJobPost(@PathVariable jobPostId: Int, @RequestBody jobPostDto: JobPostDto): ResponseEntity<JobPostDto> {
+    fun updateJobPost(
+        @PathVariable jobPostId: Int,
+        @RequestBody jobPostDto: JobPostDto
+    ): ResponseEntity<JobPostDto> {
         val center = centerService.findById(jobPostDto.center.centerId) ?: throw CenterNotFoundException(jobPostDto.center.centerId)
         val user = userService.findUserById(center.user.userId) ?: throw UserNotFoundException(center.user.userId)
+
         val updatedJobPost = jobPostService.updateJobPost(jobPostId, jobPostDto, user)
         return ResponseEntity.ok(JobPostDto.fromEntity(updatedJobPost))
     }

@@ -52,24 +52,22 @@ class JobPostService(
     fun updateJobPost(jobPostId: Int, jobPostDto: JobPostDto, user: User): JobPost {
         val jobPost = findById(jobPostId) ?: throw JobPostNotFoundException(jobPostId)
 
+        // 기존의 WorkDay 엔티티 삭제
         workDayService.deleteByJobPostJobPostId(jobPostId)
 
         // DTO의 데이터로 JobPost 엔티티 업데이트
         jobPost.apply {
-            isPostCompleted = jobPostDto.isPostCompleted
-            isRecruitmentOpen = jobPostDto.isRecruitmentOpen
-            jobCategories = jobPostDto.jobCategories
-            workLocation = jobPostDto.workLocation
-            workDays = jobPostDto.workDays.map { workDayDto ->
-                workDayDto.toEntity(this)
-            }
-            employmentType = jobPostDto.employmentType
-            salaryType = jobPostDto.salaryType
-            additionalSalary = jobPostDto.additionalSalary
-            minSalary = jobPostDto.minSalary
-            maxSalary = jobPostDto.maxSalary
-            experienceLevel = jobPostDto.experienceLevel
-            numberOfPositions = jobPostDto.numberOfPositions
+            isPostCompleted = jobPostDto.isPostCompleted ?: false
+            isRecruitmentOpen = jobPostDto.isRecruitmentOpen ?: false
+            jobCategories = jobPostDto.jobCategories ?: ""
+            workLocation = jobPostDto.workLocation ?: ""
+            employmentType = jobPostDto.employmentType ?: ""
+            salaryType = jobPostDto.salaryType ?: ""
+            additionalSalary = jobPostDto.additionalSalary ?: ""
+            minSalary = jobPostDto.minSalary ?: 0
+            maxSalary = jobPostDto.maxSalary ?: 0
+            experienceLevel = jobPostDto.experienceLevel ?: 0
+            numberOfPositions = jobPostDto.numberOfPositions ?: 0
             qualifications = jobPostDto.qualifications ?: ""
             preferences = jobPostDto.preferences ?: ""
             details = jobPostDto.details ?: ""
@@ -77,6 +75,16 @@ class JobPostService(
             workStartDate = jobPostDto.workStartDate
         }
 
+        // 새로운 WorkDay 엔티티 생성 및 저장
+        val workDays = jobPostDto.workDays.map { workDayDto ->
+            WorkDay(
+                jobPost = jobPost,
+                day = workDayDto.day,
+                startTime = workDayDto.startTime,
+                endTime = workDayDto.endTime
+            )
+        }
+        jobPost.workDays = workDays
 
         return jobPostRepository.save(jobPost)
     }
