@@ -28,7 +28,6 @@ class JwtTokenFilter(private val jwtUtils: JwtUtils) : OncePerRequestFilter() {
                 name = userData.name,
                 email = userData.email,
                 socialType = userData.socialType,
-                teacherType = userData.teacherType,
                 nickname = userData.nickname,
                 photoIsDisplay = userData.photoIsDisplay,
                 photo = userData.photo,

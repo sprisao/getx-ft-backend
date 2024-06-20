@@ -9,7 +9,6 @@ import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.security.Keys
 import jakarta.servlet.http.HttpServletRequest
 import kr.getx.fitnessteachers.dto.UserDto
-import kr.getx.fitnessteachers.entity.TeacherType
 import org.springframework.stereotype.Component
 
 @Component
@@ -74,7 +73,6 @@ class JwtUtils {
                 false,
                 "",
                 false,
-                TeacherType.FITNESS,
                 false,
                 false,
                 false,
