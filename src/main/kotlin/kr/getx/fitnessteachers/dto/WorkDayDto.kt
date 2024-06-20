@@ -7,7 +7,7 @@ import kr.getx.fitnessteachers.entity.WorkDay
 
 data class WorkDayDto(
     val workDayId: Int = 0,
-    var jobPostId: Int,
+    @JsonProperty("jobPostId") var jobPostId: Int,
     val day: String,
     val startTime: String,
     val endTime: String
@@ -26,7 +26,7 @@ data class WorkDayDto(
             jobPostId = workDay.jobPost.jobPostId,
             day = workDay.day,
             startTime = workDay.startTime,
-            endTime = workDay.endTime,
+            endTime = workDay.endTime
         )
     }
 
@@ -34,6 +34,6 @@ data class WorkDayDto(
         jobPost = jobPost,
         day = day,
         startTime = startTime,
-        endTime = endTime,
+        endTime = endTime
     )
 }
