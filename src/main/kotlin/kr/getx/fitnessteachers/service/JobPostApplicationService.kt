@@ -1,6 +1,5 @@
 package kr.getx.fitnessteachers.service
 
-import java.time.LocalDateTime
 import kr.getx.fitnessteachers.dto.*
 import kr.getx.fitnessteachers.entity.JobPostApplication
 import kr.getx.fitnessteachers.repository.JobPostApplicationRepository
