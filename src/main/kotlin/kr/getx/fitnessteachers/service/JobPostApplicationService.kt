@@ -30,16 +30,7 @@ class JobPostApplicationService(
     }
 
     fun cancelApplication(userId: Int, jobPostId: Int) {
-        val jobPostApplication =
-                jobPostApplicationRepository.findByUserUserIdAndJobPostJobPostIdAndIsDeletedFalse(
-                        userId,
-                        jobPostId
-                )
-                        ?: throw IllegalArgumentException("해당 구직 공고 신청이 존재하지 않습니다.")
-
-        jobPostApplication.isDeleted = true
-        jobPostApplication.isDeletedAt = LocalDateTime.now()
-        jobPostApplicationRepository.save(jobPostApplication)
+        jobPostApplicationRepository.deleteByUserUserIdAndJobPostJobPostId(userId, jobPostId)
     }
 
     fun getApplicantCount(jobPostId: Int): Int =

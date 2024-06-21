@@ -11,7 +11,6 @@ class SchedulerService(
     private val certificationRepository: CertificationRepository,
     private val educationRepository: EducationRepository,
     private val experienceRepository: ExperienceRepository,
-    private val jobPostApplicationRepository: JobPostApplicationRepository,
     private val jobPostRepository: JobPostRepository,
     private val resumeAttachmentRepository: ResumeAttachmentRepository,
     private val resumePhotoRepository: ResumePhotoRepository,
@@ -41,11 +40,6 @@ class SchedulerService(
         val expiredExperiences =
             experienceRepository.findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime)
         experienceRepository.deleteAll(expiredExperiences)
-
-        // JobPostApplication 엔티티의 삭제된 레코드 삭제
-        val expiredJobPostApplications =
-            jobPostApplicationRepository.findByIsDeletedTrueAndIsDeletedAtBefore(expiredDateTime)
-        jobPostApplicationRepository.deleteAll(expiredJobPostApplications)
 
         // JobPost 엔티티의 삭제된 레코드 삭제
         val expiredJobPosts =

@@ -8,8 +8,6 @@ data class JobPostApplicationDto(
     val jobPostId: Int,
     val resumeId: Int,
     val userId: Int,
-    val isDeleted: Boolean,
-    val isDeletedAt: LocalDateTime?,
     val createdAt: LocalDateTime
 ) {
     companion object {
@@ -19,8 +17,6 @@ data class JobPostApplicationDto(
                 jobPostId = entity.jobPost.jobPostId,
                 resumeId = entity.resume.resumeId,
                 userId = entity.resume.user.userId,
-                isDeleted = entity.isDeleted,
-                isDeletedAt = entity.isDeletedAt,
                 createdAt = entity.createdAt
             )
         }
