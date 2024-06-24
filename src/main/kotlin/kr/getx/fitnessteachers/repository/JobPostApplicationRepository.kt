@@ -10,5 +10,5 @@ interface JobPostApplicationRepository : JpaRepository<JobPostApplication, Int> 
     fun findByUserUserId(userId: Int): List<JobPostApplication>
     fun countByJobPostJobPostId(jobPostId: Int): Int
 
-    fun deleteByUserUserIdAndJobPostJobPostId(userId: Int, jobPostId: Int)
+    fun findByUserUserIdAndJobPostJobPostId(userId: Int, jobPostId: Int): JobPostApplication?
 }

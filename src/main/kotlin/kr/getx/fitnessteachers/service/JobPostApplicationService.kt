@@ -1,5 +1,6 @@
 package kr.getx.fitnessteachers.service
 
+import jakarta.transaction.Transactional
 import kr.getx.fitnessteachers.dto.*
 import kr.getx.fitnessteachers.entity.JobPostApplication
 import kr.getx.fitnessteachers.repository.JobPostApplicationRepository
@@ -28,8 +29,12 @@ class JobPostApplicationService(
         )
     }
 
+    @Transactional
     fun cancelApplication(userId: Int, jobPostId: Int) {
-        jobPostApplicationRepository.deleteByUserUserIdAndJobPostJobPostId(userId, jobPostId)
+        val jobPostApplication =
+                jobPostApplicationRepository.findByUserUserIdAndJobPostJobPostId(userId, jobPostId)
+                        ?: throw IllegalArgumentException("해당 지원이 존재하지 않습니다.")
+        jobPostApplicationRepository.delete(jobPostApplication)
     }
 
     fun getApplicantCount(jobPostId: Int): Int =
