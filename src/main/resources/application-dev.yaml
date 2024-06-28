@@ -7,8 +7,6 @@ spring:
     url: jdbc:mysql://getx-mysql-test.cebci2gmpvew.ap-northeast-2.rds.amazonaws.com:3306/fitnessTeachersDB
     username: jino
     password: ENC(1HDF9pxjaOsYt6VKXmIMSg==)
-#    username: admin
-#    password: ENC(9EEFtNppt+RzcSLxBYadwc2JPZ1PJmWj)
   jpa:
     hibernate:
       ddl-auto: update
