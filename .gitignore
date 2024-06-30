@@ -28,7 +28,7 @@ out/
 
 ### Application Properties ###
 src/main/resources/application-dev.yaml
-src/main/resources/application-local.yaml
+src/main/resources/application-release.yaml
 src/main/resources/application-prod.yaml
 
 ### NetBeans ###
