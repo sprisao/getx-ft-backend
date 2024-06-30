@@ -64,3 +64,18 @@ hs_err_pid*
 
 ### Local configuration file (sdk path, etc) ###
 local.properties
+
+### SSL Certificate Files ###
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.pem
+*.key
+*.crt
+*.cer
+*.der
+
+### Let's Encrypt Files ###
+.well-known/
+certbot/
