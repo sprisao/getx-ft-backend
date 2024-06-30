@@ -9,7 +9,6 @@ import java.time.LocalDateTime
 data class Center(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "centerId")
     val centerId: Int = 0,
 
     @ManyToOne
