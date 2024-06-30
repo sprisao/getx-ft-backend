@@ -2,11 +2,19 @@ jasypt:
   encryptor:
     bean: jasyptStringEncryptor
     password: pilyoga
+
+db-config:
+  host: getx-mysql-test.cebci2gmpvew.ap-northeast-2.rds.amazonaws.com
+  port: 3307
+  name: fitnessTeachersDB
+  username: jino
+  password: ENC(1HDF9pxjaOsYt6VKXmIMSg==)
+
 spring:
   datasource:
-    url: jdbc:mysql://getx-mysql-test.cebci2gmpvew.ap-northeast-2.rds.amazonaws.com:3306/fitnessTeachersDB
-    username: jino
-    password: ENC(1HDF9pxjaOsYt6VKXmIMSg==)
+    url: jdbc:mysql://${db-config.host}:${db-config.port}/${db-config.name}?useSSL=true&serverTimezone=UTC
+    username: ${db-config.username}
+    password: ${db-config.password}
   jpa:
     hibernate:
       ddl-auto: update
