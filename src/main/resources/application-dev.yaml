@@ -5,7 +5,7 @@ jasypt:
 
 db-config:
   host: getx-mysql-test.cebci2gmpvew.ap-northeast-2.rds.amazonaws.com
-  port: 3307
+  port: 3306
   name: fitnessTeachersDB
   username: jino
   password: ENC(1HDF9pxjaOsYt6VKXmIMSg==)
