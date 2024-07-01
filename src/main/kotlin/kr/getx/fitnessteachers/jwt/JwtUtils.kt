@@ -10,35 +10,37 @@ import io.jsonwebtoken.security.Keys
 import jakarta.servlet.http.HttpServletRequest
 import kr.getx.fitnessteachers.dto.UserDto
 import org.springframework.stereotype.Component
+import org.springframework.beans.factory.annotation.Value
 
 @Component
 class JwtUtils {
 
+    @Value("\${jwt.secret}")
+    private lateinit var jwtSecret: String
+
     fun validateToken(authToken: String): Boolean {
-        try {
+        return try {
             Jwts.parserBuilder()
-                .setSigningKey(
-                    Keys.hmacShaKeyFor(
-                        "s3BTt6uIdU6/99xZQYfOQoh4cRrJyZIXSbrmq+4nDog".toByteArray(
-                            StandardCharset.UTF_8
-                        )
-                    )
-                )
+                .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.toByteArray(StandardCharset.UTF_8)))
                 .build()
                 .parseClaimsJws(authToken)
-            return true
+            true
         } catch (e: JwtException) {
             // 로그: Jwt 관련 예외 처리 (일괄 처리)
+            false
         } catch (e: MalformedJwtException) {
             // 로그: 구조적 문제가 있는 JWT
+            false
         } catch (e: ExpiredJwtException) {
             // 로그: 만료된 JWT
+            false
         } catch (e: UnsupportedJwtException) {
             // 로그: 지원되지 않는 JWT
+            false
         } catch (e: IllegalArgumentException) {
             // 로그: 부적절한 인자
+            false
         }
-        return false
     }
 
     // Jwt 토큰 추출
@@ -54,7 +56,7 @@ class JwtUtils {
     // Jwt Claims 추출
     fun getSocialLoginInfo(authToken: String): UserDto {
         val claims = Jwts.parserBuilder()
-            .setSigningKey(Keys.hmacShaKeyFor("s3BTt6uIdU6/99xZQYfOQoh4cRrJyZIXSbrmq+4nDog".toByteArray(StandardCharset.UTF_8)))
+            .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.toByteArray(StandardCharset.UTF_8)))
             .build()
             .parseClaimsJws(authToken)
             .body
