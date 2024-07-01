@@ -23,10 +23,6 @@ class SecurityConfig(private val env: Environment) {
             csrf.disable()
         }
 
-        http.cors { cors ->
-            cors.configurationSource(corsConfigurationSource())
-        }
-
         if (isDev) {
             http.authorizeHttpRequests { authorize ->
                 authorize.anyRequest().permitAll()
@@ -52,8 +48,6 @@ class SecurityConfig(private val env: Environment) {
         configuration.allowedOrigins = listOf("*") // 필요한 포트 추가
         configuration.allowedMethods = listOf("*")
         configuration.allowedHeaders = listOf("*")
-        configuration.allowCredentials = true
-        configuration.maxAge = 3600L
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
