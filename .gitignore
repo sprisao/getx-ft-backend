@@ -29,8 +29,7 @@ out/
 ### Application Properties ###
 src/main/resources/application-dev.yaml
 src/main/resources/application-release.yaml
-### .gitignore 설정 지우기
-### src/main/resources/application-prod.yaml
+src/main/resources/application-prod.yaml
 
 ### NetBeans ###
 /nbproject/private/
