@@ -12,7 +12,7 @@ db-config:
 
 spring:
   datasource:
-    url: jdbc:mysql://${db-config.host}:${db-config.port}/${db-config.name}?useSSL=true&serverTimezone=UTC
+    url: jdbc:mysql://${db-config.host}:${db-config.port}/${db-config.name}
     username: ${db-config.username}
     password: ${db-config.password}
   jpa:
