@@ -38,7 +38,6 @@ spring:
 
 server:
   port: 443
-  # port: 8080
   ssl:
     key-store: ${SSL_KEY_STORE}
     key-store-password: ${SSL_KEY_STORE_PASSWORD}
