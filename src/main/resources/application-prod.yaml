@@ -6,6 +6,10 @@ jasypt:
     bean: jasyptStringEncryptor
     password: pilyoga
 
+# JWT 설정
+jwt:
+  secret: s3BTt6uIdU6/99xZQYfOQoh4cRrJyZIXSbrmq+4nDog
+
 # DB 설정
 db-config:
   host: getx-mysql-test.cebci2gmpvew.ap-northeast-2.rds.amazonaws.com
