@@ -13,26 +13,20 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig(private val env: Environment) {
+class SecurityConfig {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        val isDev = env.activeProfiles.contains("dev")
-
         http.csrf { csrf ->
             csrf.disable()
         }
 
-        if (isDev) {
-            http.authorizeHttpRequests { authorize ->
-                authorize.anyRequest().permitAll()
-            }
-        } else {
-            http.authorizeHttpRequests { authorize ->
-                authorize
-                    .requestMatchers("/**").permitAll()
-                    .anyRequest().authenticated()
-            }
+        http.cors { cors ->
+            cors.configurationSource(corsConfigurationSource())
+        }
+
+        http.authorizeHttpRequests { authorize ->
+            authorize.anyRequest().permitAll()
         }
 
         http.sessionManagement { session ->
@@ -45,13 +39,13 @@ class SecurityConfig(private val env: Environment) {
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("*") // 필요한 포트 추가
-        configuration.allowedMethods = listOf("*")
+        configuration.allowedOrigins = listOf("http://localhost:3000")  // 클라이언트의 주소
+        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
         configuration.allowedHeaders = listOf("*")
+        configuration.allowCredentials = true
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
-
         return source
     }
 }
