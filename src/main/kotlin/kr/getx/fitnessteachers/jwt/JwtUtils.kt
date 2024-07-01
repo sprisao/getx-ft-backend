@@ -13,10 +13,9 @@ import org.springframework.stereotype.Component
 import org.springframework.beans.factory.annotation.Value
 
 @Component
-class JwtUtils {
-
-    @Value("\${jwt.secret}")
-    private lateinit var jwtSecret: String
+class JwtUtils (
+    @Value("\${jwt.secret}") private val jwtSecret: String
+) {
 
     fun validateToken(authToken: String): Boolean {
         return try {
