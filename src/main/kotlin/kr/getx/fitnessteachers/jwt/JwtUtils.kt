@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Value
 class JwtUtils {
 
     @Value("\${jwt.secret}")
-    private lateinit var jwtSecret: String
+    private var jwtSecret = "s3BTt6uIdU6/99xZQYfOQoh4cRrJyZIXSbrmq+4nDog"
 
     fun validateToken(authToken: String): Boolean {
         return try {
