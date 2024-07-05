@@ -2,48 +2,41 @@ package kr.getx.fitnessteachers.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.env.Environment
+import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-import org.springframework.security.web.SecurityFilterChain
+import kr.getx.fitnessteachers.jwt.JwtTokenFilter
+import kr.getx.fitnessteachers.jwt.JwtUtils
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
-@EnableWebSecurity
 class SecurityConfig {
+    private val allowedUrls = arrayOf(
+        "/**"
+    )
+    val jwtTokenFilter = JwtTokenFilter(JwtUtils())
+    @Bean
+    fun filterChain(http: HttpSecurity) = http
+        .csrf { it.disable() }
+        .cors(Customizer.withDefaults())
+        .authorizeHttpRequests {
+            it.requestMatchers(*allowedUrls).permitAll()    // 허용할 url 목록을 배열로 분리했다
+                .anyRequest().authenticated()
+        }
+        .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) } // 세션을 사용할 수 있게 변경
+        .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter::class.java) // JwtTokenFilter 추가
+        // OAuth2 인증 프로세스에 필요한 세션 정보를 유지하기 위해 필요
+        .build()!!
 
     @Bean
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http.csrf { csrf ->
-            csrf.disable()
-        }
-
-        http.cors { cors ->
-            cors.configurationSource(corsConfigurationSource())
-        }
-
-        http.authorizeHttpRequests { authorize ->
-            authorize.anyRequest().permitAll()
-        }
-
-        http.sessionManagement { session ->
-            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        }
-
-        return http.build()
-    }
-
-    @Bean
-    fun corsConfigurationSource(): CorsConfigurationSource {
+    fun corsConfigurationSource() : CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("http://localhost:3000")  // 클라이언트의 주소
-        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        configuration.allowedOrigins = listOf("*")
+        configuration.allowedMethods = listOf("*")
         configuration.allowedHeaders = listOf("*")
-        configuration.allowCredentials = true
-
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
         return source
