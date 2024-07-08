@@ -28,7 +28,6 @@ class SecurityConfig {
         }
         .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) } // 세션을 사용할 수 있게 변경
         .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter::class.java) // JwtTokenFilter 추가
-        // OAuth2 인증 프로세스에 필요한 세션 정보를 유지하기 위해 필요
         .build()!!
 
     @Bean
