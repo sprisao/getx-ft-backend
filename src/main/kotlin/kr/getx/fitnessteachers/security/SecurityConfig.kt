@@ -21,7 +21,7 @@ class SecurityConfig {
     @Bean
     fun filterChain(http: HttpSecurity) = http
         .csrf { it.disable() }
-        .cors(Customizer.withDefaults())
+        .cors { it.configurationSource(corsConfigurationSource()) } //(Customizer.withDefaults()))
         .authorizeHttpRequests {
             it.requestMatchers(*allowedUrls).permitAll()    // 허용할 url 목록을 배열로 분리했다
                 .anyRequest().authenticated()
@@ -33,9 +33,10 @@ class SecurityConfig {
     @Bean
     fun corsConfigurationSource() : CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("*")
-        configuration.allowedMethods = listOf("*")
+        configuration.allowedOrigins = listOf("http://localhost:3000")
+        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
         configuration.allowedHeaders = listOf("*")
+        configuration.allowCredentials = true
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
         return source
