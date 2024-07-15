@@ -32,7 +32,7 @@ data class ResumeDto(
                         description = this.description,
                         isDisplay = this.isDisplay,
                         isEditing = this.isEditing,
-                        teacherType = this.teacherType,
+                        teacherType = this.teacherType ?: TeacherType.FITNESS,
                         mainPhoto = this.mainPhoto,
                         educationIds = this.educationIds,
                         experienceIds = this.experienceIds,
