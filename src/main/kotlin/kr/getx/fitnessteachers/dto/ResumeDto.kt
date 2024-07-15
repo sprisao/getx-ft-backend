@@ -10,7 +10,7 @@ data class ResumeDto(
         val description: String,
         val isDisplay: Boolean,
         val isEditing: Boolean,
-        val teacherType: TeacherType,
+        val teacherType: TeacherType? = TeacherType.FITNESS,
         val educationIds: List<Int> = listOf(),
         val experienceIds: List<Int> = listOf(),
         val certificationIds: List<Int> = listOf(),

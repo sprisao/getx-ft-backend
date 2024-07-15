@@ -23,7 +23,7 @@ data class Resume(
     var isEditing: Boolean?,
 
     @Enumerated(EnumType.STRING)
-    var teacherType: TeacherType,
+    var teacherType: TeacherType? = TeacherType.FITNESS,
 
     // 교육 번호 적어놓기
     @ElementCollection
