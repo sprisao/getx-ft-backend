@@ -9,6 +9,7 @@ import kr.getx.fitnessteachers.exceptions.UserNotFoundExceptionByEmail
 import kr.getx.fitnessteachers.repository.UserRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
+import java.util.*
 
 @Service
 class UserService(
@@ -57,7 +58,7 @@ class UserService(
 
     private fun registerUser(userDto: UserDto): User {
         val nickname = if (userDto.nickname.isBlank()) {
-            "회원_&{UUID.randomUUID().toString.take(8)}"
+            "회원_${UUID.randomUUID().toString().take(8)}"
         } else {
             userDto.nickname
         }
